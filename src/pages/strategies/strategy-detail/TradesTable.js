@@ -70,23 +70,22 @@ const headCells = [
     label: 'Token Name'
   },
   {
-    id: 'fat',
+    id: 'direction',
     align: 'right',
     disablePadding: false,
-    label: 'Total Order'
+    label: 'Direction'
   },
   {
-    id: 'carbs',
+    id: 'pnl',
     align: 'left',
     disablePadding: false,
-
-    label: 'Status'
+    label: 'PNL'
   },
   {
-    id: 'protein',
+    id: 'pnl-ratio',
     align: 'right',
     disablePadding: false,
-    label: 'Total Amount'
+    label: 'PNL Ratio'
   }
 ];
 
@@ -166,7 +165,8 @@ export default function TradeTable() {
       <TableContainer
         sx={{
           width: '100%',
-          overflowX: 'auto',
+          maxHeight: '400px', // Set max height for the table container
+          overflowY: 'auto', // Enable vertical scrolling
           position: 'relative',
           display: 'block',
           maxWidth: '100%',

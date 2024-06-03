@@ -20,7 +20,7 @@ import {
 } from '@mui/material';
 
 // project import
-import TradeTable from './TradesTable';
+// import TradeTable from '../strategies/strategy-detail/TradesTable';
 import AcumPnlAraeChart from './PnlAreaChart';
 import WeeklyPnlBarChart from './WeeklyPnlBarChart';
 import BalanceAraeChart from './BalanceAreaChart';
