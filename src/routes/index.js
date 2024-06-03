@@ -4,12 +4,15 @@ import { useRoutes } from 'react-router-dom';
 import LoginRoutes from './LoginRoutes';
 import MainRoutes from './MainRoutes';
 import LandingPageRoutes from './LandingRoutes';
-
+import UserRoutes from './User';
+// import ProductRoutes from './Products';
 
 export default function ThemeRoutes() {
   return useRoutes([
     LandingPageRoutes,
     MainRoutes,
-    LoginRoutes
+    LoginRoutes,
+    UserRoutes
+    //  ProductRoutes
   ]);
 }

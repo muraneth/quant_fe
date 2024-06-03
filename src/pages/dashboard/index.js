@@ -81,7 +81,6 @@ const DashboardDefault = () => {
   const [userAssetBaseInfo, setUserAssetBaseInfo] = useState([]);
   const navigate = useNavigate();
   const host = 'http://matrixcipher.com';
-  // const host = 'http://localhost:5001';
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -121,6 +120,7 @@ const DashboardDefault = () => {
   const recent7WeekPnl =
     userWeeklyCashFlowData.length > 7 ? userWeeklyCashFlowData.slice(userWeeklyCashFlowData.length - 7) : userWeeklyCashFlowData;
   const isLoss = lastRecord ? lastRecord.daily_pnl_ratio < 0 : false;
+
   return (
     <Grid container rowSpacing={4.5} columnSpacing={2.75}>
       {/* row 1 */}
