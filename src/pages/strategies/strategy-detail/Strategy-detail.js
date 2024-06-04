@@ -10,6 +10,7 @@ import TradeTable from './TradesTable';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { set } from 'lodash';
+import ProfitCalendar from './Profit-calender';
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -40,7 +41,7 @@ const areaChartOptions = {
 };
 
 const StrategyDetail = () => {
-  const [slot, setSlot] = useState('month');
+  const [slot, setSlot] = useState('all');
   const [series, setSeries] = useState([{}]);
   const [productInfo, setProductInfo] = useState({});
   const { id } = useParams();
@@ -126,6 +127,19 @@ const StrategyDetail = () => {
             {/* </Box> */}
           </MainCard>
         </Grid>
+        <Grid item xs={12}>
+          <MainCard sx={{ minWidth: 275, bgcolor: '#1e1e2d', color: '#fff', m: 2 }}>
+            <CardContent>
+              <Typography variant="h5" component="div">
+                Profit Calender
+              </Typography>
+              <Typography variant="body2">Profit: 1.7</Typography>
+              <Typography variant="body2">Win Ratio: 64%</Typography>
+              <Typography variant="body2">Trade Count: 110</Typography>
+              <ProfitCalendar />
+            </CardContent>
+            </MainCard>
+          </Grid>
         <Grid item xs={8}>
           <MainCard sx={{ mt: 2 }} content={false}>
             <TradeTable />
