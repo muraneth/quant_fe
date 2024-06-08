@@ -205,7 +205,7 @@ const DashboardDefault = () => {
             </Stack>
           </Grid>
         </Grid>
-        <MainCard content={false} sx={{ mt: 1.5 }}>
+        <MainCard content={false} sx={{ mt: 1.5, bgcolor: '#1e1e2d' }}>
           <Box sx={{ pt: 1, pr: 2 }}>
             <AcumPnlAraeChart slot={slot} />
           </Box>
@@ -247,7 +247,7 @@ const DashboardDefault = () => {
             </Stack>
           </Grid>
         </Grid>
-        <MainCard content={false} sx={{ mt: 1.5 }}>
+        <MainCard content={false} sx={{ mt: 1.5, bgcolor: '#1e1e2d' }}>
           <Box sx={{ pt: 1, pr: 2 }}>
             <BalanceAraeChart slot={slot} />
           </Box>
@@ -260,7 +260,7 @@ const DashboardDefault = () => {
           </Grid>
           <Grid item />
         </Grid>
-        <MainCard sx={{ mt: 2 }} content={false}>
+        <MainCard sx={{ mt: 2, bgcolor: '#1e1e2d' }} content={false}>
           <Box sx={{ p: 3, pb: 0 }}>
             <Stack spacing={2}>
               {/* <Typography variant="h6" color="textSecondary">

@@ -4,7 +4,8 @@ import { Box, Grid, Paper, Card, CardContent, Typography, Button } from '@mui/ma
 import { styled } from '@mui/material/styles';
 
 import { useState, useEffect } from 'react';
-import ReactApexChart from 'react-apexcharts';
+// import ReactApexChart from 'react-apexcharts';
+import AcumPnlRatioAraeChart from './Pnl-ratio-area';
 import MainCard from 'components/MainCard';
 import TradeTable from './TradesTable';
 import { useParams } from 'react-router-dom';
@@ -12,37 +13,7 @@ import axios from 'axios';
 import { set } from 'lodash';
 import ProfitCalendar from './Profit-calender';
 
-const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-  ...theme.typography.body2,
-  padding: theme.spacing(1),
-  textAlign: 'center',
-  color: theme.palette.text.secondary
-}));
-
-const areaChartOptions = {
-  chart: {
-    height: 450,
-    type: 'area',
-    toolbar: {
-      show: false
-    }
-  },
-  dataLabels: {
-    enabled: false
-  },
-  stroke: {
-    curve: 'smooth',
-    width: 2
-  },
-  grid: {
-    strokeDashArray: 0
-  }
-};
-
 const StrategyDetail = () => {
-  const [slot, setSlot] = useState('all');
-  const [series, setSeries] = useState([{}]);
   const [productInfo, setProductInfo] = useState({});
   const { id } = useParams();
   console.log(id);
@@ -51,7 +22,7 @@ const StrategyDetail = () => {
 
   useEffect(() => {
     const fetchProduct = async () => {
-      const url = `${host}/api/product/getInfoById?productId=${id}`;
+      const url = `${host}/api/product/getProductBaseById?productId=${id}`;
       try {
         const response = await axios.get(url);
         setProductInfo(response.data.data);
@@ -60,19 +31,6 @@ const StrategyDetail = () => {
       }
     };
     fetchProduct();
-    const fetchProductHistory = async () => {
-      const url = `${host}/api/product/getSharePriceHistory?productId=${id}`;
-      try {
-        const response = await axios.get(url);
-        if (response.data.data.length === 0) {
-          return;
-        }
-        setSeries(response.data.data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchProductHistory();
   }, []);
 
   const handleButtonClick = () => {};
@@ -91,17 +49,29 @@ const StrategyDetail = () => {
                 a take profit of 0.7%. Each entry uses 5% of the portfolio and is signaled when the RSI value is bellow 50.
               </Typography>
               {/* <RiskBar value={strategy.risk} /> */}
-              <Typography variant="body2" sx={{ mt: 2 }}>
-                Last month: 60%
-              </Typography>
-              <Typography variant="body2">Last 6 months: {productInfo.lastSixMonths || 'N/A'}</Typography>
-              <Typography variant="body2">Min. Investment:100</Typography>
-              <Typography variant="body2">Trade Count: {productInfo.tradeCount || 'N/A'}</Typography>
-              <Typography variant="body2">Win Ratio: {productInfo.winRatio || 'N/A'}</Typography>
 
-              {/* <Button variant="contained" sx={{ mt: 2 }} onClick={handleButtonClick}>
-                Invest
-              </Button> */}
+              <Grid container alignItems="center">
+                <Grid item xs={12} md={6}>
+                  <Typography variant="h5" sx={{ mt: 2 }}>
+                    Data In 1 Month
+                  </Typography>
+                  <Typography variant="body2">Trade Count: {productInfo.one_month_static?.trade_count || 'N/A'}</Typography>
+                  <Typography variant="body2">PNL Ratio: {productInfo.one_month_static?.pnl_ratio || 'N/A'}%</Typography>
+
+                  <Typography variant="body2">Profit Ratio: {productInfo.one_month_static?.profit_ratio || 'N/A'}%</Typography>
+                  <Typography variant="body2">Win Ratio: {productInfo.one_month_static?.win_ratio || 'N/A'}%</Typography>
+                </Grid>
+                <Grid item>
+                  <Typography variant="h5" sx={{ mt: 2 }}>
+                    Data In 3 Month
+                  </Typography>
+                  <Typography variant="body2">Trade Count: {productInfo.thr_month_static?.trade_count || 'N/A'}</Typography>
+                  <Typography variant="body2">PNL Ratio: {productInfo.thr_month_static?.pnl_ratio || 'N/A'}%</Typography>
+                  <Typography variant="body2">Profit Ratio: {productInfo.thr_month_static?.profit_ratio || 'N/A'}%</Typography>
+                  <Typography variant="body2">Win Ratio: {productInfo.thr_month_static?.win_ratio || 'N/A'}%</Typography>
+                </Grid>
+              </Grid>
+
               <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', mt: 2 }}>
                 <Button
                   variant="contained"
@@ -121,31 +91,41 @@ const StrategyDetail = () => {
           </MainCard>
         </Grid>
         <Grid item xs={12}>
-          <MainCard sx={{ minWidth: 275, bgcolor: '#1e1e2d', color: '#fff', m: 2 }}>
+          <Typography variant="h5" component="div">
+            Acum Pnl Ratio
+          </Typography>
+
+          <MainCard sx={{ minWidth: 275, bgcolor: '#1e1e2d', m: 2 }}>
             {/* <Box sx={{ pt: 1, pr: 2 }}> */}
-            <ReactApexChart options={areaChartOptions} series={series} type="area" height={450} />
+
+            <AcumPnlRatioAraeChart productId={id} />
             {/* </Box> */}
           </MainCard>
         </Grid>
         <Grid item xs={12}>
+          <Typography variant="h5" component="div">
+            Recent 30 Days Profit Calendar
+          </Typography>
           <MainCard sx={{ minWidth: 275, bgcolor: '#1e1e2d', color: '#fff', m: 2 }}>
             <CardContent>
-              <Typography variant="h5" component="div">
-                Profit Calender
-              </Typography>
-              <Typography variant="body2">Profit: 1.7</Typography>
+              {/* <Typography variant="body2">Profit: 1.7</Typography>
               <Typography variant="body2">Win Ratio: 64%</Typography>
-              <Typography variant="body2">Trade Count: 110</Typography>
-              <ProfitCalendar />
+              <Typography variant="body2">Trade Count: 110</Typography> */}
+              <ProfitCalendar productId={id} />
             </CardContent>
-            </MainCard>
-          </Grid>
-        <Grid item xs={8}>
-          <MainCard sx={{ mt: 2 }} content={false}>
-            <TradeTable />
           </MainCard>
         </Grid>
-        <Grid item xs={4}>
+        <Grid item xs={12}>
+          <Typography variant="h5" component="div">
+            Recent Trades
+          </Typography>
+          <MainCard sx={{ mt: 2 }}>
+            <CardContent>
+              <TradeTable productId={id} />
+            </CardContent>
+          </MainCard>
+        </Grid>
+        {/* <Grid item xs={4}>
           <MainCard sx={{ minWidth: 275, bgcolor: '#1e1e2d', color: '#fff', m: 2 }}>
             <CardContent>
               <Typography variant="h5" component="div">
@@ -156,7 +136,7 @@ const StrategyDetail = () => {
               <Typography variant="body2">ETH: [ win-ratia 54%] [profit-ratio 1.6] </Typography>
             </CardContent>
           </MainCard>
-        </Grid>
+        </Grid> */}
       </Grid>
     </Box>
   );

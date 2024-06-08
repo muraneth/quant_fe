@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 
 // material-ui
@@ -10,23 +10,23 @@ import { NumericFormat } from 'react-number-format';
 
 // project import
 import Dot from 'components/@extended/Dot';
+import axios from 'axios';
+// function createData(trackingNo, name, fat, carbs, protein) {
+//   return { trackingNo, name, fat, carbs, protein };
+// }
 
-function createData(trackingNo, name, fat, carbs, protein) {
-  return { trackingNo, name, fat, carbs, protein };
-}
-
-const rows = [
-  createData(84564564, 'Camera Lens', 40, 2, 40570),
-  createData(98764564, 'Laptop', 300, 0, 180139),
-  createData(98756325, 'Mobile', 355, 1, 90989),
-  createData(98652366, 'Handset', 50, 1, 10239),
-  createData(13286564, 'Computer Accessories', 100, 1, 83348),
-  createData(86739658, 'TV', 99, 0, 410780),
-  createData(13256498, 'Keyboard', 125, 2, 70999),
-  createData(98753263, 'Mouse', 89, 2, 10570),
-  createData(98753275, 'Desktop', 185, 1, 98063),
-  createData(98753291, 'Chair', 100, 0, 14001)
-];
+// const rows = [
+//   createData(84564564, 'Camera Lens', 40, 2, 40570),
+//   createData(98764564, 'Laptop', 300, 0, 180139),
+//   createData(98756325, 'Mobile', 355, 1, 90989),
+//   createData(98652366, 'Handset', 50, 1, 10239),
+//   createData(13286564, 'Computer Accessories', 100, 1, 83348),
+//   createData(86739658, 'TV', 99, 0, 410780),
+//   createData(13256498, 'Keyboard', 125, 2, 70999),
+//   createData(98753263, 'Mouse', 89, 2, 10570),
+//   createData(98753275, 'Desktop', 185, 1, 98063),
+//   createData(98753291, 'Chair', 100, 0, 14001)
+// ];
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -58,10 +58,10 @@ function stableSort(array, comparator) {
 
 const headCells = [
   {
-    id: 'tradingNo',
+    id: 'trading-date',
     align: 'left',
     disablePadding: false,
-    label: 'Trading No.'
+    label: 'Trading Date'
   },
   {
     id: 'token',
@@ -76,10 +76,22 @@ const headCells = [
     label: 'Direction'
   },
   {
-    id: 'pnl',
+    id: 'open-avg-px',
     align: 'left',
     disablePadding: false,
-    label: 'PNL'
+    label: 'Open Avg Px'
+  },
+  {
+    id: 'close-avg-px',
+    align: 'right',
+    disablePadding: false,
+    label: 'Close Avg Px'
+  },
+  {
+    id: 'status',
+    align: 'left',
+    disablePadding: false,
+    label: 'WIN/LOSE'
   },
   {
     id: 'pnl-ratio',
@@ -117,26 +129,26 @@ OrderTableHead.propTypes = {
 
 // ==============================|| ORDER TABLE - STATUS ||============================== //
 
-const OrderStatus = ({ status }) => {
+const WinStatus = ({ status }) => {
   let color;
   let title;
 
-  switch (status) {
-    case 0:
+  switch (status < 0) {
+    case true:
       color = 'warning';
-      title = 'Pending';
+      title = 'LOSE';
       break;
-    case 1:
+    case false:
       color = 'success';
-      title = 'Approved';
+      title = 'WIN';
       break;
-    case 2:
-      color = 'error';
-      title = 'Rejected';
-      break;
-    default:
-      color = 'primary';
-      title = 'None';
+    // case 2:
+    //   color = 'error';
+    //   title = 'Rejected';
+    //   break;
+    // default:
+    //   color = 'primary';
+    //   title = 'None';
   }
 
   return (
@@ -147,16 +159,29 @@ const OrderStatus = ({ status }) => {
   );
 };
 
-OrderStatus.propTypes = {
+WinStatus.propTypes = {
   status: PropTypes.number
 };
 
 // ==============================|| ORDER TABLE ||============================== //
 
-export default function TradeTable() {
+export default function TradeTable({ productId }) {
   const [order] = useState('asc');
   const [orderBy] = useState('trackingNo');
   const [selected] = useState([]);
+  const [trades, setTrades] = useState([]);
+  useEffect(() => {
+    const fetchTrades = async () => {
+      const url = `http://matrixcipher.com/api/product/getProductTrades?productId=${productId}`;
+      try {
+        const response = await axios.get(url);
+        setTrades(response.data.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchTrades();
+  }, []);
 
   const isSelected = (trackingNo) => selected.indexOf(trackingNo) !== -1;
 
@@ -186,8 +211,8 @@ export default function TradeTable() {
         >
           <OrderTableHead order={order} orderBy={orderBy} />
           <TableBody>
-            {stableSort(rows, getComparator(order, orderBy)).map((row, index) => {
-              const isItemSelected = isSelected(row.trackingNo);
+            {stableSort(trades, getComparator(order, orderBy)).map((row, index) => {
+              const isItemSelected = isSelected(row.trade_id);
               const labelId = `enhanced-table-checkbox-${index}`;
 
               return (
@@ -197,21 +222,23 @@ export default function TradeTable() {
                   sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                   aria-checked={isItemSelected}
                   tabIndex={-1}
-                  key={row.trackingNo}
+                  key={row.trade_id}
                   selected={isItemSelected}
                 >
                   <TableCell component="th" id={labelId} scope="row" align="left">
                     <Link color="secondary" component={RouterLink} to="">
-                      {row.trackingNo}
+                      {row.c_time_date}
                     </Link>
                   </TableCell>
-                  <TableCell align="left">{row.name}</TableCell>
-                  <TableCell align="right">{row.fat}</TableCell>
+                  <TableCell align="left">{row.uly}</TableCell>
+                  <TableCell align="right">{row.direction}</TableCell>
+                  <TableCell align="left">{row.open_avg_px}</TableCell>
+                  <TableCell align="right">{row.close_avg_px}</TableCell>
                   <TableCell align="left">
-                    <OrderStatus status={row.carbs} />
+                    <WinStatus status={row.pnl_ratio} />
                   </TableCell>
                   <TableCell align="right">
-                    <NumericFormat value={row.protein} displayType="text" thousandSeparator prefix="$" />
+                    <NumericFormat value={row.pnl_ratio} displayType="text" thousandSeparator suffix="%" />
                   </TableCell>
                 </TableRow>
               );

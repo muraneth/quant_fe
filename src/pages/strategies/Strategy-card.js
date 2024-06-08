@@ -35,20 +35,60 @@ const StrategyCard = ({ strategy }) => {
             <Typography variant="h5" sx={{ mt: 2 }}>
               Data In 1 Month
             </Typography>
-            <Typography variant="body2">Trade Count: {strategy.one_month_static?.trade_count || 'N/A'}</Typography>
-            <Typography variant="body2">PNL Ratio: {strategy.one_month_static?.pnl_ratio || 'N/A'}</Typography>
+            <Grid item container direction="row" alignItems="center">
+              <Typography variant="body2">Trade Count: </Typography>
+              <Typography variant="h5" color="primary">
+                {strategy.one_month_static?.trade_count || 'N/A'}
+              </Typography>
+            </Grid>
+            <Grid item container direction="row" alignItems="center">
+              <Typography variant="body2">PNL Ratio: </Typography>
 
-            <Typography variant="body2">Profit Ratio: {strategy.one_month_static?.profit_ratio || 'N/A'}</Typography>
-            <Typography variant="body2">Win Ratio: {strategy.one_month_static?.win_ratio || 'N/A'}</Typography>
+              <Typography variant="h5" color="primary">
+                {strategy.one_month_static?.pnl_ratio || 'N/A'}%
+              </Typography>
+            </Grid>
+            <Grid item container direction="row" alignItems="center">
+              <Typography variant="body2">Profit Ratio: </Typography>
+              <Typography variant="h5" color="primary">
+                {strategy.one_month_static?.profit_ratio || 'N/A'}%
+              </Typography>
+            </Grid>
+            <Grid item container direction="row" alignItems="center">
+              <Typography variant="body2">Win Ratio: </Typography>
+              <Typography variant="h5" color="primary">
+                {strategy.one_month_static?.win_ratio || 'N/A'}%
+              </Typography>
+            </Grid>
           </Grid>
           <Grid item>
             <Typography variant="h5" sx={{ mt: 2 }}>
-              Data In 6 Month
+              Data In 3 Month
             </Typography>
-            <Typography variant="body2">Trade Count: {strategy.six_month_static?.trade_count || 'N/A'}</Typography>
-            <Typography variant="body2">PNL Ratio: {strategy.six_month_static?.pnl_ratio || 'N/A'}</Typography>
-            <Typography variant="body2">Profit Ratio: {strategy.six_month_static?.profit_ratio || 'N/A'}</Typography>
-            <Typography variant="body2">Win Ratio: {strategy.six_month_static?.win_ratio || 'N/A'}</Typography>
+            <Grid item container direction="row" alignItems="center">
+              <Typography variant="body2">Trade Count: </Typography>
+              <Typography variant="h5" color="primary">
+                {strategy.thr_month_static?.trade_count || 'N/A'}
+              </Typography>
+            </Grid>
+            <Grid item container direction="row" alignItems="center">
+              <Typography variant="body2">PNL Ratio: </Typography>
+              <Typography variant="h5" color="primary">
+                {strategy.thr_month_static?.pnl_ratio || 'N/A'}%
+              </Typography>
+            </Grid>
+            <Grid item container direction="row" alignItems="center">
+              <Typography variant="body2">Profit Ratio: </Typography>
+              <Typography variant="h5" color="primary">
+                {strategy.thr_month_static?.profit_ratio || 'N/A'}%
+              </Typography>
+            </Grid>
+            <Grid item container direction="row" alignItems="center">
+              <Typography variant="body2">Win Ratio: </Typography>
+              <Typography variant="h5" color="primary">
+                {strategy.thr_month_static?.win_ratio || 'N/A'}%
+              </Typography>
+            </Grid>
           </Grid>
         </Grid>
 
