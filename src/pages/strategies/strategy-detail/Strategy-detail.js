@@ -10,8 +10,7 @@ import MainCard from 'components/MainCard';
 import TradeTable from './TradesTable';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import { set } from 'lodash';
-import ProfitCalendar from './Profit-calender';
+import WeeklyPnlBarChart from './WeeklyPnlBarChart';
 
 const StrategyDetail = () => {
   const [productInfo, setProductInfo] = useState({});
@@ -55,20 +54,20 @@ const StrategyDetail = () => {
                   <Typography variant="h5" sx={{ mt: 2 }}>
                     Data In 1 Month
                   </Typography>
-                  <Typography variant="body2">Trade Count: {productInfo.one_month_static?.trade_count || 'N/A'}</Typography>
-                  <Typography variant="body2">PNL Ratio: {productInfo.one_month_static?.pnl_ratio || 'N/A'}%</Typography>
+                  <Typography variant="body2">Trade Count: {productInfo?.one_month_static?.trade_count || 'N/A'}</Typography>
+                  <Typography variant="body2">PNL Ratio: {productInfo?.one_month_static?.pnl_ratio || 'N/A'}%</Typography>
 
-                  <Typography variant="body2">Profit Ratio: {productInfo.one_month_static?.profit_ratio || 'N/A'}%</Typography>
-                  <Typography variant="body2">Win Ratio: {productInfo.one_month_static?.win_ratio || 'N/A'}%</Typography>
+                  <Typography variant="body2">Profit Ratio: {productInfo?.one_month_static?.profit_ratio || 'N/A'}%</Typography>
+                  <Typography variant="body2">Win Ratio: {productInfo?.one_month_static?.win_ratio || 'N/A'}%</Typography>
                 </Grid>
                 <Grid item>
                   <Typography variant="h5" sx={{ mt: 2 }}>
                     Data In 3 Month
                   </Typography>
-                  <Typography variant="body2">Trade Count: {productInfo.thr_month_static?.trade_count || 'N/A'}</Typography>
-                  <Typography variant="body2">PNL Ratio: {productInfo.thr_month_static?.pnl_ratio || 'N/A'}%</Typography>
-                  <Typography variant="body2">Profit Ratio: {productInfo.thr_month_static?.profit_ratio || 'N/A'}%</Typography>
-                  <Typography variant="body2">Win Ratio: {productInfo.thr_month_static?.win_ratio || 'N/A'}%</Typography>
+                  <Typography variant="body2">Trade Count: {productInfo?.thr_month_static?.trade_count || 'N/A'}</Typography>
+                  <Typography variant="body2">PNL Ratio: {productInfo?.thr_month_static?.pnl_ratio || 'N/A'}%</Typography>
+                  <Typography variant="body2">Profit Ratio: {productInfo?.thr_month_static?.profit_ratio || 'N/A'}%</Typography>
+                  <Typography variant="body2">Win Ratio: {productInfo?.thr_month_static?.win_ratio || 'N/A'}%</Typography>
                 </Grid>
               </Grid>
 
@@ -104,14 +103,12 @@ const StrategyDetail = () => {
         </Grid>
         <Grid item xs={12}>
           <Typography variant="h5" component="div">
-            Recent 30 Days Profit Calendar
+            Weekly Profit Bar
           </Typography>
           <MainCard sx={{ minWidth: 275, bgcolor: '#1e1e2d', color: '#fff', m: 2 }}>
             <CardContent>
-              {/* <Typography variant="body2">Profit: 1.7</Typography>
-              <Typography variant="body2">Win Ratio: 64%</Typography>
-              <Typography variant="body2">Trade Count: 110</Typography> */}
-              <ProfitCalendar productId={id} />
+              {/* <ProfitCalendar productId={id} /> */}
+              {/* <WeeklyPnlBarChart productId={id} /> */}
             </CardContent>
           </MainCard>
         </Grid>

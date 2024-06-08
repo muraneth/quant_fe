@@ -67,7 +67,7 @@ const AcumPnlRatioAraeChart = ({ productId }) => {
       ...prevState,
       colors: [theme.palette.primary.main, theme.palette.primary[700]],
       xaxis: {
-        categories: productDailyInfo.map((item) => item.u_time_date),
+        categories: productDailyInfo?.map((item) => item.u_time_date),
 
         axisBorder: {
           show: true,
@@ -106,7 +106,7 @@ const AcumPnlRatioAraeChart = ({ productId }) => {
     setSeries([
       {
         name: 'Acum PNL Ratio',
-        data: productDailyInfo.map((item) => item.acum_pnl_ratio)
+        data: productDailyInfo?.map((item) => item.acum_pnl_ratio)
       }
     ]);
   }, [productDailyInfo]);
