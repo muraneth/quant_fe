@@ -1,7 +1,6 @@
 /* eslint-disable no-unused-vars */
 
 import { Box, Grid, Paper, Card, CardContent, Typography, Button } from '@mui/material';
-import { styled } from '@mui/material/styles';
 
 import { useState, useEffect } from 'react';
 // import ReactApexChart from 'react-apexcharts';
@@ -11,6 +10,7 @@ import TradeTable from './TradesTable';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import WeeklyPnlBarChart from './WeeklyPnlBarChart';
+import TokenProfitCard from './Token-profit';
 
 const StrategyDetail = () => {
   const [productInfo, setProductInfo] = useState({});
@@ -103,18 +103,17 @@ const StrategyDetail = () => {
         </Grid>
         <Grid item xs={12}>
           <Typography variant="h5" component="div">
-            Weekly Profit Bar
+            Weekly Profit Ratio Bar
           </Typography>
-          <MainCard sx={{ minWidth: 275, bgcolor: '#1e1e2d', color: '#fff', m: 2 }}>
+          <MainCard sx={{ minWidth: 275, bgcolor: '#1e1e2d', m: 2 }}>
             <CardContent>
-              {/* <ProfitCalendar productId={id} /> */}
-              {/* <WeeklyPnlBarChart productId={id} /> */}
+              <WeeklyPnlBarChart productId={id} />
             </CardContent>
           </MainCard>
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={8}>
           <Typography variant="h5" component="div">
-            Recent Trades
+            Last 3 Months Trades
           </Typography>
           <MainCard sx={{ mt: 2 }}>
             <CardContent>
@@ -122,18 +121,16 @@ const StrategyDetail = () => {
             </CardContent>
           </MainCard>
         </Grid>
-        {/* <Grid item xs={4}>
+        <Grid item xs={4}>
+          <Typography variant="h5" component="div">
+            Last 3 Months Profit By Token{' '}
+          </Typography>
           <MainCard sx={{ minWidth: 275, bgcolor: '#1e1e2d', color: '#fff', m: 2 }}>
             <CardContent>
-              <Typography variant="h5" component="div">
-                Last 3 month Token Info{' '}
-              </Typography>
-              <Typography variant="body2">Solana: [ win-ratia 64%] [profit-ratio 1.7] count 110</Typography>
-              <Typography variant="body2">Pepe: [ win-ratia 54%] [profit-ratio 1.6] </Typography>
-              <Typography variant="body2">ETH: [ win-ratia 54%] [profit-ratio 1.6] </Typography>
+              <TokenProfitCard productId={id} />
             </CardContent>
           </MainCard>
-        </Grid> */}
+        </Grid>
       </Grid>
     </Box>
   );

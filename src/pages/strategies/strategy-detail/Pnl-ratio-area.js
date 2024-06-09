@@ -7,6 +7,7 @@ import { useTheme } from '@mui/material/styles';
 // third-party
 import ReactApexChart from 'react-apexcharts';
 import axios from 'axios';
+import { common } from '@mui/material/colors';
 
 // chart options
 const areaChartOptions = {
@@ -34,7 +35,7 @@ const areaChartOptions = {
 const AcumPnlRatioAraeChart = ({ productId }) => {
   const theme = useTheme();
 
-  const { secondary } = theme.palette.text;
+  // const { secondary } = theme.palette.text;
   const line = theme.palette.divider;
 
   const [options, setOptions] = useState(areaChartOptions);
@@ -72,13 +73,18 @@ const AcumPnlRatioAraeChart = ({ productId }) => {
         axisBorder: {
           show: true,
           color: line
+        },
+        labels: {
+          style: {
+            colors: common.white
+          }
         }
         // tickAmount: slot === 'all' ? 20 : slot === 'month' ? 11 : 7
       },
       yaxis: {
         labels: {
           style: {
-            colors: [secondary]
+            colors: common.white // Set the y-axis label color
           },
           formatter: function (val) {
             return val + '%'; // Adding '%' symbol to y-axis labels

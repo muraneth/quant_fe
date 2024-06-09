@@ -20,6 +20,15 @@ const StrategyCard = ({ strategy }) => {
     </Box>
   );
 
+  const GetApporateApy = (strategy) => {
+    // if (strategy.thr_month_static) {
+    //   return ((strategy.thr_month_static.pnl_ratio / 3) * 12).toFixed(2);
+    // }
+    if (strategy.one_month_static) {
+      return ((strategy.one_month_static.pnl_ratio / 1) * 12).toFixed(2);
+    }
+    return 'N/A';
+  };
   return (
     <Card sx={{ minWidth: 275, bgcolor: '#1e1e2d', color: '#fff', m: 2 }}>
       <CardContent>
@@ -29,6 +38,13 @@ const StrategyCard = ({ strategy }) => {
 
         <RiskBar value={strategy.risk} />
         <Typography variant="body3">Trading Coins: {strategy.coin_pairs?.join(', ')}</Typography>
+
+        <Grid container alignItems="center">
+          <Typography variant="body3">APY : </Typography>
+          <Typography variant="h5" color="primary">
+            {GetApporateApy(strategy)}%
+          </Typography>
+        </Grid>
 
         <Grid container alignItems="center">
           <Grid item xs={12} md={6}>

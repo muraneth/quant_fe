@@ -1,7 +1,9 @@
+/* eslint-disable no-unused-vars */
 import { useEffect, useState } from 'react';
 import ReactApexChart from 'react-apexcharts';
 import { useTheme } from '@mui/material/styles';
 import axios from 'axios';
+import { green, red, common } from '@mui/material/colors';
 
 const barChartOptions = {
   chart: {
@@ -55,8 +57,8 @@ const WeeklyPnlBarChart = ({ productId }) => {
   }, []);
 
   useEffect(() => {
-    const positiveData = data.map((item) => (item.pnl >= 0 ? item.pnl : 0));
-    const negativeData = data.map((item) => (item.pnl < 0 ? item.pnl : 0));
+    const positiveData = data.map((item) => (item.pnl_ratio >= 0 ? item.pnl_ratio : 0));
+    const negativeData = data.map((item) => (item.pnl_ratio < 0 ? item.pnl_ratio : 0));
 
     setSeries([
       { name: 'Weekly PNL+', data: positiveData },
@@ -66,16 +68,29 @@ const WeeklyPnlBarChart = ({ productId }) => {
       ...prevState,
       colors: [primary.main, error.light],
       xaxis: {
-        categories: data.map((item) => item.week_start_date),
+        categories: data.map((item) => item.date),
         axisBorder: {
           show: true
         },
         axisTicks: {
           show: true
+        },
+        labels: {
+          style: {
+            colors: common.white // Set the y-axis label color
+          }
         }
       },
       yaxis: {
-        show: true
+        show: true,
+        labels: {
+          style: {
+            colors: common.white // Set the y-axis label color
+          },
+          formatter: function (val) {
+            return val + '%'; // Adding '%' symbol to y-axis labels
+          }
+        }
       },
       tooltip: {
         theme: 'light'

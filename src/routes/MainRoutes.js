@@ -8,7 +8,7 @@ import MainLayout from 'layout/MainLayout';
 // render - dashboard
 const DashboardDefault = Loadable(lazy(() => import('pages/dashboard')));
 const Strategies = Loadable(lazy(() => import('pages/strategies/Strategies')));
-const StrategyDetail = Loadable(lazy(() => import('pages/strategies/strategy-detail/Strategy-detail')));
+const StrategyDetail = Loadable(lazy(() => import('pages/strategies/strategy-detail')));
 
 // render - sample page
 const SamplePage = Loadable(lazy(() => import('pages/extra-pages/SamplePage')));
