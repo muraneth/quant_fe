@@ -11,7 +11,8 @@ COPY package*.json ./
 RUN npm install
 
 # Copy the rest of the application code to the working directory
-COPY . .
+# COPY . .
+COPY build ./build
 
 # Build the application if there is a build step (uncomment if needed)
 # RUN npm run build
