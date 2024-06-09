@@ -14,6 +14,7 @@ RUN mkdir build
 # Copy the rest of the application code to the working directory
 # COPY . .
 COPY build ./build
+COPY node.js .
 
 # Build the application if there is a build step (uncomment if needed)
 # RUN npm run build
