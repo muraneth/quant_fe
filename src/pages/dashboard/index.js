@@ -2,83 +2,25 @@
 import { useState, useEffect } from 'react';
 
 // material-ui
-import {
-  Avatar,
-  AvatarGroup,
-  Box,
-  Button,
-  Grid,
-  // List,
-  // ListItemAvatar,
-  // ListItemButton,
-  // ListItemSecondaryAction,
-  // ListItemText,
-  // MenuItem,
-  Stack,
-  // TextField,
-  Typography
-} from '@mui/material';
+import { Box, Button, Grid, Stack, Typography } from '@mui/material';
 
-// project import
-// import TradeTable from '../strategies/strategy-detail/TradesTable';
 import AcumPnlAraeChart from './PnlAreaChart';
 import WeeklyPnlBarChart from './WeeklyPnlBarChart';
 import BalanceAraeChart from './BalanceAreaChart';
-// import ReportAreaChart from './ReportAreaChart';
+
 // import SalesColumnChart from './SalesColumnChart';
 import MainCard from 'components/MainCard';
 import AnalyticEcommerce from 'components/cards/statistics/AnalyticEcommerce';
 import { useNavigate } from 'react-router-dom';
 
-// assets
-// import { GiftOutlined, MessageOutlined, SettingOutlined } from '@ant-design/icons';
-import avatar1 from 'assets/images/users/avatar-1.png';
-import avatar2 from 'assets/images/users/avatar-2.png';
-import avatar3 from 'assets/images/users/avatar-3.png';
-import avatar4 from 'assets/images/users/avatar-4.png';
 import axios from 'axios';
-
-// avatar style
-// const avatarSX = {
-//   width: 36,
-//   height: 36,
-//   fontSize: '1rem'
-// };
-
-// // action style
-// const actionSX = {
-//   mt: 0.75,
-//   ml: 1,
-//   top: 'auto',
-//   right: 'auto',
-//   alignSelf: 'flex-start',
-//   transform: 'none'
-// };
-
-// sales report status
-// const status = [
-//   {
-//     value: 'today',
-//     label: 'Today'
-//   },
-//   {
-//     value: 'month',
-//     label: 'This Month'
-//   },
-//   {
-//     value: 'year',
-//     label: 'This Year'
-//   }
-// ];
 
 // ==============================|| DASHBOARD - DEFAULT ||============================== //
 
 const DashboardDefault = () => {
-  // const [value, setValue] = useState('today');
   const [slot, setSlot] = useState('month');
   const [userDailyCashFlowData, setUserDailyCashFlowData] = useState([]);
   const [userWeeklyCashFlowData, setUserWeeklyCashFlowData] = useState([]);
-  const [userAssetBaseInfo, setUserAssetBaseInfo] = useState([]);
   const navigate = useNavigate();
   const host = 'http://matrixcipher.com';
   useEffect(() => {
@@ -86,22 +28,15 @@ const DashboardDefault = () => {
       try {
         const token = localStorage.getItem('token');
         const uid = localStorage.getItem('uid');
-        const response = await axios.get(`${host}/api/user/asset/getAllHistoryCashFlow?uid=${uid}`, {
+        const response = await axios.get(`${host}/api/user/asset/getAllHistoryCashFlow`, {
           headers: {
             Authorization: `${token}`,
             Uid: `${uid}`
           }
         });
 
-        setUserDailyCashFlowData(response.data.data.daily_cash_flow);
-        setUserWeeklyCashFlowData(response.data.data.weekly_cash_flow);
-        const response2 = await axios.get(`${host}/api/user/asset/getAccountAsset?uid=${uid}`, {
-          headers: {
-            Authorization: `${token}`,
-            Uid: `${uid}`
-          }
-        });
-        setUserAssetBaseInfo(response2.data.data);
+        setUserDailyCashFlowData(response.data.data?.daily_cash_flow);
+        setUserWeeklyCashFlowData(response.data.data?.weekly_cash_flow);
       } catch (error) {
         console.error('Error fetching data:', error);
         navigate('/sign-in', { replace: true });
@@ -112,10 +47,6 @@ const DashboardDefault = () => {
   }, []);
 
   const lastRecord = userDailyCashFlowData.length > 0 ? userDailyCashFlowData[userDailyCashFlowData.length - 1] : null;
-  const recent7DaysCashFlow =
-    userDailyCashFlowData.length > 7 ? userDailyCashFlowData.slice(userDailyCashFlowData.length - 7) : userDailyCashFlowData;
-  const recent7DaysPnl = recent7DaysCashFlow.map((item) => item.daily_pnl);
-  const recent7AccumPnl = recent7DaysPnl.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
 
   const recent7WeekPnl =
     userWeeklyCashFlowData.length > 7 ? userWeeklyCashFlowData.slice(userWeeklyCashFlowData.length - 7) : userWeeklyCashFlowData;
@@ -261,14 +192,6 @@ const DashboardDefault = () => {
           <Grid item />
         </Grid>
         <MainCard sx={{ mt: 2, bgcolor: '#1e1e2d' }} content={false}>
-          <Box sx={{ p: 3, pb: 0 }}>
-            <Stack spacing={2}>
-              {/* <Typography variant="h6" color="textSecondary">
-                  Recent 7 days PNL
-                </Typography>
-                <Typography variant="h3">{`$${recent7AccumPnl}`}</Typography> */}
-            </Stack>
-          </Box>
           <WeeklyPnlBarChart data={recent7WeekPnl} />
         </MainCard>
       </Grid>

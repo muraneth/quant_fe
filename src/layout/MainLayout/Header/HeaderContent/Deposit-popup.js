@@ -17,6 +17,7 @@ import {
 } from '@mui/material';
 import { styled } from '@mui/system';
 import QRCode from 'qrcode';
+import axios from 'axios';
 
 const Deposit = () => {
   const [isDepositOpen, setIsDepositOpen] = useState(false);
@@ -58,31 +59,64 @@ const QRCodeImage = styled('img')({
   width: '150px',
   height: '150px'
 });
+const CustomDialog = styled(Dialog)(({ theme }) => ({
+  '& .MuiDialog-paper': {
+    minWidth: '400px', // Set the minimum width you want for the dialog
+    maxWidth: '700px' // Optionally set a maximum width
+  }
+}));
 const DepositCryptoPopup = ({ open, handleClose }) => {
   const [coin, setCoin] = useState('USDT');
-  const [network, setNetwork] = useState('Arbitrum One');
+  const [chain, setChain] = useState('Arbitrum');
+  const [userInfo, setUserInfo] = useState({});
+  const [address, setAddress] = useState('');
 
   const [qrCodeUrl, setQrCodeUrl] = useState('');
+  const setWallet = (chain) => {
+    const wallet = userInfo.wallets.find((wallet) => wallet.chain === chain);
+    setChain(chain);
+    setAddress(wallet.addr);
+  };
 
   useEffect(() => {
-    const generateQrCode = async () => {
+    if (open) {
+      const fetchUserInfo = async () => {
+        const uid = localStorage.getItem('uid');
+        const token = localStorage.getItem('token');
+
+        try {
+          const response = await axios.get('http://matrixcipher.com/api/user/info/getUserInfo', {
+            headers: {
+              Authorization: `${token}`,
+              Uid: `${uid}`
+            }
+          });
+          console.log(response.data.data);
+          setUserInfo(response.data.data);
+          setChain(response.data.data.wallets[0].chain);
+          setAddress(response.data.data.wallets[0].addr);
+        } catch (error) {
+          console.error(error);
+        }
+      };
+      fetchUserInfo();
+    }
+  }, [open]);
+
+  useEffect(() => {
+    const generateQrCode = async (addr) => {
       try {
-        const url = await QRCode.toDataURL('0x13f3067f697eb6e24c790ad6a21058aa8fd275c0');
+        const url = await QRCode.toDataURL(addr);
         setQrCodeUrl(url);
       } catch (err) {
         console.error(err);
       }
     };
-
-    generateQrCode();
-  }, []);
-
+    generateQrCode(address);
+  }, [address]);
   return (
     <div>
-      {/* <Button variant="contained" color="primary" onClick={handleOpen}>
-        Open Deposit Popup
-      </Button> */}
-      <Dialog open={open} onClose={handleClose}>
+      <CustomDialog open={open} onClose={handleClose}>
         <DialogTitle>Deposit Crypto</DialogTitle>
         <StyledDialogContent>
           <StyledFormControl>
@@ -94,14 +128,19 @@ const DepositCryptoPopup = ({ open, handleClose }) => {
           </StyledFormControl>
           <StyledFormControl>
             <InputLabel>Network</InputLabel>
-            <Select value={network} onChange={(e) => setNetwork(e.target.value)}>
-              <MenuItem value="Arbitrum One">Arbitrum One</MenuItem>
+            <Select value={chain} onChange={(e) => setWallet(e.target.value)}>
+              {userInfo?.wallets?.map((wallet, index) => (
+                <MenuItem key={index} value={wallet.chain}>
+                  {wallet.chain}
+                </MenuItem>
+              ))}
+
               {/* Add more networks as needed */}
             </Select>
           </StyledFormControl>
           <TextField
             label="Deposit Address"
-            value="0x13f3067f697eb6e24c790ad6a21058aa8fd275c0"
+            value={address}
             InputProps={{
               readOnly: true
             }}
@@ -118,7 +157,7 @@ const DepositCryptoPopup = ({ open, handleClose }) => {
             Close
           </Button>
         </DialogActions>
-      </Dialog>
+      </CustomDialog>
     </div>
   );
 };

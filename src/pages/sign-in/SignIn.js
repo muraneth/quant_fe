@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -80,6 +81,7 @@ export default function SignIn() {
   const [emailErrorMessage, setEmailErrorMessage] = React.useState('');
   const [passwordError, setPasswordError] = React.useState(false);
   const [passwordErrorMessage, setPasswordErrorMessage] = React.useState('');
+  const [uid, setUid] = React.useState('');
   // const [open, setOpen] = React.useState(false);
   const navigate = useNavigate();
 
@@ -109,9 +111,9 @@ export default function SignIn() {
       localStorage.setItem('token', token);
       localStorage.setItem('uid', uid);
       localStorage.setItem('username', username);
+      setUid(uid);
       console.log('Logged in successfully!');
       // Redirect to user home page
-      navigate('/dashboard/default');
     } catch (error) {
       console.log(error);
       console.log('Invalid username or password');
@@ -120,6 +122,12 @@ export default function SignIn() {
       setPasswordError(true);
     }
   };
+
+  useEffect(() => {
+    if (uid !== '') {
+      navigate('/dashboard/default');
+    }
+  }, [uid]);
 
   const validateInputs = () => {
     const email = document.getElementById('email');
