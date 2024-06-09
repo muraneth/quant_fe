@@ -1,22 +1,23 @@
-# Use an existing Docker image as a base
-FROM node:alpine
+# Use an official Node.js runtime as the base image
+FROM node:16
 
-# Set working directory within the container
-WORKDIR /app
+# Set the working directory
+WORKDIR /usr/src/app
 
 # Copy package.json and package-lock.json to the working directory
 COPY package*.json ./
 
-RUN npm config set registry https://registry.npm.taobao.org
 # Install dependencies
 RUN npm install
 
-
-# Copy the rest of the application code
+# Copy the rest of the application code to the working directory
 COPY . .
 
-# Expose the port that the React app will run on
-EXPOSE 3000
+# Build the application if there is a build step (uncomment if needed)
+RUN npm run build
 
-# Start the React application
-CMD ["npm", "start"]
+# Expose the port the app runs on
+EXPOSE 3001
+
+# Define the command to run the application
+CMD ["node", "node.js"]
