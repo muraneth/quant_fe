@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 
-import { Box, Grid, Paper, Card, CardContent, Typography, Button } from '@mui/material';
+import { Box, Grid, Paper, Card, CardContent, Typography, Button, Container } from '@mui/material';
 
 import { useState, useEffect } from 'react';
 // import ReactApexChart from 'react-apexcharts';
@@ -11,6 +11,7 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import WeeklyPnlBarChart from './WeeklyPnlBarChart';
 import TokenProfitCard from './Token-profit';
+import DepositCryptoPopup from '../../invest/deposit';
 
 const StrategyDetail = () => {
   const [productInfo, setProductInfo] = useState({});
@@ -32,10 +33,25 @@ const StrategyDetail = () => {
     fetchProduct();
   }, []);
 
-  const handleButtonClick = () => {};
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+
+  const handleOpenPopup = () => {
+    setIsPopupOpen(true);
+  };
+
+  const handleClosePopup = () => {
+    setIsPopupOpen(false);
+  };
 
   return (
     <Box sx={{ flexGrow: 1, p: 3, minHeight: '100vh' }}>
+      {/* <Container>
+        <Button variant="contained" color="primary" onClick={handleOpenPopup}>
+          Open Deposit Popup
+        </Button>
+        <DepositCryptoPopup open={isPopupOpen} handleClose={handleClosePopup} />
+      </Container> */}
+
       <Grid container spacing={2}>
         <Grid item xs={12}>
           <MainCard sx={{ minWidth: 275, bgcolor: '#1e1e2d', color: '#fff', m: 2 }}>
@@ -81,7 +97,7 @@ const StrategyDetail = () => {
                     // color: '#fff',
                     '&:hover': { bgcolor: '#388e3c' }
                   }}
-                  onClick={handleButtonClick}
+                  onClick={handleOpenPopup}
                 >
                   Invest
                 </Button>

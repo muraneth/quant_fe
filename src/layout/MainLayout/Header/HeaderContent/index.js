@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 
 // material-ui
-import { Box,useMediaQuery } from '@mui/material';
+import { Box, useMediaQuery } from '@mui/material';
 // import { GithubOutlined } from '@ant-design/icons';
 
 // project import
@@ -9,6 +9,7 @@ import Search from './Search';
 import Profile from './Profile';
 import Notification from './Notification';
 import MobileSection from './MobileSection';
+import Deposit from './Deposit-popup';
 
 // ==============================|| HEADER - CONTENT ||============================== //
 
@@ -33,6 +34,7 @@ const HeaderContent = () => {
       </IconButton> */}
 
       {/* <Notification /> */}
+      <Deposit />
       {!matchesXs && <Profile />}
       {matchesXs && <MobileSection />}
     </>

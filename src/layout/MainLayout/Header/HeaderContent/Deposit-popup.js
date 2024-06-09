@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Dialog,
   DialogTitle,
@@ -12,9 +12,34 @@ import {
   Select,
   MenuItem,
   InputLabel,
-  FormControl
+  FormControl,
+  Box
 } from '@mui/material';
 import { styled } from '@mui/system';
+import QRCode from 'qrcode';
+
+const Deposit = () => {
+  const [isDepositOpen, setIsDepositOpen] = useState(false);
+
+  const handleOpenPopup = () => {
+    setIsDepositOpen(true);
+  };
+  const handleClosePopup = () => {
+    setIsDepositOpen(false);
+  };
+
+  return (
+    <Box sx={{ flexShrink: 0, ml: 0.75 }}>
+      <Button variant="outlined" color="primary" onClick={handleOpenPopup}>
+        Deposit
+      </Button>
+      <DepositCryptoPopup open={isDepositOpen} handleClose={handleClosePopup} />
+    </Box>
+  );
+};
+export default Deposit;
+
+/* eslint-disable no-unused-vars */
 
 const StyledDialogContent = styled(DialogContent)(({ theme }) => ({
   padding: '20px',
@@ -28,15 +53,29 @@ const StyledFormControl = styled(FormControl)(({ theme }) => ({
   minWidth: 200
 }));
 
-const QRCode = styled('img')({
+const QRCodeImage = styled('img')({
   marginTop: '20px',
   width: '150px',
   height: '150px'
 });
-
 const DepositCryptoPopup = ({ open, handleClose }) => {
   const [coin, setCoin] = useState('USDT');
   const [network, setNetwork] = useState('Arbitrum One');
+
+  const [qrCodeUrl, setQrCodeUrl] = useState('');
+
+  useEffect(() => {
+    const generateQrCode = async () => {
+      try {
+        const url = await QRCode.toDataURL('0x13f3067f697eb6e24c790ad6a21058aa8fd275c0');
+        setQrCodeUrl(url);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    generateQrCode();
+  }, []);
 
   return (
     <div>
@@ -72,7 +111,7 @@ const DepositCryptoPopup = ({ open, handleClose }) => {
           <Typography variant="body2" color="error">
             Only send Arbitrum One TetherUS tokens to this address
           </Typography>
-          <QRCode src="path/to/your/qr-code.png" alt="QR Code" />
+          <QRCodeImage src={qrCodeUrl} alt="QR Code" />
         </StyledDialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="primary">
@@ -83,5 +122,3 @@ const DepositCryptoPopup = ({ open, handleClose }) => {
     </div>
   );
 };
-
-export default DepositCryptoPopup;
