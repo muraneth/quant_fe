@@ -14,7 +14,7 @@ RUN npm install
 COPY . .
 
 # Build the application if there is a build step (uncomment if needed)
-RUN npm run build
+# RUN npm run build
 
 # Expose the port the app runs on
 EXPOSE 3001
