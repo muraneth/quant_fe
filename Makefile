@@ -4,14 +4,14 @@ image_name = quant_fe_pre:$(version)
 
 .PHONY: pull build stop run
 
-all : pull build-docker stop run
+all : pull build build-docker stop run
 
 pull:
 	git pull
 
 # Uncomment the line below if you need to run a build command
-# build:
-# 	npm run build
+build:
+	npm run build
 
 build-docker:
 	docker build -t $(image_name) .
