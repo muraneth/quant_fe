@@ -90,10 +90,7 @@ const WeeklyPnlBarChart = ({ productId }) => {
         }
       },
       grid: {
-        show: true,
-        stroke: {
-          colors: ['#f0f0f0']
-        }
+        borderColor: '#445661'
       },
       tooltip: {
         theme: 'light'

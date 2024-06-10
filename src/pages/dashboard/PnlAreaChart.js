@@ -27,7 +27,8 @@ const areaChartOptions = {
     width: 2
   },
   grid: {
-    strokeDashArray: 0
+    strokeDashArray: 0,
+    borderColor: '#90A4AE'
   }
 };
 
@@ -95,6 +96,11 @@ const AcumPnlAraeChart = ({ slot }) => {
           show: true,
           color: line
         },
+        labels: {
+          style: {
+            colors: common.white
+          }
+        },
         tickAmount: slot === 'all' ? 20 : slot === 'month' ? 11 : 7
       },
       yaxis: {
@@ -108,7 +114,7 @@ const AcumPnlAraeChart = ({ slot }) => {
         }
       },
       grid: {
-        borderColor: line
+        borderColor: '#445661'
       },
       tooltip: {
         theme: 'light',

@@ -92,7 +92,7 @@ const AcumPnlRatioAraeChart = ({ productId }) => {
         }
       },
       grid: {
-        borderColor: line
+        borderColor: '#445661'
       },
       tooltip: {
         theme: 'light',

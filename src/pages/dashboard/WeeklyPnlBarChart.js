@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import ReactApexChart from 'react-apexcharts';
 import { useTheme } from '@mui/material/styles';
-import { green } from '@mui/material/colors';
+import { common, green } from '@mui/material/colors';
 
 const barChartOptions = {
   chart: {
@@ -21,7 +21,8 @@ const barChartOptions = {
     enabled: false
   },
   grid: {
-    show: true
+    show: true,
+    borderColor: '#445661'
   }
 };
 
@@ -50,13 +51,26 @@ const WeeklyPnlBarChart = ({ data }) => {
         },
         axisTicks: {
           show: true
+        },
+        labels: {
+          style: {
+            colors: common.white
+          }
         }
       },
       yaxis: {
-        show: true
+        show: true,
+        labels: {
+          style: {
+            colors: common.white
+          }
+        }
       },
       tooltip: {
         theme: 'light'
+      },
+      grid: {
+        borderColor: '#445661'
       }
     }));
   }, [data]);

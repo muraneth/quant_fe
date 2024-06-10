@@ -8,7 +8,7 @@ import { useTheme } from '@mui/material/styles';
 import ReactApexChart from 'react-apexcharts';
 import axios from 'axios';
 
-import { green } from '@mui/material/colors';
+import { green, common } from '@mui/material/colors';
 
 // chart options
 const areaChartOptions = {
@@ -36,7 +36,6 @@ const areaChartOptions = {
 const BalanceAraeChart = ({ slot }) => {
   const theme = useTheme();
 
-  const { secondary } = theme.palette.text;
   const line = theme.palette.divider;
 
   const [options, setOptions] = useState(areaChartOptions);
@@ -93,17 +92,22 @@ const BalanceAraeChart = ({ slot }) => {
           show: true,
           color: line
         },
+        labels: {
+          style: {
+            colors: common.white
+          }
+        },
         tickAmount: slot === 'all' ? 20 : slot === 'month' ? 11 : 7
       },
       yaxis: {
         labels: {
           style: {
-            colors: [secondary]
+            colors: common.white
           }
         }
       },
       grid: {
-        borderColor: line
+        borderColor: '#445661'
       },
       tooltip: {
         theme: 'light'
