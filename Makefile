@@ -1,12 +1,23 @@
-
 version = 0.1.5
+container_name = quant_fe_pre_container
+image_name = quant_fe_pre:$(version)
 
-git pull
+.PHONY: pull build stop run
 
-# npm run build
+all : pull build-docker stop run
 
-docker build -t quant_fe_pre:$(version) .
+pull:
+	git pull
 
-docker stop $(docker ps -f 'name=quant_fe_pre_container' -q)
+# Uncomment the line below if you need to run a build command
+# build:
+# 	npm run build
 
-docker run -d --name quant_fe_pre_container   -p   3001:3001 quant_fe_pre:$(version)
+build-docker:
+	docker build -t $(image_name) .
+
+stop:
+	docker stop $(shell docker ps -f 'name=$(container_name)' -q)
+
+run:
+	docker run -d --name $(container_name) -p 3001:3001 $(image_name)
