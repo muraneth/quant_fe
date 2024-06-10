@@ -39,7 +39,7 @@ const headCells = [
     id: 'trading-date',
     align: 'left',
     disablePadding: false,
-    label: 'Trading Date'
+    label: 'Date'
   },
   {
     id: 'token',
@@ -54,28 +54,28 @@ const headCells = [
     label: 'Direction'
   },
   {
-    id: 'open-avg-px',
+    id: 'open-px',
     align: 'left',
     disablePadding: false,
-    label: 'Open Avg Px'
+    label: 'OpenPx'
   },
   {
-    id: 'close-avg-px',
+    id: 'close-px',
     align: 'right',
     disablePadding: false,
-    label: 'Close Avg Px'
-  },
-  {
-    id: 'status',
-    align: 'left',
-    disablePadding: false,
-    label: 'WIN/LOSE'
+    label: 'ClosePx'
   },
   {
     id: 'pnl-ratio',
     align: 'right',
     disablePadding: false,
     label: 'PNL Ratio'
+  },
+  {
+    id: 'status',
+    align: 'left',
+    disablePadding: false,
+    label: 'WIN/LOSE'
   }
 ];
 
@@ -212,11 +212,11 @@ export default function TradeTable({ productId }) {
                   <TableCell align="right">{row.direction}</TableCell>
                   <TableCell align="left">{row.open_avg_px}</TableCell>
                   <TableCell align="right">{row.close_avg_px}</TableCell>
-                  <TableCell align="left">
-                    <WinStatus status={row.pnl_ratio} />
-                  </TableCell>
                   <TableCell align="right">
                     <NumericFormat value={row.pnl_ratio} displayType="text" thousandSeparator suffix="%" />
+                  </TableCell>
+                  <TableCell align="left">
+                    <WinStatus status={row.pnl_ratio} />
                   </TableCell>
                 </TableRow>
               );

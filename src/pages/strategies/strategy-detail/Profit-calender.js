@@ -30,7 +30,7 @@ const ProfitCalendar = ({ productId }) => {
             Uid: `${uid}`
           }
         });
-        setData(response.data.data);
+        setData(response.data.data ? response.data.data : []);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -41,7 +41,7 @@ const ProfitCalendar = ({ productId }) => {
   return (
     <Box p={3}>
       <Grid container spacing={3}>
-        {data.map((item, index) => (
+        {data?.map((item, index) => (
           <Grid item xs={4} sm={3} md={2} key={index}>
             <Paper
               sx={{

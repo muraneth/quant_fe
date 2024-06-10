@@ -18,7 +18,8 @@ const TokenProfitCard = ({ productId }) => {
             Uid: `${uid}`
           }
         });
-        setData(response.data.data);
+
+        setData(response.data.data ? response.data.data : []);
       } catch (error) {
         console.error('Error fetching data:', error);
       }

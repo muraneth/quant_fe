@@ -17,7 +17,8 @@ build-docker:
 	docker build -t $(image_name) .
 
 stop:
-	docker stop $(shell docker ps -f 'name=$(container_name)' -q)
+	docker stop  $(shell docker ps -f 'name=$(container_name)' -q)
+	docker rm $(shell docker ps -a -f 'name=$(container_name)' -q)
 
 run:
 	docker run -d --name $(container_name) -p 3001:3001 $(image_name)
