@@ -9,6 +9,7 @@ import MainLayout from 'layout/MainLayout';
 const DashboardDefault = Loadable(lazy(() => import('pages/dashboard')));
 const Strategies = Loadable(lazy(() => import('pages/strategies/Strategies')));
 const StrategyDetail = Loadable(lazy(() => import('pages/strategies/strategy-detail')));
+const InvestPage = Loadable(lazy(() => import('pages/invest')));
 
 // render - sample page
 const SamplePage = Loadable(lazy(() => import('pages/extra-pages/SamplePage')));
@@ -42,6 +43,10 @@ const MainRoutes = {
     {
       path: 'strategy/:id',
       element: <StrategyDetail />
+    },
+    {
+      path: 'strategy/invest/:id',
+      element: <InvestPage />
     },
 
     {

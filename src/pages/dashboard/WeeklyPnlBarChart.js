@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import ReactApexChart from 'react-apexcharts';
 import { useTheme } from '@mui/material/styles';
+import { green } from '@mui/material/colors';
 
 const barChartOptions = {
   chart: {
@@ -20,28 +21,28 @@ const barChartOptions = {
     enabled: false
   },
   grid: {
-    show: true,
+    show: true
   }
 };
 
 const WeeklyPnlBarChart = ({ data }) => {
   const theme = useTheme();
-  const { primary, error } = theme.palette;
+  const { error } = theme.palette;
 
   const [series, setSeries] = useState([]);
   const [options, setOptions] = useState(barChartOptions);
 
   useEffect(() => {
-    const positiveData = data.map ((item) => item.pnl>=0?item.pnl:0);
-    const negativeData = data.map ((item) => item.pnl<0?item.pnl:0)
+    const positiveData = data.map((item) => (item.pnl >= 0 ? item.pnl : 0));
+    const negativeData = data.map((item) => (item.pnl < 0 ? item.pnl : 0));
 
     setSeries([
-      { name: 'Weekly PNL+', data: positiveData},
+      { name: 'Weekly PNL+', data: positiveData },
       { name: 'Weekly PNL-', data: negativeData }
     ]);
     setOptions((prevState) => ({
       ...prevState,
-      colors: [primary.main, error.light],
+      colors: [green[700], error.light],
       xaxis: {
         categories: data.map((item) => item.week_start_date),
         axisBorder: {

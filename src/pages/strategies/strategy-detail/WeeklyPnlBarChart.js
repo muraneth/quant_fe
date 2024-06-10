@@ -21,9 +21,6 @@ const barChartOptions = {
   },
   dataLabels: {
     enabled: false
-  },
-  grid: {
-    show: true
   }
 };
 
@@ -66,7 +63,7 @@ const WeeklyPnlBarChart = ({ productId }) => {
     ]);
     setOptions((prevState) => ({
       ...prevState,
-      colors: [primary.main, error.light],
+      colors: [green[500], error.light],
       xaxis: {
         categories: data.map((item) => item.date),
         axisBorder: {
@@ -90,6 +87,12 @@ const WeeklyPnlBarChart = ({ productId }) => {
           formatter: function (val) {
             return val + '%'; // Adding '%' symbol to y-axis labels
           }
+        }
+      },
+      grid: {
+        show: true,
+        stroke: {
+          colors: ['#f0f0f0']
         }
       },
       tooltip: {

@@ -8,6 +8,8 @@ import { useTheme } from '@mui/material/styles';
 import ReactApexChart from 'react-apexcharts';
 import axios from 'axios';
 
+import { green } from '@mui/material/colors';
+
 // chart options
 const areaChartOptions = {
   chart: {
@@ -83,7 +85,7 @@ const BalanceAraeChart = ({ slot }) => {
   useEffect(() => {
     setOptions((prevState) => ({
       ...prevState,
-      colors: [theme.palette.primary.main, theme.palette.primary[700]],
+      colors: [green[700]],
       xaxis: {
         categories: userDailyCashFlowData.map((item) => item.date),
 

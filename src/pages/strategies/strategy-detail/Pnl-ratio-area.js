@@ -7,7 +7,7 @@ import { useTheme } from '@mui/material/styles';
 // third-party
 import ReactApexChart from 'react-apexcharts';
 import axios from 'axios';
-import { common } from '@mui/material/colors';
+import { common, green } from '@mui/material/colors';
 
 // chart options
 const areaChartOptions = {
@@ -66,7 +66,7 @@ const AcumPnlRatioAraeChart = ({ productId }) => {
   useEffect(() => {
     setOptions((prevState) => ({
       ...prevState,
-      colors: [theme.palette.primary.main, theme.palette.primary[700]],
+      colors: [green[500]],
       xaxis: {
         categories: productDailyInfo?.map((item) => item.date),
 

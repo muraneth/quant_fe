@@ -1,8 +1,10 @@
+/* eslint-disable no-unused-vars */
 import PropTypes from 'prop-types';
 import { useState, useEffect } from 'react';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
+import { common, green, orange } from '@mui/material/colors';
 
 // third-party
 import ReactApexChart from 'react-apexcharts';
@@ -38,7 +40,7 @@ const AcumPnlAraeChart = ({ slot }) => {
   const line = theme.palette.divider;
 
   const [options, setOptions] = useState(areaChartOptions);
-
+  const [chartColor, setChartColor] = useState([green[700]]);
   const [userDailyCashFlowData, setUserDailyCashFlowData] = useState([]);
 
   useEffect(() => {
@@ -72,7 +74,7 @@ const AcumPnlAraeChart = ({ slot }) => {
             }
           }
         );
-        setUserDailyCashFlowData(response.data.data.daily_cash_flow);
+        setUserDailyCashFlowData(response.data.data?.daily_cash_flow);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -84,7 +86,8 @@ const AcumPnlAraeChart = ({ slot }) => {
   useEffect(() => {
     setOptions((prevState) => ({
       ...prevState,
-      colors: [theme.palette.primary.main, theme.palette.primary[700]],
+      // colors: [theme.palette.primary.main, theme.palette.primary[700]],
+      colors: chartColor,
       xaxis: {
         categories: userDailyCashFlowData.map((item) => item.date),
 
