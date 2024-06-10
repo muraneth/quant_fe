@@ -20,15 +20,6 @@ const StrategyCard = ({ strategy }) => {
     </Box>
   );
 
-  const GetApporateApy = (strategy) => {
-    // if (strategy.thr_month_static) {
-    //   return ((strategy.thr_month_static.pnl_ratio / 3) * 12).toFixed(2);
-    // }
-    if (strategy.one_month_static) {
-      return ((strategy.one_month_static.pnl_ratio / 1) * 12).toFixed(2);
-    }
-    return 'N/A';
-  };
   return (
     <Card sx={{ minWidth: 275, bgcolor: '#1e1e2d', color: '#fff', m: 2 }}>
       <CardContent>
@@ -36,14 +27,27 @@ const StrategyCard = ({ strategy }) => {
           {strategy.name}
         </Typography>
 
-        <RiskBar value={strategy.risk} />
         <Typography variant="body3">Trading Coins: {strategy.coin_pairs?.join(', ')}</Typography>
-
-        <Grid container alignItems="center">
-          <Typography variant="body3">APY : </Typography>
-          <Typography variant="h5" color="primary">
-            {GetApporateApy(strategy)}%
-          </Typography>
+        <RiskBar value={strategy.risk} />
+        <Grid item>
+          <Grid container alignItems="center">
+            <Typography variant="body3">APY : </Typography>
+            <Typography variant="h5" color="primary">
+              {strategy.apy}%
+            </Typography>
+          </Grid>
+          <Grid container alignItems="center">
+            <Typography variant="body3">SharpeRatio : </Typography>
+            <Typography variant="h5" color="primary">
+              {strategy.sharpe_ratio}
+            </Typography>
+          </Grid>
+          <Grid container alignItems="center">
+            <Typography variant="body3">MaxDownDraw : </Typography>
+            <Typography variant="h5" color="primary">
+              {strategy.mdd}%
+            </Typography>
+          </Grid>
         </Grid>
 
         <Grid container alignItems="center">

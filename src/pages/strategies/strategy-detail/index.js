@@ -64,6 +64,26 @@ const StrategyDetail = () => {
                 a take profit of 0.7%. Each entry uses 5% of the portfolio and is signaled when the RSI value is bellow 50.
               </Typography>
               {/* <RiskBar value={strategy.risk} /> */}
+              <Grid item container direction="row" justifyContent="space-evenly">
+                <Grid alignItems="center">
+                  <Typography variant="body3">APY : </Typography>
+                  <Typography variant="h5" color="primary">
+                    {productInfo.apy}%
+                  </Typography>
+                </Grid>
+                <Grid alignItems="center">
+                  <Typography variant="body3">SharpeRatio : </Typography>
+                  <Typography variant="h5" color="primary">
+                    {productInfo.sharpe_ratio}
+                  </Typography>
+                </Grid>
+                <Grid alignItems="center">
+                  <Typography variant="body3">MaxDownDraw : </Typography>
+                  <Typography variant="h5" color="primary">
+                    {productInfo.mdd}%
+                  </Typography>
+                </Grid>
+              </Grid>
 
               <Grid container alignItems="center">
                 <Grid item xs={12} md={6}>
