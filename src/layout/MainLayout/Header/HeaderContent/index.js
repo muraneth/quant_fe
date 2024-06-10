@@ -9,7 +9,7 @@ import Search from './Search';
 import Profile from './Profile';
 import Notification from './Notification';
 import MobileSection from './MobileSection';
-import Deposit from './Deposit-popup';
+import Deposit from './Deposit-balance';
 
 // ==============================|| HEADER - CONTENT ||============================== //
 

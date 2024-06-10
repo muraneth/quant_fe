@@ -85,7 +85,7 @@ function OrderTableHead({ order, orderBy }) {
   return (
     <TableHead>
       <TableRow>
-        {headCells.map((headCell) => (
+        {headCells?.map((headCell) => (
           <TableCell
             key={headCell.id}
             align={headCell.align}

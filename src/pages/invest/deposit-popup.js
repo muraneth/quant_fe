@@ -19,63 +19,6 @@ import { styled } from '@mui/system';
 import QRCode from 'qrcode';
 import axios from 'axios';
 
-const Deposit = () => {
-  const [isDepositOpen, setIsDepositOpen] = useState(false);
-  const [userBalance, setUserBalance] = useState({});
-  const handleOpenPopup = () => {
-    setIsDepositOpen(true);
-  };
-  const handleClosePopup = () => {
-    setIsDepositOpen(false);
-  };
-  useEffect(() => {
-    const fetchUserInfo = async () => {
-      const uid = localStorage.getItem('uid');
-      const token = localStorage.getItem('token');
-
-      try {
-        const response = await axios.get('http://matrixcipher.com/api/user/asset/getAccountBalance', {
-          headers: {
-            Authorization: `${token}`,
-            Uid: `${uid}`
-          }
-        });
-
-        setUserBalance(response.data.data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchUserInfo();
-  }, []);
-
-  return (
-    <Box
-      sx={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        // backgroundColor: '#2a2a2a',
-        padding: '1px 1px',
-        borderRadius: '5px',
-        width: '450px',
-        margin: 'auto',
-        color: 'grey'
-      }}
-    >
-      <Box>
-        <Typography variant="body1">Portfolio: ${userBalance.in_position_balance}</Typography>
-        <Typography variant="body1">Available: ${userBalance.avaliable_balance}</Typography>
-      </Box>
-      <Button variant="outlined" color="primary" onClick={handleOpenPopup}>
-        Deposit
-      </Button>
-      <DepositCryptoPopup open={isDepositOpen} handleClose={handleClosePopup} />
-    </Box>
-  );
-};
-export default Deposit;
-
 const StyledDialogContent = styled(DialogContent)(({ theme }) => ({
   padding: '20px',
   display: 'flex',
@@ -195,3 +138,5 @@ const DepositCryptoPopup = ({ open, handleClose }) => {
     </div>
   );
 };
+
+export default DepositCryptoPopup;

@@ -44,7 +44,7 @@ const WeeklyPnlBarChart = ({ productId }) => {
             Uid: `${uid}`
           }
         });
-        setData(response.data.data);
+        setData(response.data.data ? response.data.data : []);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -54,8 +54,8 @@ const WeeklyPnlBarChart = ({ productId }) => {
   }, []);
 
   useEffect(() => {
-    const positiveData = data.map((item) => (item.pnl_ratio >= 0 ? item.pnl_ratio : 0));
-    const negativeData = data.map((item) => (item.pnl_ratio < 0 ? item.pnl_ratio : 0));
+    const positiveData = data?.map((item) => (item.pnl_ratio >= 0 ? item.pnl_ratio : 0));
+    const negativeData = data?.map((item) => (item.pnl_ratio < 0 ? item.pnl_ratio : 0));
 
     setSeries([
       { name: 'Weekly PNL+', data: positiveData },
@@ -65,7 +65,7 @@ const WeeklyPnlBarChart = ({ productId }) => {
       ...prevState,
       colors: [green[500], error.light],
       xaxis: {
-        categories: data.map((item) => item.date),
+        categories: data?.map((item) => item.date),
         axisBorder: {
           show: true
         },

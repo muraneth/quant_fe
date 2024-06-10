@@ -1,12 +1,12 @@
 
-version = 0.0.1
+version = 0.1.4
 
 git pull
 
-npm run build
+# npm run build
 
 docker build -t quant_fe_pre:$(version) .
 
-docker stop $(docker ps -a -q)
+docker stop $(docker ps -f 'name=quant_fe_pre_container' -q)
 
-docker run -d -p 3001:3001 quant_fe_pre:$(version)
+docker run -d --name quant_fe_pre_container   -p   3001:3001 quant_fe_pre:$(version)

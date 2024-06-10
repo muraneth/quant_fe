@@ -12,7 +12,7 @@ import axios from 'axios';
 import WeeklyPnlBarChart from './WeeklyPnlBarChart';
 import TokenProfitCard from './Token-profit';
 import { useNavigate } from 'react-router-dom';
-import InvestPopup from './Invest-popup';
+import InvestPopup from '../../invest/Invest-popup';
 
 const StrategyDetail = () => {
   const [productInfo, setProductInfo] = useState({});
@@ -52,7 +52,7 @@ const StrategyDetail = () => {
         </Button>
         <DepositCryptoPopup open={isPopupOpen} handleClose={handleClosePopup} />
       </Container> */}
-      <InvestPopup open={isInvestPopOpen} handleClose={handleClosePopup} />
+      <InvestPopup open={isInvestPopOpen} handleClose={handleClosePopup} productId={id} />
 
       <Grid container spacing={2}>
         <Grid item xs={12}>

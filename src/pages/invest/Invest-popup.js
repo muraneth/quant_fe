@@ -18,6 +18,7 @@ import {
 
 import axios from 'axios';
 import { styled } from '@mui/system';
+import { set } from 'lodash';
 
 const StyledDialogContent = styled(DialogContent)(({ theme }) => ({
   padding: '20px',
@@ -38,9 +39,65 @@ const CustomDialog = styled(Dialog)(({ theme }) => ({
   }
 }));
 
-const InvestPopup = ({ open, handleClose }) => {
+const InvestPopup = ({ open, handleClose, productId }) => {
   const [userBalance, setUserBalance] = useState(0);
   const [amount, setAmount] = useState(0);
+  const [isErr, setIsErr] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+
+  const HandleCancel = () => {
+    setAmount(0);
+    setIsErr(false);
+    setErrorMessage('');
+    handleClose();
+  };
+  const handleInvest = async () => {
+    // Convert the amount to a number
+    const numericAmount = parseFloat(amount);
+
+    // Check if the amount exceeds the available balance
+    if (numericAmount > userBalance.avaliable_balance) {
+      setIsErr(true);
+      setErrorMessage(`Amount exceeds your available balance, current balance is ${userBalance.avaliable_balance}`);
+      return;
+    }
+    // Reset error state
+    setIsErr(false);
+    setErrorMessage('');
+
+    // Get user ID and token from local storage
+    const uid = localStorage.getItem('uid');
+    const token = localStorage.getItem('token');
+
+    try {
+      // Send a POST request to the invest API
+      const response = await axios.post(
+        'http://matrixcipher.com/api/invest/invest',
+        {
+          product_id: parseInt(productId),
+          amount: numericAmount
+        },
+        {
+          headers: {
+            Authorization: `${token}`,
+            Uid: `${uid}`
+          }
+        }
+      );
+      // Check the response code
+      if (response.data.code !== 0) {
+        setIsErr(true);
+        setErrorMessage(response.data.msg);
+        return;
+      }
+    } catch (error) {
+      console.error(error);
+    }
+
+    // Close the modal
+    handleClose();
+  };
+
   useEffect(() => {
     if (open) {
       const fetchUserInfo = async () => {
@@ -70,7 +127,15 @@ const InvestPopup = ({ open, handleClose }) => {
         <DialogTitle>Invest into strategy</DialogTitle>
         <DialogContent>
           <Box component="form" noValidate autoComplete="off">
-            <TextField fullWidth label="Invest Amount USDT" margin="dense" value={amount} onChange={(e) => setAmount(e.target.value)} />
+            <TextField
+              fullWidth
+              label="Invest Amount USDT"
+              margin="dense"
+              value={amount}
+              error={isErr}
+              helperText={errorMessage}
+              onChange={(e) => setAmount(e.target.value)}
+            />
           </Box>
           <Typography variant="subtitle1">Your available balance: {userBalance.avaliable_balance} USDT</Typography>
           <Box mt={3}>
@@ -78,10 +143,10 @@ const InvestPopup = ({ open, handleClose }) => {
           </Box>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color="primary">
+          <Button onClick={HandleCancel} color="primary">
             Cancel
           </Button>
-          <Button variant="contained" onClick={handleClose} color="primary">
+          <Button variant="contained" onClick={handleInvest} color="primary">
             Commit
           </Button>
         </DialogActions>

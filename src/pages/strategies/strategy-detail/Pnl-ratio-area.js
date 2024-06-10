@@ -54,7 +54,7 @@ const AcumPnlRatioAraeChart = ({ productId }) => {
             Uid: `${uid}`
           }
         });
-        setProductDailyInfo(response.data.data);
+        setProductDailyInfo(response.data.data ? response.data.data : []);
       } catch (error) {
         console.error('Error fetching data:', error);
       }

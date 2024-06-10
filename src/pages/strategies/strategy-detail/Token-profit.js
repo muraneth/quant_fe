@@ -29,7 +29,7 @@ const TokenProfitCard = ({ productId }) => {
 
   return (
     <>
-      {data.map((it, index) => {
+      {data?.map((it, index) => {
         return (
           <Grid item key={index}>
             <Typography variant="h5"> {it.token}</Typography>
