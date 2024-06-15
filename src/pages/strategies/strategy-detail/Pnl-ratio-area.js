@@ -47,8 +47,10 @@ const AcumPnlRatioAraeChart = ({ productId }) => {
       try {
         const token = localStorage.getItem('token');
         const uid = localStorage.getItem('uid');
+        // const url = `http://matrixcipher.com/api/product/getWeeklyPnl?productId=${productId}`;
+        const url = `http://matrixcipher.com/api/product/getSharePriceHistory?product=${productId}`;
 
-        const response = await axios.get(`http://matrixcipher.com/api/product/getWeeklyPnl?productId=${productId}`, {
+        const response = await axios.get(url, {
           headers: {
             Authorization: `${token}`,
             Uid: `${uid}`

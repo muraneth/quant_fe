@@ -39,7 +39,7 @@ const CustomDialog = styled(Dialog)(({ theme }) => ({
   }
 }));
 
-const InvestPopup = ({ open, handleClose, productId }) => {
+const InvestPopup = ({ open, handleClose, product }) => {
   const [userBalance, setUserBalance] = useState(0);
   const [amount, setAmount] = useState(0);
   const [isErr, setIsErr] = useState(false);
@@ -74,7 +74,7 @@ const InvestPopup = ({ open, handleClose, productId }) => {
       const response = await axios.post(
         'http://matrixcipher.com/api/invest/invest',
         {
-          product_id: parseInt(productId),
+          product_symbol: product,
           amount: numericAmount
         },
         {

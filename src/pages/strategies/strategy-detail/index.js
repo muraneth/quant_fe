@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 
-import { Box, Grid, Paper, Card, CardContent, Typography, Button, Container } from '@mui/material';
+import { Box, Grid, Paper, Stack, CardContent, Typography, Button, Container } from '@mui/material';
+import { styled } from '@mui/material/styles';
 
 import { useState, useEffect } from 'react';
 // import ReactApexChart from 'react-apexcharts';
@@ -13,11 +14,21 @@ import WeeklyPnlBarChart from './WeeklyPnlBarChart';
 import TokenProfitCard from './Token-profit';
 import { useNavigate } from 'react-router-dom';
 import InvestPopup from '../../invest/Invest-popup';
+import StrategySummary from './Summary';
+
+const Item = styled(Paper)(({ theme }) => ({
+  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+  ...theme.typography.body2,
+  padding: theme.spacing(1),
+  textAlign: 'center',
+  color: theme.palette.text.secondary
+}));
 
 const StrategyDetail = () => {
   const [productInfo, setProductInfo] = useState({});
   const navigate = useNavigate();
   const [isInvestPopOpen, setIsInvestPopOpen] = useState(false);
+  const [slot, setSlot] = useState('all');
 
   const { id } = useParams();
   console.log(id);
@@ -26,7 +37,7 @@ const StrategyDetail = () => {
 
   useEffect(() => {
     const fetchProduct = async () => {
-      const url = `${host}/api/product/getProductBaseById?productId=${id}`;
+      const url = `${host}/api/product/getProductBaseById?product=${id}`;
       try {
         const response = await axios.get(url);
         setProductInfo(response.data.data);
@@ -52,37 +63,70 @@ const StrategyDetail = () => {
         </Button>
         <DepositCryptoPopup open={isPopupOpen} handleClose={handleClosePopup} />
       </Container> */}
-      <InvestPopup open={isInvestPopOpen} handleClose={handleClosePopup} productId={id} />
+      <InvestPopup open={isInvestPopOpen} handleClose={handleClosePopup} product={id} />
 
       <Grid container spacing={2}>
         <Grid item xs={12}>
-          {/* <MainCard sx={{ minWidth: 275, bgcolor: '#0b1836', color: '#fff', m: 2 }}> */}
-          <CardContent>
-            <Typography variant="h5" component="div">
-              Myquant-alpha 1x
-            </Typography>
-            <Typography sx={{ mb: 1.5 }} color="text.secondary">
-              Quickly enter and exit XMR/USDT, MKR/USDT and TRX/USDT markets using dollar cost averaging with up to 6 entries followed by a
-              take profit of 0.7%. Each entry uses 5% of the portfolio and is signaled when the RSI value is bellow 50.
-            </Typography>
-            {/* <RiskBar value={strategy.risk} /> */}
+          <Typography variant="h3" component="div">
+            {productInfo?.name}
+          </Typography>
+        </Grid>
+        <Grid item xs={8} sx={{ color: '#0b1836' }} justifyContent="space-between">
+          {/* <Typography variant="h5" component="div" sx={{ color: '#fff' }}>
+            Acum Pnl Ratio
+          </Typography> */}
+
+          <Grid item>
+            <Stack direction="row" alignItems="center" spacing={0}>
+              <Button
+                size="small"
+                onClick={() => setSlot('all')}
+                color={slot === 'all' ? 'primary' : 'secondary'}
+                variant={slot === 'all' ? 'outlined' : 'text'}
+              >
+                ALL
+              </Button>
+              <Button
+                size="small"
+                onClick={() => setSlot('month')}
+                color={slot === 'month' ? 'primary' : 'secondary'}
+                variant={slot === 'month' ? 'outlined' : 'text'}
+              >
+                Month
+              </Button>
+              <Button
+                size="small"
+                onClick={() => setSlot('week')}
+                color={slot === 'week' ? 'primary' : 'secondary'}
+                variant={slot === 'week' ? 'outlined' : 'text'}
+              >
+                Week
+              </Button>
+            </Stack>
+          </Grid>
+
+          <AcumPnlRatioAraeChart productId={id} />
+        </Grid>
+
+        <Grid item xs={4}>
+          <Grid>
             <Grid item container direction="row" justifyContent="space-evenly">
               <Grid alignItems="center">
                 <Typography variant="body3">APY : </Typography>
                 <Typography variant="h5" color="green">
-                  {productInfo.apy}%
+                  {productInfo?.apy}%
                 </Typography>
               </Grid>
               <Grid alignItems="center">
                 <Typography variant="body3">SharpeRatio : </Typography>
                 <Typography variant="h5" color="green">
-                  {productInfo.sharpe_ratio}
+                  {productInfo?.sharpe_ratio}
                 </Typography>
               </Grid>
               <Grid alignItems="center">
                 <Typography variant="body3">MaxDownDraw : </Typography>
                 <Typography variant="h5" color="error">
-                  -{productInfo.mdd}%
+                  -{productInfo?.mdd}%
                 </Typography>
               </Grid>
             </Grid>
@@ -124,31 +168,29 @@ const StrategyDetail = () => {
                 Invest
               </Button>
             </Box>
-          </CardContent>
+          </Grid>
+          {/* </CardContent> */}
           {/* </MainCard> */}
         </Grid>
-        <Grid item xs={12} sx={{ color: '#0b1836' }}>
-          <Typography variant="h5" component="div" sx={{ color: '#fff' }}>
-            Acum Pnl Ratio
-          </Typography>
-
-          <AcumPnlRatioAraeChart productId={id} />
+        <Grid item xs={12}>
+          <StrategySummary
+            overview="This Strategy primarily engages with cryptocurrency pairs including ETH-USDT, PEPE-USDT, DOGE-USDT, and SOL-USDT, while retaining the flexibility to trade other pairs as market opportunities arise. This strategy is designed with a strong emphasis on risk management and consistent performance. "
+            allocation="The strategy employs a structured approach to allocation and risk management. It limits ETH-USDT exposure to a maximum of 50% of total capital, while other pairs are allocated up to 30% each. Leverage, though occasionally surpassing 100% with multiple positions, generally stays below 50%, maintaining a conservative risk profile that balances potential returns with controlled market exposure."
+            features="Diversifies  spreads risk across multiple cryptocurrency pairs, flexibility that adapts to market conditions by incorporating additional pairs when advantageous, controlled leverage, which maintains leverage at safe levels, ensuring stability and minimizing risk, and strong performance metrics such as a high Sharpe ratio and low drawdown, indicating effective risk-adjusted returns."
+          />
         </Grid>
+
         <Grid item xs={12} sx={{ color: '#0b1836' }}>
           <Typography variant="h5" component="div" sx={{ color: '#fff' }}>
             Weekly Profit Ratio Bar
           </Typography>
-          {/* <MainCard sx={{ minWidth: 275, bgcolor: '#0b1836', m: 2 }}> */}
-          {/* <CardContent> */}
           <WeeklyPnlBarChart productId={id} />
-          {/* </CardContent> */}
-          {/* </MainCard> */}
         </Grid>
-        <Grid item xs={8}>
+        <Grid item xs={8} sx={{ color: '#fff' }}>
           <Typography variant="h5" component="div">
             Last 3 Months Trades
           </Typography>
-          <MainCard sx={{ mt: 2 }}>
+          <MainCard sx={{ minWidth: 275, bgcolor: '#0b1836', color: '#fff', m: 2 }}>
             <CardContent>
               <TradeTable productId={id} />
             </CardContent>

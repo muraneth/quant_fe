@@ -24,7 +24,7 @@ const ProfitCalendar = ({ productId }) => {
         const token = localStorage.getItem('token');
         const uid = localStorage.getItem('uid');
 
-        const response = await axios.get(`http://matrixcipher.com/api/product/getProductCalanderProfit?productId=${productId}`, {
+        const response = await axios.get(`http://matrixcipher.com/api/product/getProductCalanderProfit?product=${productId}`, {
           headers: {
             Authorization: `${token}`,
             Uid: `${uid}`

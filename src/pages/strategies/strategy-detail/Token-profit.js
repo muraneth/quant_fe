@@ -12,7 +12,7 @@ const TokenProfitCard = ({ productId }) => {
         const token = localStorage.getItem('token');
         const uid = localStorage.getItem('uid');
 
-        const response = await axios.get(`http://matrixcipher.com/api/product/getProfitGroupByToken?productId=${productId}`, {
+        const response = await axios.get(`http://matrixcipher.com/api/product/getProfitGroupByToken?product=${productId}`, {
           headers: {
             Authorization: `${token}`,
             Uid: `${uid}`

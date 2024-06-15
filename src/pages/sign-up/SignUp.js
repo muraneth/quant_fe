@@ -20,11 +20,12 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 import AutoAwesomeRoundedIcon from '@mui/icons-material/AutoAwesomeRounded';
 import ArrowBackRoundedIcon from '@mui/icons-material/ArrowBackRounded';
-
+import { useNavigate } from 'react-router-dom';
 // import getSignUpTheme from './getSignUpTheme';
 import ToggleColorMode from './ToggleColorMode';
 import Logo from 'components/Logo/Logo';
 // import { GoogleIcon, FacebookIcon, SitemarkIcon } from './CustomIcons';
+import axios from 'axios';
 
 function ToggleCustomTheme({ showCustomTheme, toggleCustomTheme }) {
   return (
@@ -35,7 +36,7 @@ function ToggleCustomTheme({ showCustomTheme, toggleCustomTheme }) {
         alignItems: 'center',
         width: '100dvw',
         position: 'fixed',
-        bottom: 24,
+        bottom: 24
       }}
     >
       <ToggleButtonGroup
@@ -47,8 +48,8 @@ function ToggleCustomTheme({ showCustomTheme, toggleCustomTheme }) {
         sx={{
           backgroundColor: 'background.default',
           '& .Mui-selected': {
-            pointerEvents: 'none',
-          },
+            pointerEvents: 'none'
+          }
         }}
       >
         <ToggleButton value>
@@ -63,9 +64,9 @@ function ToggleCustomTheme({ showCustomTheme, toggleCustomTheme }) {
 
 ToggleCustomTheme.propTypes = {
   showCustomTheme: PropTypes.shape({
-    valueOf: PropTypes.func.isRequired,
+    valueOf: PropTypes.func.isRequired
   }).isRequired,
-  toggleCustomTheme: PropTypes.func.isRequired,
+  toggleCustomTheme: PropTypes.func.isRequired
 };
 
 export default function SignUp() {
@@ -79,6 +80,7 @@ export default function SignUp() {
   const [passwordErrorMessage, setPasswordErrorMessage] = React.useState('');
   const [nameError, setNameError] = React.useState(false);
   const [nameErrorMessage, setNameErrorMessage] = React.useState('');
+  const navigate = useNavigate();
 
   const validateInputs = () => {
     const email = document.getElementById('email');
@@ -122,24 +124,43 @@ export default function SignUp() {
   };
 
   // const toggleCustomTheme = () => {
-    // setShowCustomTheme(true);
+  // setShowCustomTheme(true);
   // };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     console.log({
       name: data.get('name'),
       lastName: data.get('lastName'),
       email: data.get('email'),
-      password: data.get('password'),
+      password: data.get('password')
     });
+    const response = await axios.post('http://matrixcipher.com/api/user/register', {
+      username: data.get('name'),
+      email: data.get('email'),
+      password: data.get('password')
+    });
+    if (response.data.code === 0) {
+      navigate('/sign-in', { replace: true });
+    } else {
+      if (response.data.msg.includes('email')) {
+        setEmailError(true);
+        setEmailErrorMessage(response.data.msg);
+      } else {
+        setNameError(true);
+        setNameErrorMessage(response.data.msg);
+      }
+    }
   };
 
   return (
-    <ThemeProvider theme={
-      // showCustomTheme ? SignUpTheme :
-     defaultTheme}>
+    <ThemeProvider
+      theme={
+        // showCustomTheme ? SignUpTheme :
+        defaultTheme
+      }
+    >
       <CssBaseline />
       <Stack
         component="main"
@@ -151,7 +172,7 @@ export default function SignUp() {
             theme.palette.mode === 'light'
               ? 'radial-gradient(ellipse at 50% 50%, hsl(210, 100%, 97%), hsl(0, 0%, 100%))'
               : 'radial-gradient(at 50% 50%, hsla(210, 100%, 16%, 0.3), hsl(220, 30%, 5%))',
-          pb: { xs: 12, sm: 0 },
+          pb: { xs: 12, sm: 0 }
         })}
       >
         <Stack
@@ -160,22 +181,15 @@ export default function SignUp() {
           sx={{
             position: { xs: 'static', sm: 'fixed' },
             width: '100%',
-            p: { xs: 2, sm: 4 },
+            p: { xs: 2, sm: 4 }
           }}
         >
-          <Button
-            startIcon={<ArrowBackRoundedIcon />}
-            component="a"
-            href="/sign-in"
-          >
+          <Button startIcon={<ArrowBackRoundedIcon />} component="a" href="/sign-in">
             Back
           </Button>
           <ToggleColorMode mode={mode} toggleColorMode={toggleColorMode} />
         </Stack>
-        <Stack
-          justifyContent="center"
-          sx={{ height: { xs: '100%', sm: '100dvh' }, p: 2 }}
-        >
+        <Stack justifyContent="center" sx={{ height: { xs: '100%', sm: '100dvh' }, p: 2 }}>
           <Card
             sx={(theme) => ({
               display: 'flex',
@@ -187,23 +201,15 @@ export default function SignUp() {
               boxShadow:
                 theme.palette.mode === 'light'
                   ? 'hsla(220, 30%, 5%, 0.05) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.05) 0px 15px 35px -5px, hsla(220, 30%, 5%, 0.05) 0px 0px 0px 1px'
-                  : 'hsla(220, 30%, 5%, 0.5) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.08) 0px 15px 35px -5px, hsla(220, 30%, 5%, 0.05) 0px 0px 0px 1px',
+                  : 'hsla(220, 30%, 5%, 0.5) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.08) 0px 15px 35px -5px, hsla(220, 30%, 5%, 0.05) 0px 0px 0px 1px'
             })}
           >
             {/* <SitemarkIcon /> */}
-            <Logo/>
-            <Typography
-              component="h1"
-              variant="h4"
-              sx={{ width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)' }}
-            >
+            <Logo />
+            <Typography component="h1" variant="h4" sx={{ width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)' }}>
               Sign up
             </Typography>
-            <Box
-              component="form"
-              onSubmit={handleSubmit}
-              sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}
-            >
+            <Box component="form" onSubmit={handleSubmit} sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
               <FormControl>
                 <FormLabel htmlFor="name">Full name</FormLabel>
                 <TextField
@@ -253,19 +259,10 @@ export default function SignUp() {
                 control={<Checkbox value="allowExtraEmails" color="primary" />}
                 label="I want to receive updates via email."
               />
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                onClick={validateInputs}
-              >
+              <Button type="submit" fullWidth variant="contained" onClick={validateInputs}>
                 Sign up
               </Button>
-              <Link
-                href="/material-ui/getting-started/templates/sign-in/"
-                variant="body2"
-                sx={{ alignSelf: 'center' }}
-              >
+              <Link href="/sign-in/" variant="body2" sx={{ alignSelf: 'center' }}>
                 Already have an account? Sign in
               </Link>
             </Box>

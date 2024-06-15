@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
-import { Box, Link, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
+// import { Link as RouterLink } from 'react-router-dom';
+import { Box, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
 import { NumericFormat } from 'react-number-format';
 import Dot from 'components/@extended/Dot';
 import axios from 'axios';
@@ -54,18 +54,6 @@ const headCells = [
     label: 'Direction'
   },
   {
-    id: 'open-px',
-    align: 'left',
-    disablePadding: false,
-    label: 'OpenPx'
-  },
-  {
-    id: 'close-px',
-    align: 'right',
-    disablePadding: false,
-    label: 'ClosePx'
-  },
-  {
     id: 'pnl-ratio',
     align: 'right',
     disablePadding: false,
@@ -91,6 +79,7 @@ function OrderTableHead({ order, orderBy }) {
             align={headCell.align}
             padding={headCell.disablePadding ? 'none' : 'normal'}
             sortDirection={orderBy === headCell.id ? order : false}
+            sx={{ color: '#fff' }}
           >
             {headCell.label}
           </TableCell>
@@ -150,7 +139,7 @@ export default function TradeTable({ productId }) {
   const [trades, setTrades] = useState([]);
   useEffect(() => {
     const fetchTrades = async () => {
-      const url = `http://matrixcipher.com/api/product/getProductTrades?productId=${productId}`;
+      const url = `http://matrixcipher.com/api/product/getProductTrades?product=${productId}`;
       try {
         const response = await axios.get(url);
         setTrades(response.data.data ? response.data.data : []);
@@ -173,6 +162,7 @@ export default function TradeTable({ productId }) {
           position: 'relative',
           display: 'block',
           maxWidth: '100%',
+
           '& td, & th': { whiteSpace: 'nowrap' }
         }}
       >
@@ -203,19 +193,22 @@ export default function TradeTable({ productId }) {
                   key={row.trade_id}
                   selected={isItemSelected}
                 >
-                  <TableCell component="th" id={labelId} scope="row" align="left">
-                    <Link color="secondary" component={RouterLink} to="">
-                      {row.c_time_date}
-                    </Link>
+                  <TableCell component="th" sx={{ color: '#fff' }} id={labelId} scope="row" align="left">
+                    {/* <Link color="secondary" component={RouterLink} to=""> */}
+                    {row.c_time_date}
+                    {/* </Link> */}
                   </TableCell>
-                  <TableCell align="left">{row.uly}</TableCell>
-                  <TableCell align="right">{row.direction}</TableCell>
-                  <TableCell align="left">{row.open_avg_px}</TableCell>
-                  <TableCell align="right">{row.close_avg_px}</TableCell>
-                  <TableCell align="right">
+                  <TableCell align="left" sx={{ color: '#fff' }}>
+                    {row.uly}
+                  </TableCell>
+                  <TableCell align="right" sx={{ color: '#fff' }}>
+                    {row.direction}
+                  </TableCell>
+
+                  <TableCell align="right" sx={{ color: '#fff' }}>
                     <NumericFormat value={row.pnl_ratio} displayType="text" thousandSeparator suffix="%" />
                   </TableCell>
-                  <TableCell align="left">
+                  <TableCell align="left" sx={{ color: '#fff' }}>
                     <WinStatus status={row.pnl_ratio} />
                   </TableCell>
                 </TableRow>

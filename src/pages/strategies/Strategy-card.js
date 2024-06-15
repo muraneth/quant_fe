@@ -8,7 +8,7 @@ const StrategyCard = ({ strategy }) => {
 
   const handleButtonClick = async () => {
     // navigate to the product page
-    navigate(`/dashboard/strategy/${strategy.id}`);
+    navigate(`/dashboard/strategy/${strategy.symbol}`);
   };
   // const handleButtonClick = () => {
   //   // Call the onClick handler with the strategy title
