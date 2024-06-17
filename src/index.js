@@ -15,9 +15,6 @@ import 'assets/third-party/apex-chart.css';
 import App from './App';
 import { store } from 'store';
 
-
-
-
 // ==============================|| MAIN - REACT DOM RENDER  ||============================== //
 
 const container = document.getElementById('root');
@@ -31,4 +28,3 @@ root.render(
     </ReduxProvider>
   </StrictMode>
 );
-

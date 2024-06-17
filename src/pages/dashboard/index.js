@@ -14,6 +14,7 @@ import AnalyticEcommerce from 'components/cards/statistics/AnalyticEcommerce';
 import { useNavigate } from 'react-router-dom';
 import { common } from '@mui/material/colors';
 import axios from 'axios';
+import NoAuthorityPage from 'pages/authentication/NoAuthority';
 
 // ==============================|| DASHBOARD - DEFAULT ||============================== //
 
@@ -21,7 +22,8 @@ const DashboardDefault = () => {
   const [slot, setSlot] = useState('month');
   const [userDailyCashFlowData, setUserDailyCashFlowData] = useState([]);
   const [userWeeklyCashFlowData, setUserWeeklyCashFlowData] = useState([]);
-  const navigate = useNavigate();
+  const [authorization, setAuthorization] = useState(false);
+  // const navigate = useNavigate();
   const host = 'http://matrixcipher.com';
   useEffect(() => {
     const fetchData = async () => {
@@ -37,9 +39,11 @@ const DashboardDefault = () => {
 
         setUserDailyCashFlowData(response.data.data?.daily_cash_flow);
         setUserWeeklyCashFlowData(response.data.data?.weekly_cash_flow);
+        setAuthorization(true);
       } catch (error) {
         console.error('Error fetching data:', error);
-        navigate('/sign-in', { replace: true });
+        // navigate('/sign-in', { replace: true });
+        setAuthorization(false);
       }
     };
 
@@ -51,142 +55,150 @@ const DashboardDefault = () => {
   const recent7WeekPnl =
     userWeeklyCashFlowData.length > 7 ? userWeeklyCashFlowData.slice(userWeeklyCashFlowData.length - 7) : userWeeklyCashFlowData;
   const isLoss = lastRecord ? lastRecord.daily_pnl_ratio < 0 : false;
-
-  return (
-    <Grid container rowSpacing={4.5} columnSpacing={2.75} sx={{ color: '#fff' }}>
-      {/* row 1 */}
-      <Grid item xs={12} sx={{ mb: -2.25 }}>
-        <Typography variant="h5">Dashboard</Typography>
+  if (authorization === false) {
+    return (
+      // <Box sx={{ display: 'flex', justifyContent: 'center', mt: 5 }}>
+      <Grid container sx={{ bgcolor: '#0b1836' }}>
+        <NoAuthorityPage />
       </Grid>
-      <Grid item xs={12} sm={6} md={3} lg={3}>
-        <AnalyticEcommerce
-          title="Current balance"
-          count={`$${lastRecord ? lastRecord.balance : 0}`}
-          // percentage={lastRecord ? lastRecord.daily_pnl_ratio : 0}
-          extra={`$${lastRecord ? lastRecord.daily_pnl : 0}`}
-          isLoss={isLoss}
-          // color= {isLoss ? 'warning' : 'success'}
-          msg="daily banlane change"
-        />
-      </Grid>
-      <Grid item xs={12} sm={6} md={3} lg={3}>
-        <AnalyticEcommerce
-          title="Accumulative PNL"
-          count={`$${lastRecord ? lastRecord.acum_pnl : 0}`}
-          // percentage={lastRecord ? lastRecord.daily_pnl_ratio : 0}
-          extra={`$${lastRecord ? lastRecord.daily_pnl : 0}`}
-          isLoss={isLoss}
-          // color= {isLoss ? 'warning' : 'success'}
-          msg="daily pnl change"
-        />
-      </Grid>
-      <Grid item xs={12} sm={6} md={3} lg={3}>
-        <AnalyticEcommerce
-          title="Accumulative PNLRatio"
-          count={`${lastRecord ? lastRecord.acum_pnl_ratio : 0}%`}
-          extra={`$${lastRecord ? lastRecord.daily_pnl_ratio : 0}%`}
-          msg="daily pnl ratio"
-        />
-      </Grid>
-
-      <Grid item md={8} sx={{ display: { sm: 'none', md: 'block', lg: 'none' } }} />
-
-      {/* row 2 pnl ratio */}
-      <Grid item xs={16} md={7} lg={12}>
-        <Grid container alignItems="center" justifyContent="space-between">
-          <Grid item>
-            <Typography variant="h5">Accumulative PNL Ratio</Typography>
-          </Grid>
-          <Grid item>
-            <Stack direction="row" alignItems="center" spacing={0}>
-              <Button
-                size="small"
-                onClick={() => setSlot('all')}
-                color={slot === 'all' ? 'primary' : 'secondary'}
-                variant={slot === 'all' ? 'outlined' : 'text'}
-              >
-                ALL
-              </Button>
-              <Button
-                size="small"
-                onClick={() => setSlot('month')}
-                color={slot === 'month' ? 'primary' : 'secondary'}
-                variant={slot === 'month' ? 'outlined' : 'text'}
-              >
-                Month
-              </Button>
-              <Button
-                size="small"
-                onClick={() => setSlot('week')}
-                color={slot === 'week' ? 'primary' : 'secondary'}
-                variant={slot === 'week' ? 'outlined' : 'text'}
-              >
-                Week
-              </Button>
-            </Stack>
-          </Grid>
+    );
+  } else {
+    return (
+      <Grid container rowSpacing={4.5} columnSpacing={2.75} sx={{ color: '#fff' }}>
+        {/* row 1 */}
+        <Grid item xs={12} sx={{ mb: -2.25 }}>
+          <Typography variant="h5">Dashboard</Typography>
         </Grid>
-        <MainCard content={false} sx={{ mt: 1.5, bgcolor: '#0b1836' }}>
-          <Box sx={{ pt: 1, pr: 2 }}>
-            <AcumPnlAraeChart slot={slot} />
-          </Box>
-        </MainCard>
-      </Grid>
+        <Grid item xs={12} sm={6} md={3} lg={3}>
+          <AnalyticEcommerce
+            title="Current balance"
+            count={`$${lastRecord ? lastRecord.balance : 0}`}
+            // percentage={lastRecord ? lastRecord.daily_pnl_ratio : 0}
+            extra={`$${lastRecord ? lastRecord.daily_pnl : 0}`}
+            isLoss={isLoss}
+            // color= {isLoss ? 'warning' : 'success'}
+            msg="daily banlane change"
+          />
+        </Grid>
+        <Grid item xs={12} sm={6} md={3} lg={3}>
+          <AnalyticEcommerce
+            title="Accumulative PNL"
+            count={`$${lastRecord ? lastRecord.acum_pnl : 0}`}
+            // percentage={lastRecord ? lastRecord.daily_pnl_ratio : 0}
+            extra={`$${lastRecord ? lastRecord.daily_pnl : 0}`}
+            isLoss={isLoss}
+            // color= {isLoss ? 'warning' : 'success'}
+            msg="daily pnl change"
+          />
+        </Grid>
+        <Grid item xs={12} sm={6} md={3} lg={3}>
+          <AnalyticEcommerce
+            title="Accumulative PNLRatio"
+            count={`${lastRecord ? lastRecord.acum_pnl_ratio : 0}%`}
+            extra={`$${lastRecord ? lastRecord.daily_pnl_ratio : 0}%`}
+            msg="daily pnl ratio"
+          />
+        </Grid>
 
-      {/* row 2 balance */}
-      <Grid item xs={12} md={7} lg={8}>
-        <Grid container alignItems="center" justifyContent="space-between">
-          <Grid item>
-            <Typography variant="h5">History Balance</Typography>
+        <Grid item md={8} sx={{ display: { sm: 'none', md: 'block', lg: 'none' } }} />
+
+        {/* row 2 pnl ratio */}
+        <Grid item xs={16} md={7} lg={12}>
+          <Grid container alignItems="center" justifyContent="space-between">
+            <Grid item>
+              <Typography variant="h5">Accumulative PNL Ratio</Typography>
+            </Grid>
+            <Grid item>
+              <Stack direction="row" alignItems="center" spacing={0}>
+                <Button
+                  size="small"
+                  onClick={() => setSlot('all')}
+                  color={slot === 'all' ? 'primary' : 'secondary'}
+                  variant={slot === 'all' ? 'outlined' : 'text'}
+                >
+                  ALL
+                </Button>
+                <Button
+                  size="small"
+                  onClick={() => setSlot('month')}
+                  color={slot === 'month' ? 'primary' : 'secondary'}
+                  variant={slot === 'month' ? 'outlined' : 'text'}
+                >
+                  Month
+                </Button>
+                <Button
+                  size="small"
+                  onClick={() => setSlot('week')}
+                  color={slot === 'week' ? 'primary' : 'secondary'}
+                  variant={slot === 'week' ? 'outlined' : 'text'}
+                >
+                  Week
+                </Button>
+              </Stack>
+            </Grid>
           </Grid>
-          <Grid item>
-            <Stack direction="row" alignItems="center" spacing={0}>
-              <Button
-                size="small"
-                onClick={() => setSlot('all')}
-                color={slot === 'all' ? 'primary' : 'secondary'}
-                variant={slot === 'all' ? 'outlined' : 'text'}
-              >
-                ALL
-              </Button>
-              <Button
-                size="small"
-                onClick={() => setSlot('month')}
-                color={slot === 'month' ? 'primary' : 'secondary'}
-                variant={slot === 'month' ? 'outlined' : 'text'}
-              >
-                Month
-              </Button>
-              <Button
-                size="small"
-                onClick={() => setSlot('week')}
-                color={slot === 'week' ? 'primary' : 'secondary'}
-                variant={slot === 'week' ? 'outlined' : 'text'}
-              >
-                Week
-              </Button>
-            </Stack>
-          </Grid>
+          <MainCard content={false} sx={{ mt: 1.5, bgcolor: '#0b1836' }}>
+            <Box sx={{ pt: 1, pr: 2 }}>
+              <AcumPnlAraeChart slot={slot} />
+            </Box>
+          </MainCard>
         </Grid>
-        <MainCard content={false} sx={{ mt: 1.5, bgcolor: '#0b1836' }}>
-          <Box sx={{ pt: 1, pr: 2 }}>
-            <BalanceAraeChart slot={slot} />
-          </Box>
-        </MainCard>
-      </Grid>
-      <Grid item xs={12} md={5} lg={4}>
-        <Grid container alignItems="center" justifyContent="space-between">
-          <Grid item>
-            <Typography variant="h5">Recent Weekly PNL</Typography>
+
+        {/* row 2 balance */}
+        <Grid item xs={12} md={7} lg={8}>
+          <Grid container alignItems="center" justifyContent="space-between">
+            <Grid item>
+              <Typography variant="h5">History Balance</Typography>
+            </Grid>
+            <Grid item>
+              <Stack direction="row" alignItems="center" spacing={0}>
+                <Button
+                  size="small"
+                  onClick={() => setSlot('all')}
+                  color={slot === 'all' ? 'primary' : 'secondary'}
+                  variant={slot === 'all' ? 'outlined' : 'text'}
+                >
+                  ALL
+                </Button>
+                <Button
+                  size="small"
+                  onClick={() => setSlot('month')}
+                  color={slot === 'month' ? 'primary' : 'secondary'}
+                  variant={slot === 'month' ? 'outlined' : 'text'}
+                >
+                  Month
+                </Button>
+                <Button
+                  size="small"
+                  onClick={() => setSlot('week')}
+                  color={slot === 'week' ? 'primary' : 'secondary'}
+                  variant={slot === 'week' ? 'outlined' : 'text'}
+                >
+                  Week
+                </Button>
+              </Stack>
+            </Grid>
           </Grid>
-          <Grid item />
+          <MainCard content={false} sx={{ mt: 1.5, bgcolor: '#0b1836' }}>
+            <Box sx={{ pt: 1, pr: 2 }}>
+              <BalanceAraeChart slot={slot} />
+            </Box>
+          </MainCard>
         </Grid>
-        <MainCard sx={{ mt: 2, bgcolor: '#0b1836' }} content={false}>
-          <WeeklyPnlBarChart data={recent7WeekPnl} />
-        </MainCard>
+        <Grid item xs={12} md={5} lg={4}>
+          <Grid container alignItems="center" justifyContent="space-between">
+            <Grid item>
+              <Typography variant="h5">Recent Weekly PNL</Typography>
+            </Grid>
+            <Grid item />
+          </Grid>
+          <MainCard sx={{ mt: 2, bgcolor: '#0b1836' }} content={false}>
+            <WeeklyPnlBarChart data={recent7WeekPnl} />
+          </MainCard>
+        </Grid>
       </Grid>
-    </Grid>
-  );
+    );
+  }
 };
 
 export default DashboardDefault;

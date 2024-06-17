@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 
 // material-ui
 import { CssBaseline, StyledEngineProvider } from '@mui/material';
@@ -10,11 +10,15 @@ import Palette from './palette';
 import Typography from './typography';
 import CustomShadows from './shadows';
 import componentsOverride from './overrides';
+import AppAppBar from 'components/AppappBar';
 
 // ==============================|| DEFAULT THEME - MAIN  ||============================== //
 
 export default function ThemeCustomization({ children }) {
-  const theme = Palette('light', 'default');
+  const [mode, setMode] = useState('light');
+
+  const theme = useMemo(() => Palette(mode, 'default'), [mode]);
+  // const theme = Palette('dark', 'default');
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const themeTypography = Typography(`'Public Sans', sans-serif`);
@@ -49,10 +53,17 @@ export default function ThemeCustomization({ children }) {
   const themes = createTheme(themeOptions);
   themes.components = componentsOverride(themes);
 
+  const defaultTheme = createTheme({ palette: { mode } });
+
+  const toggleColorMode = () => {
+    setMode((prev) => (prev === 'dark' ? 'light' : 'dark'));
+  };
+
   return (
     <StyledEngineProvider injectFirst>
-      <ThemeProvider theme={themes}>
+      <ThemeProvider theme={defaultTheme}>
         <CssBaseline />
+        <AppAppBar mode={mode} toggleColorMode={toggleColorMode} />
         {children}
       </ThemeProvider>
     </StyledEngineProvider>
