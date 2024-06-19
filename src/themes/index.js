@@ -61,9 +61,8 @@ export default function ThemeCustomization({ children }) {
 
   return (
     <StyledEngineProvider injectFirst>
-      <ThemeProvider theme={defaultTheme}>
+      <ThemeProvider theme={themes}>
         <CssBaseline />
-        <AppAppBar mode={mode} toggleColorMode={toggleColorMode} />
         {children}
       </ThemeProvider>
     </StyledEngineProvider>

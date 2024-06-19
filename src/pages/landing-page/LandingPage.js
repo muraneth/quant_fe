@@ -28,7 +28,7 @@ function ToggleCustomTheme({ showCustomTheme, toggleCustomTheme }) {
         alignItems: 'center',
         width: '100dvw',
         position: 'fixed',
-        bottom: 24,
+        bottom: 24
       }}
     >
       <ToggleButtonGroup
@@ -40,8 +40,8 @@ function ToggleCustomTheme({ showCustomTheme, toggleCustomTheme }) {
         sx={{
           backgroundColor: 'background.default',
           '& .Mui-selected': {
-            pointerEvents: 'none',
-          },
+            pointerEvents: 'none'
+          }
         }}
       >
         <ToggleButton value>
@@ -56,9 +56,9 @@ function ToggleCustomTheme({ showCustomTheme, toggleCustomTheme }) {
 
 ToggleCustomTheme.propTypes = {
   showCustomTheme: PropTypes.shape({
-    valueOf: PropTypes.func.isRequired,
+    valueOf: PropTypes.func.isRequired
   }).isRequired,
-  toggleCustomTheme: PropTypes.func.isRequired,
+  toggleCustomTheme: PropTypes.func.isRequired
 };
 
 export default function LandingPage() {
@@ -76,8 +76,10 @@ export default function LandingPage() {
   };
 
   return (
-    <ThemeProvider theme={showCustomTheme ? LPtheme : defaultTheme}>
-      <CssBaseline />
+    // <ThemeProvider theme={showCustomTheme ? LPtheme : defaultTheme}>
+    <>
+      {/* <CssBaseline /> */}
+
       <AppAppBar mode={mode} toggleColorMode={toggleColorMode} />
       <Hero />
       <Box sx={{ bgcolor: 'background.default' }}>
@@ -94,10 +96,8 @@ export default function LandingPage() {
         <Divider />
         <Footer />
       </Box>
-      <ToggleCustomTheme
-        showCustomTheme={showCustomTheme}
-        toggleCustomTheme={toggleCustomTheme}
-      />
-    </ThemeProvider>
+      {/* <ToggleCustomTheme showCustomTheme={showCustomTheme} toggleCustomTheme={toggleCustomTheme} /> */}
+    </>
+    // </ThemeProvider>
   );
 }

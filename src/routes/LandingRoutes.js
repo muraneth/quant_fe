@@ -10,14 +10,7 @@ import { Navigate } from 'react-router-dom';
 const LandingPage = Loadable(lazy(() => import('pages/landing-page/LandingPage')));
 
 const LandingPageRoutes = {
-    path: '/',
-    element: localStorage.getItem('token') ? <Navigate to="/dashboard/default" /> : <SignIn />,
-
-    children: [
-        {
-        path: '/home',
-        element: <LandingPage />
-        }
-    ]
+  path: '/',
+  element: <LandingPage />
 };
 export default LandingPageRoutes;

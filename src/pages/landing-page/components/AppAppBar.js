@@ -15,6 +15,7 @@ import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import ToggleColorMode from './ToggleColorMode';
 
 import Sitemark from './SitemarkIcon';
+import Logo from 'components/Logo/Logo';
 
 function AppAppBar({ mode, toggleColorMode }) {
   const [open, setOpen] = React.useState(false);
@@ -31,7 +32,7 @@ function AppAppBar({ mode, toggleColorMode }) {
       sectionElement.scrollIntoView({ behavior: 'smooth' });
       window.scrollTo({
         top: targetScroll,
-        behavior: 'smooth',
+        behavior: 'smooth'
       });
       setOpen(false);
     }
@@ -44,7 +45,7 @@ function AppAppBar({ mode, toggleColorMode }) {
         boxShadow: 0,
         bgcolor: 'transparent',
         backgroundImage: 'none',
-        mt: 2,
+        mt: 2
       }}
     >
       <Container maxWidth="lg">
@@ -55,70 +56,45 @@ function AppAppBar({ mode, toggleColorMode }) {
             alignItems: 'center',
             justifyContent: 'space-between',
             flexShrink: 0,
-            borderRadius: '999px',
-            bgcolor:
-              theme.palette.mode === 'light'
-                ? 'hsla(220, 60%, 99%, 0.6)'
-                : 'hsla(220, 0%, 0%, 0.7)',
-            backdropFilter: 'blur(24px)',
-            maxHeight: 40,
-            border: '1px solid',
-            borderColor: 'divider',
-            boxShadow:
-              theme.palette.mode === 'light'
-                ? '0 1px 2px hsla(210, 0%, 0%, 0.05), 0 2px 12px hsla(210, 100%, 80%, 0.5)'
-                : '0 1px 2px hsla(210, 0%, 0%, 0.5), 0 2px 12px hsla(210, 100%, 25%, 0.3)',
+            // borderRadius: '999px',
+            // bgcolor: theme.palette.mode === 'light' ? 'hsla(220, 60%, 99%, 0.6)' : 'hsla(220, 0%, 0%, 0.7)',
+            // backdropFilter: 'blur(24px)',
+            maxHeight: 40
+            // border: '1px solid',
+            // borderColor: 'divider',
+            // boxShadow:
+            //   theme.palette.mode === 'light'
+            //     ? '0 1px 2px hsla(210, 0%, 0%, 0.05), 0 2px 12px hsla(210, 100%, 80%, 0.5)'
+            //     : '0 1px 2px hsla(210, 0%, 0%, 0.5), 0 2px 12px hsla(210, 100%, 25%, 0.3)'
           })}
         >
+          <Box sx={{ width: '150px' }}>
+            <Logo />
+          </Box>
           <Box
-            sx={{
-              flexGrow: 1,
-              display: 'flex',
-              alignItems: 'center',
-              px: 0,
-            }}
+          // sx={{
+          //   flexGrow: 1,
+          //   display: 'flex',
+          //   alignItems: 'center',
+          //   px: 0
+          // }}
           >
-            <Sitemark />
+            {/* <Sitemark /> */}
+
             <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-              <Button
-                variant="text"
-                color="info"
-                size="small"
-                onClick={() => scrollToSection('features')}
-              >
-                Features
+              <Button variant="text" color="primary" size="large" onClick={() => scrollToSection('features')}>
+                Strategies
               </Button>
-              <Button
-                variant="text"
-                color="info"
-                size="small"
-                onClick={() => scrollToSection('testimonials')}
-              >
+              <Button variant="text" color="info" size="small" onClick={() => scrollToSection('testimonials')}>
                 Testimonials
               </Button>
-              <Button
-                variant="text"
-                color="info"
-                size="small"
-                onClick={() => scrollToSection('highlights')}
-              >
+              <Button variant="text" color="info" size="small" onClick={() => scrollToSection('highlights')}>
                 Highlights
               </Button>
-              <Button
-                variant="text"
-                color="info"
-                size="small"
-                onClick={() => scrollToSection('pricing')}
-              >
+              <Button variant="text" color="info" size="small" onClick={() => scrollToSection('pricing')}>
                 Pricing
               </Button>
-              <Button
-                variant="text"
-                color="info"
-                size="small"
-                onClick={() => scrollToSection('faq')}
-                sx={{ minWidth: 0 }}
-              >
+              <Button variant="text" color="info" size="small" onClick={() => scrollToSection('faq')} sx={{ minWidth: 0 }}>
                 FAQ
               </Button>
             </Box>
@@ -127,28 +103,14 @@ function AppAppBar({ mode, toggleColorMode }) {
             sx={{
               display: { xs: 'none', md: 'flex' },
               gap: 0.5,
-              alignItems: 'center',
+              alignItems: 'center'
             }}
           >
             <ToggleColorMode mode={mode} toggleColorMode={toggleColorMode} />
-            <Button
-              color="primary"
-              variant="text"
-              size="small"
-              component="a"
-              href="/sign-in/"
-              target="_blank"
-            >
+            <Button color="primary" variant="text" size="small" component="a" href="/sign-in/" target="_blank">
               Sign in
             </Button>
-            <Button
-              color="primary"
-              variant="contained"
-              size="small"
-              component="a"
-              href="/sign-up/"
-              target="_blank"
-            >
+            <Button color="primary" variant="contained" size="small" component="a" href="/sign-up/" target="_blank">
               Sign up
             </Button>
           </Box>
@@ -160,14 +122,14 @@ function AppAppBar({ mode, toggleColorMode }) {
               <Box
                 sx={{
                   p: 2,
-                  backgroundColor: 'background.default',
+                  backgroundColor: 'background.default'
                 }}
               >
                 <Box
                   sx={{
                     display: 'flex',
                     alignItems: 'center',
-                    justifyContent: 'space-between',
+                    justifyContent: 'space-between'
                   }}
                 >
                   <ToggleColorMode mode={mode} toggleColorMode={toggleColorMode} />
@@ -176,18 +138,10 @@ function AppAppBar({ mode, toggleColorMode }) {
                   </IconButton>
                 </Box>
                 <Divider sx={{ my: 3 }} />
-                <MenuItem onClick={() => scrollToSection('features')}>
-                  Features
-                </MenuItem>
-                <MenuItem onClick={() => scrollToSection('testimonials')}>
-                  Testimonials
-                </MenuItem>
-                <MenuItem onClick={() => scrollToSection('highlights')}>
-                  Highlights
-                </MenuItem>
-                <MenuItem onClick={() => scrollToSection('pricing')}>
-                  Pricing
-                </MenuItem>
+                <MenuItem onClick={() => scrollToSection('features')}>Features</MenuItem>
+                <MenuItem onClick={() => scrollToSection('testimonials')}>Testimonials</MenuItem>
+                <MenuItem onClick={() => scrollToSection('highlights')}>Highlights</MenuItem>
+                <MenuItem onClick={() => scrollToSection('pricing')}>Pricing</MenuItem>
                 <MenuItem onClick={() => scrollToSection('faq')}>FAQ</MenuItem>
                 <MenuItem>
                   <Button
@@ -224,7 +178,7 @@ function AppAppBar({ mode, toggleColorMode }) {
 
 AppAppBar.propTypes = {
   mode: PropTypes.oneOf(['dark', 'light']).isRequired,
-  toggleColorMode: PropTypes.func.isRequired,
+  toggleColorMode: PropTypes.func.isRequired
 };
 
 export default AppAppBar;
