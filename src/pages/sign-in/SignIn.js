@@ -4,31 +4,24 @@ import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
-// import Checkbox from '@mui/material/Checkbox';
-import CssBaseline from '@mui/material/CssBaseline';
-// import FormControlLabel from '@mui/material/FormControlLabel';
-// import Divider from '@mui/material/Divider';
+
 import FormLabel from '@mui/material/FormLabel';
 import FormControl from '@mui/material/FormControl';
 import Link from '@mui/material/Link';
-import TextField from '@mui/material/TextField';
+
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 
-import { ThemeProvider, createTheme } from '@mui/material/styles';
+import ForgotPassword from './ForgotPassword';
 
-// import ArrowBackRoundedIcon from '@mui/icons-material/ArrowBackRounded';
 import AutoAwesomeRoundedIcon from '@mui/icons-material/AutoAwesomeRounded';
 
-// import ForgotPassword from './ForgotPassword';
-// import getSignInTheme from './getSignInTheme';
-// import ToggleColorMode from './ToggleColorMode';
-// import {SitemarkIcon } from './CustomIcons';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Logo from 'components/Logo/Logo';
+import CustomTextField from 'components/overrides/CustomTextField';
 
 function ToggleCustomTheme({ showCustomTheme, toggleCustomTheme }) {
   return (
@@ -74,24 +67,14 @@ ToggleCustomTheme.propTypes = {
 
 export default function SignIn() {
   const [mode] = React.useState('light');
-  // const [showCustomTheme, setShowCustomTheme] = React.useState(true);
-  const defaultTheme = createTheme({ palette: { mode } });
-  // const SignInTheme = createTheme(getSignInTheme(mode));
+
   const [emailError, setEmailError] = React.useState(false);
   const [emailErrorMessage, setEmailErrorMessage] = React.useState('');
   const [passwordError, setPasswordError] = React.useState(false);
   const [passwordErrorMessage, setPasswordErrorMessage] = React.useState('');
   const [uid, setUid] = React.useState('');
-  // const [open, setOpen] = React.useState(false);
+
   const navigate = useNavigate();
-
-  // const toggleColorMode = () => {
-  //   setMode((prev) => (prev === 'dark' ? 'light' : 'dark'));
-  // };
-
-  // const toggleCustomTheme = () => {
-  //   setShowCustomTheme((prev) => !prev);
-  // };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -113,7 +96,6 @@ export default function SignIn() {
       localStorage.setItem('username', username);
       setUid(uid);
       console.log('Logged in successfully!');
-      // Redirect to user home page
     } catch (error) {
       console.log(error);
       console.log('Invalid username or password');
@@ -157,8 +139,8 @@ export default function SignIn() {
   };
 
   return (
-    <ThemeProvider theme={defaultTheme}>
-      <CssBaseline />
+    <>
+      {/* <CssBaseline /> */}
       <Stack
         direction="column"
         justifyContent="space-between"
@@ -181,19 +163,13 @@ export default function SignIn() {
             width: '100%',
             p: { xs: 2, sm: 4 }
           }}
-        >
-          {/* <Button
-            startIcon={<ArrowBackRoundedIcon />}
-            component="a"
-            href="/material-ui/getting-started/templates/"
-          >
-            Back
-          </Button> */}
-          {/* <ToggleColorMode mode={mode} toggleColorMode={toggleColorMode} /> */}
-        </Stack>
+        ></Stack>
         <Stack justifyContent="center" sx={{ height: { xs: '100%', sm: '100dvh' }, p: 2 }}>
           <Card
+            variant="outlined"
             sx={(theme) => ({
+              backgroundColor: theme.palette.mode === 'light' ? 'background.paper' : 'background.default',
+
               display: 'flex',
               flexDirection: 'column',
               alignSelf: 'center',
@@ -206,8 +182,7 @@ export default function SignIn() {
                   : 'hsla(220, 30%, 5%, 0.5) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.08) 0px 15px 35px -5px, hsla(220, 30%, 5%, 0.05) 0px 0px 0px 1px'
             })}
           >
-            {/* <SitemarkIcon /> */}
-            <Logo />
+            {/* <Logo /> */}
             <Typography component="h1" variant="h4" sx={{ width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)' }}>
               Sign in
             </Typography>
@@ -224,7 +199,7 @@ export default function SignIn() {
             >
               <FormControl>
                 <FormLabel htmlFor="email">Email</FormLabel>
-                <TextField
+                <CustomTextField
                   error={emailError}
                   helperText={emailErrorMessage}
                   id="email"
@@ -237,27 +212,13 @@ export default function SignIn() {
                   fullWidth
                   variant="outlined"
                   color={emailError ? 'error' : 'primary'}
-                  sx={{ ariaLabel: 'email' }}
+                  // sx={{ ariaLabel: 'email' }}
                 />
               </FormControl>
               <FormControl>
-                <Box
-                  sx={{
-                    display: 'flex',
-                    justifyContent: 'space-between'
-                  }}
-                >
-                  <FormLabel htmlFor="password">Password</FormLabel>
-                  {/* <Link
-                    component="button"
-                    onClick={handleClickOpen}
-                    variant="body2"
-                    sx={{ alignSelf: 'baseline' }}
-                  >
-                    Forgot your password?
-                  </Link> */}
-                </Box>
-                <TextField
+                <FormLabel htmlFor="password">Password</FormLabel>
+
+                <CustomTextField
                   error={passwordError}
                   helperText={passwordErrorMessage}
                   name="password"
@@ -272,172 +233,37 @@ export default function SignIn() {
                   color={passwordError ? 'error' : 'primary'}
                 />
               </FormControl>
-              {/* <FormControlLabel
-                control={<Checkbox value="remember" color="primary" />}
-                label="Remember me"
-              /> */}
+
               {/* <ForgotPassword open={open} handleClose={handleClose} /> */}
-              <Button type="submit" fullWidth variant="contained" onClick={validateInputs}>
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{
+                  bgcolor: 'secondary.main',
+                  color: 'white',
+                  '&:hover': {
+                    bgcolor: 'secondary.light'
+                  }
+                }}
+                onClick={validateInputs}
+              >
                 Sign in
               </Button>
-              <Link href="/sign-up/" variant="body2" sx={{ alignSelf: 'center' }}>
+              <Link
+                href="/sign-up/"
+                variant="body2"
+                sx={{
+                  alignSelf: 'center',
+                  color: 'common.white'
+                }}
+              >
                 Don&apos;t have an account? Sign up
               </Link>
             </Box>
-            {/* <Divider>or</Divider>
-            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-              <Button
-                type="submit"
-                fullWidth
-                variant="outlined"
-                color="secondary"
-                onClick={() => alert('Sign in with Google')}
-                startIcon={<GoogleIcon />}
-              >
-                Sign in with Google
-              </Button>
-              <Button
-                type="submit"
-                fullWidth
-                variant="outlined"
-                color="secondary"
-                onClick={() => alert('Sign in with Facebook')}
-                startIcon={<FacebookIcon />}
-              >
-                Sign in with Facebook
-              </Button>
-            </Box> */}
           </Card>
         </Stack>
       </Stack>
-      {/* <ToggleCustomTheme
-        showCustomTheme={showCustomTheme}
-        toggleCustomTheme={toggleCustomTheme}
-      /> */}
-    </ThemeProvider>
+    </>
   );
 }
-
-// import * as React from 'react';
-// import {useState} from 'react';
-// import Avatar from '@mui/material/Avatar';
-// import Button from '@mui/material/Button';
-// import CssBaseline from '@mui/material/CssBaseline';
-// import TextField from '@mui/material/TextField';
-// import FormControlLabel from '@mui/material/FormControlLabel';
-// import Checkbox from '@mui/material/Checkbox';
-// import Link from '@mui/material/Link';
-// import Grid from '@mui/material/Grid';
-// import Box from '@mui/material/Box';
-// import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-// import Typography from '@mui/material/Typography';
-// import Container from '@mui/material/Container';
-// import { createTheme, ThemeProvider } from '@mui/material/styles';
-
-// import { useNavigate } from 'react-router-dom';
-
-// import axios from 'axios';
-// import './login-page.css'; // Import CSS file for styling
-
-// export default function SignIn() {
-//   const [username, setUsername] = useState('');
-//   const [password, setPassword] = useState('');
-//   // const [error, setError] = useState('');
-//   const navigate = useNavigate();
-//   const handleSubmit = async (e) => {
-//     e.preventDefault();
-//     const data = new FormData(e.currentTarget);
-
-//     setUsername(data.get('username'));
-//     setPassword(data.get('password'));
-//     try {
-//       const response = await axios.post('http://127.0.0.1:5001/user/login', {
-//         username,
-//         password,
-//       });
-//       const { token,uid } = response.data.data;
-
-//       console.log(uid);
-
-//       localStorage.setItem('token', token);
-//       localStorage.setItem('uid', uid);
-//       console.log('Logged in successfully!');
-//       // Redirect to user home page
-//       navigate('/user');
-
-//     } catch (error) {
-//       // setError('Invalid username or password');
-//     }
-//   };
-//   const defaultTheme = createTheme();
-
-//   return (
-//     <ThemeProvider theme={defaultTheme}>
-//       <Container component="main" maxWidth="xs">
-//         <CssBaseline />
-//         <Box
-//           sx={{
-//             marginTop: 8,
-//             display: 'flex',
-//             flexDirection: 'column',
-//             alignItems: 'center',
-//           }}
-//         >
-//           <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-//             <LockOutlinedIcon />
-//           </Avatar>
-//           <Typography component="h1" variant="h5">
-//             Sign in
-//           </Typography>
-//           <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-//             <TextField
-//               margin="normal"
-//               required
-//               fullWidth
-//               id="username"
-//               label="User name"
-//               name="username"
-//               autoComplete="username"
-//               autoFocus
-//             />
-//             <TextField
-//               margin="normal"
-//               required
-//               fullWidth
-//               name="password"
-//               label="Password"
-//               type="password"
-//               id="password"
-//               autoComplete="current-password"
-//             />
-//             <FormControlLabel
-//               control={<Checkbox value="remember" color="primary" />}
-//               label="Remember me"
-//             />
-//             <Button
-//               type="submit"
-//               fullWidth
-//               variant="contained"
-//               sx={{ mt: 3, mb: 2 }}
-//             >
-//               Sign In
-//             </Button>
-//             <Grid container>
-//               <Grid item xs>
-//                 <Link href="#" variant="body2">
-//                   Forgot password?
-//                 </Link>
-//               </Grid>
-//               <Grid item>
-//                 <Link href="#" variant="body2">
-//                   {"Don't have an account? Sign Up"}
-//                 </Link>
-//               </Grid>
-//             </Grid>
-//           </Box>
-//         </Box>
-//         {/* <Copyright sx={{ mt: 8, mb: 4 }} /> */}
-//       </Container>
-//     </ThemeProvider>
-//   );
-// }

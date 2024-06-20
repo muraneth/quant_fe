@@ -26,6 +26,7 @@ import ToggleColorMode from './ToggleColorMode';
 import Logo from 'components/Logo/Logo';
 // import { GoogleIcon, FacebookIcon, SitemarkIcon } from './CustomIcons';
 import axios from 'axios';
+import CustomTextField from 'components/overrides/CustomTextField';
 
 function ToggleCustomTheme({ showCustomTheme, toggleCustomTheme }) {
   return (
@@ -155,13 +156,7 @@ export default function SignUp() {
   };
 
   return (
-    <ThemeProvider
-      theme={
-        // showCustomTheme ? SignUpTheme :
-        defaultTheme
-      }
-    >
-      <CssBaseline />
+    <>
       <Stack
         component="main"
         direction="column"
@@ -226,7 +221,7 @@ export default function SignUp() {
               </FormControl>
               <FormControl>
                 <FormLabel htmlFor="email">Email</FormLabel>
-                <TextField
+                <CustomTextField
                   required
                   fullWidth
                   id="email"
@@ -241,7 +236,7 @@ export default function SignUp() {
               </FormControl>
               <FormControl>
                 <FormLabel htmlFor="password">Password</FormLabel>
-                <TextField
+                <CustomTextField
                   required
                   fullWidth
                   name="password"
@@ -259,10 +254,22 @@ export default function SignUp() {
                 control={<Checkbox value="allowExtraEmails" color="primary" />}
                 label="I want to receive updates via email."
               />
-              <Button type="submit" fullWidth variant="contained" onClick={validateInputs}>
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                onClick={validateInputs}
+                sx={{
+                  bgcolor: 'secondary.main',
+                  color: 'white',
+                  '&:hover': {
+                    bgcolor: 'secondary.light'
+                  }
+                }}
+              >
                 Sign up
               </Button>
-              <Link href="/sign-in/" variant="body2" sx={{ alignSelf: 'center' }}>
+              <Link href="/sign-in/" variant="body2" sx={{ alignSelf: 'center', color: 'white' }}>
                 Already have an account? Sign in
               </Link>
             </Box>
@@ -294,10 +301,6 @@ export default function SignUp() {
           </Card>
         </Stack>
       </Stack>
-      {/* <ToggleCustomTheme
-        showCustomTheme={showCustomTheme}
-        toggleCustomTheme={toggleCustomTheme}
-      /> */}
-    </ThemeProvider>
+    </>
   );
 }

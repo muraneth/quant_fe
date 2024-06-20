@@ -15,7 +15,7 @@ import AppAppBar from 'components/AppappBar';
 // ==============================|| DEFAULT THEME - MAIN  ||============================== //
 
 export default function ThemeCustomization({ children }) {
-  const [mode, setMode] = useState('light');
+  const [mode, setMode] = useState('dark');
 
   const theme = useMemo(() => Palette(mode, 'default'), [mode]);
   // const theme = Palette('dark', 'default');
@@ -53,7 +53,18 @@ export default function ThemeCustomization({ children }) {
   const themes = createTheme(themeOptions);
   themes.components = componentsOverride(themes);
 
-  const defaultTheme = createTheme({ palette: { mode } });
+  const defaultTheme = createTheme({
+    palette: {
+      mode: mode,
+      primary: { main: '#111325' },
+      secondary: {
+        main: '#7451ff',
+        light: '#8f73ff'
+      },
+      background: { default: '#0c1438', paper: '#0c1438' }
+    },
+    customShadows: themeCustomShadows
+  });
 
   const toggleColorMode = () => {
     setMode((prev) => (prev === 'dark' ? 'light' : 'dark'));
@@ -61,7 +72,7 @@ export default function ThemeCustomization({ children }) {
 
   return (
     <StyledEngineProvider injectFirst>
-      <ThemeProvider theme={themes}>
+      <ThemeProvider theme={defaultTheme}>
         <CssBaseline />
         {children}
       </ThemeProvider>
