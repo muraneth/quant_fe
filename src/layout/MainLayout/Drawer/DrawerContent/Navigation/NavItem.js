@@ -46,7 +46,7 @@ const NavItem = ({ item, level }) => {
   }, [pathname]);
 
   const textColor = 'text.primary';
-  const iconSelectedColor = 'primary.main';
+  const iconSelectedColor = 'text.primary';
 
   return (
     <ListItemButton

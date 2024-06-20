@@ -22,7 +22,7 @@ const DashboardDefault = () => {
   const [slot, setSlot] = useState('month');
   const [userDailyCashFlowData, setUserDailyCashFlowData] = useState([]);
   const [userWeeklyCashFlowData, setUserWeeklyCashFlowData] = useState([]);
-  const [authorization, setAuthorization] = useState(false);
+  const [authorization, setAuthorization] = useState(true);
   // const navigate = useNavigate();
   const host = 'http://matrixcipher.com';
   useEffect(() => {

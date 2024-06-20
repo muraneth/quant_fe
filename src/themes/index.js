@@ -56,7 +56,7 @@ export default function ThemeCustomization({ children }) {
   const defaultTheme = createTheme({
     palette: {
       mode: mode,
-      primary: { main: '#111325' },
+      primary: { main: '#fff' },
       secondary: {
         main: '#7451ff',
         light: '#8f73ff'

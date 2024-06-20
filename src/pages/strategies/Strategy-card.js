@@ -118,10 +118,13 @@ const StrategyCard = ({ strategy }) => {
             mt: 2,
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'center'
-            // bgcolor: '#4caf50',
-            // color: '#fff',
-            // '&:hover': { bgcolor: '#388e3c' }
+            justifyContent: 'center',
+
+            bgcolor: 'secondary.main',
+            color: 'white',
+            '&:hover': {
+              bgcolor: 'secondary.light'
+            }
           }}
           onClick={handleButtonClick}
         >
