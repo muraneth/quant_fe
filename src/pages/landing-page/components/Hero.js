@@ -47,7 +47,7 @@ export default function Hero() {
               fontSize: 'clamp(3rem, 10vw, 3.5rem)',
             }}
           >
-            Our&nbsp;latest&nbsp;
+            Add&nbsp;Value&nbsp;To&nbsp;Your&nbsp;
             <Typography
               component="span"
               variant="h1"
@@ -57,7 +57,7 @@ export default function Hero() {
                   theme.palette.mode === 'light' ? 'primary.main' : 'primary.light',
               }}
             >
-              products
+              Wealth
             </Typography>
           </Typography>
           <Typography
@@ -65,9 +65,7 @@ export default function Hero() {
             color="text.secondary"
             sx={{ width: { sm: '100%', md: '80%' } }}
           >
-            Explore our cutting-edge dashboard, delivering high-quality solutions
-            tailored to your needs. Elevate your experience with top-tier features
-            and services.
+           Explore the best strategies to grow your wealth. Sign up to get started.
           </Typography>
           <Stack
             direction={{ xs: 'column', sm: 'row' }}
@@ -75,7 +73,7 @@ export default function Hero() {
             useFlexGap
             sx={{ pt: 2, width: { xs: '100%', sm: 'auto' } }}
           >
-            <InputLabel htmlFor="email-hero" sx={visuallyHidden}>
+            {/* <InputLabel htmlFor="email-hero" sx={visuallyHidden}>
               Email
             </InputLabel>
             <TextField
@@ -89,20 +87,30 @@ export default function Hero() {
                 autocomplete: 'off',
                 ariaLabel: 'Enter your email address',
               }}
-            />
-            <Button variant="contained" color="primary">
-              Start now
+            /> */}
+            <Button 
+            variant="contained" 
+            href="/dashboard/" 
+             sx={{
+                  bgcolor: 'secondary.main',
+                  color: 'white',
+                  
+                  '&:hover': {
+                    bgcolor: 'secondary.light'
+                  }
+                }}>
+              Launch App
             </Button>
           </Stack>
           <Typography variant="caption" textAlign="center">
-            By clicking &quot;Start now&quot; you agree to our&nbsp;
+            By clicking &quot;Launch App&quot; you agree to our&nbsp;
             <Link href="#" color="primary">
               Terms & Conditions
             </Link>
             .
           </Typography>
         </Stack>
-        <Box
+        {/* <Box
           id="image"
           sx={(theme) => ({
             mt: { xs: 8, sm: 10 },
@@ -125,7 +133,7 @@ export default function Hero() {
                 ? '0 0 12px 8px hsla(220, 25%, 80%, 0.2)'
                 : '0 0 24px 12px hsla(210, 100%, 25%, 0.2)',
           })}
-        />
+        /> */}
       </Container>
     </Box>
   );

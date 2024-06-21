@@ -83,17 +83,17 @@ export default function LandingPage() {
       <AppAppBar mode={mode} toggleColorMode={toggleColorMode} />
       <Hero />
       <Box sx={{ bgcolor: 'background.default' }}>
-        <LogoCollection />
-        <Features />
-        <Divider />
-        <Testimonials />
+        {/* <LogoCollection /> */}
+        {/* <Features /> */}
+        {/* <Divider /> */}
+        {/* <Testimonials />
         <Divider />
         <Highlights />
         <Divider />
         <Pricing />
-        <Divider />
+        <Divider /> */}
         <FAQ />
-        <Divider />
+        {/* <Divider /> */}
         <Footer />
       </Box>
       {/* <ToggleCustomTheme showCustomTheme={showCustomTheme} toggleCustomTheme={toggleCustomTheme} /> */}

@@ -11,6 +11,11 @@ const LandingPage = Loadable(lazy(() => import('pages/landing-page/LandingPage')
 
 const LandingPageRoutes = {
   path: '/',
-  element: <LandingPage />
+  element: <LandingPage />,
+  children: [
+    {
+      path: 'home',
+      element: <LandingPage />
+    }]
 };
 export default LandingPageRoutes;

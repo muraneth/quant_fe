@@ -15,7 +15,7 @@ import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import ToggleColorMode from './ToggleColorMode';
 
 import Sitemark from './SitemarkIcon';
-import Logo from 'components/Logo/Logo';
+import Logo from 'components/Logo';
 
 function AppAppBar({ mode, toggleColorMode }) {
   const [open, setOpen] = React.useState(false);
@@ -82,18 +82,18 @@ function AppAppBar({ mode, toggleColorMode }) {
             {/* <Sitemark /> */}
 
             <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-              <Button variant="text" color="primary" size="large" onClick={() => scrollToSection('features')}>
+              <Button variant="text" color="info" size="large" onClick={() => scrollToSection('features')}>
                 Strategies
               </Button>
               <Button variant="text" color="info" size="small" onClick={() => scrollToSection('testimonials')}>
-                Testimonials
+                Community
               </Button>
-              <Button variant="text" color="info" size="small" onClick={() => scrollToSection('highlights')}>
+              {/* <Button variant="text" color="info" size="small" onClick={() => scrollToSection('highlights')}>
                 Highlights
-              </Button>
-              <Button variant="text" color="info" size="small" onClick={() => scrollToSection('pricing')}>
+              </Button> */}
+              {/* <Button variant="text" color="info" size="small" onClick={() => scrollToSection('pricing')}>
                 Pricing
-              </Button>
+              </Button> */}
               <Button variant="text" color="info" size="small" onClick={() => scrollToSection('faq')} sx={{ minWidth: 0 }}>
                 FAQ
               </Button>
@@ -107,11 +107,23 @@ function AppAppBar({ mode, toggleColorMode }) {
             }}
           >
             <ToggleColorMode mode={mode} toggleColorMode={toggleColorMode} />
-            <Button color="primary" variant="text" size="small" component="a" href="/sign-in/" target="_blank">
+            {/* <Button color="primary" variant="outlined" size="small" component="a" href="/sign-in/" target="_blank" >
               Sign in
-            </Button>
-            <Button color="primary" variant="contained" size="small" component="a" href="/sign-up/" target="_blank">
-              Sign up
+            </Button> */}
+            <Button color="primary"
+             variant="contained" 
+             size="midium" 
+             component="a"
+              href="/dashboard/" 
+              target="_blank" 
+              sx={{
+                      bgcolor: 'secondary.main',
+                      color: 'white',
+                      '&:hover': {
+                        bgcolor: 'secondary.light'
+                      }
+                    }}>
+              Launch App
             </Button>
           </Box>
           <Box sx={{ display: { sm: 'flex', md: 'none' } }}>
@@ -138,31 +150,45 @@ function AppAppBar({ mode, toggleColorMode }) {
                   </IconButton>
                 </Box>
                 <Divider sx={{ my: 3 }} />
-                <MenuItem onClick={() => scrollToSection('features')}>Features</MenuItem>
+                {/* <MenuItem onClick={() => scrollToSection('features')}>Features</MenuItem>
                 <MenuItem onClick={() => scrollToSection('testimonials')}>Testimonials</MenuItem>
                 <MenuItem onClick={() => scrollToSection('highlights')}>Highlights</MenuItem>
                 <MenuItem onClick={() => scrollToSection('pricing')}>Pricing</MenuItem>
-                <MenuItem onClick={() => scrollToSection('faq')}>FAQ</MenuItem>
+                <MenuItem onClick={() => scrollToSection('faq')}>FAQ</MenuItem> */}
                 <MenuItem>
                   <Button
-                    color="primary"
+                    // color="primary"
                     variant="contained"
                     component="a"
-                    href="/material-ui/getting-started/templates/sign-up/"
+                    href="/sign-up/"
                     target="_blank"
                     fullWidth
+                    sx={{
+                      bgcolor: 'secondary.main',
+                      color: 'white',
+                      '&:hover': {
+                        bgcolor: 'secondary.light'
+                      }
+                    }}
                   >
                     Sign up
                   </Button>
                 </MenuItem>
                 <MenuItem>
                   <Button
-                    color="primary"
+                    // color="primary"
                     variant="outlined"
                     component="a"
-                    href="/material-ui/getting-started/templates/sign-in/"
+                    href="/sign-in/"
                     target="_blank"
                     fullWidth
+                    // sx={{
+                    //   bgcolor: 'secondary.main',
+                    //   color: 'white',
+                    //   '&:hover': {
+                    //     bgcolor: 'secondary.light'
+                    //   }
+                    // }}
                   >
                     Sign in
                   </Button>

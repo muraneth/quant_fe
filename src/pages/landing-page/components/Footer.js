@@ -21,7 +21,7 @@ function Copyright() {
   return (
     <Typography variant="body2" color="text.secondary" mt={1}>
       {'Copyright © '}
-      <Link href="https://mui.com/">Sitemark&nbsp;</Link>
+      <Link href="https://myquant.financial/">M&Y Quant&nbsp;</Link>
       {new Date().getFullYear()}
     </Typography>
   );
@@ -56,10 +56,10 @@ export default function Footer() {
           }}
         >
           <Box sx={{ width: { xs: '100%', sm: '60%' } }}>
-            <SitemarkIcon />
+            {/* <SitemarkIcon />
             <Typography variant="body2" fontWeight={600} gutterBottom sx={{ mt: 2 }}>
               Join the newsletter
-            </Typography>
+            </Typography> */}
             <Typography variant="body2" color="text.secondary" mb={2}>
               Subscribe for weekly updates. No spams ever!
             </Typography>
