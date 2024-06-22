@@ -21,9 +21,9 @@ const StrategyCard = ({ strategy }) => {
   );
 
   return (
-    <Card sx={{ minWidth: 275, bgcolor: '#0b1836', color: '#fff', m: 2 }}>
+    <Card sx={{ minWidth: 275, bgcolor: 'background.paper', color: 'primary.main', m: 2 }}>
       <CardContent>
-        <Typography variant="h3" component="div">
+        <Typography variant="h4" component="div">
           {strategy.name}
         </Typography>
 
@@ -32,13 +32,13 @@ const StrategyCard = ({ strategy }) => {
         <Grid item>
           <Grid container alignItems="center">
             <Typography variant="body3">APY : </Typography>
-            <Typography variant="h5" color="green">
+            <Typography variant="h5" color="green.main">
               {strategy.apy}%
             </Typography>
           </Grid>
           <Grid container alignItems="center">
             <Typography variant="body3">SharpeRatio : </Typography>
-            <Typography variant="h5" color="green">
+            <Typography variant="h5" color="green.main">
               {strategy.sharpe_ratio}
             </Typography>
           </Grid>
@@ -57,26 +57,26 @@ const StrategyCard = ({ strategy }) => {
             </Typography>
             <Grid item container direction="row" alignItems="center">
               <Typography variant="body2">Trade Count: </Typography>
-              <Typography variant="h5" color="green">
+              <Typography variant="h5" color="green.main">
                 {strategy.one_month_static?.trade_count || 'N/A'}
               </Typography>
             </Grid>
             <Grid item container direction="row" alignItems="center">
               <Typography variant="body2">PNL Ratio: </Typography>
 
-              <Typography variant="h5" color="green">
+              <Typography variant="h5" color="green.main">
                 {strategy.one_month_static?.pnl_ratio || 'N/A'}%
               </Typography>
             </Grid>
             <Grid item container direction="row" alignItems="center">
               <Typography variant="body2">Profit Ratio: </Typography>
-              <Typography variant="h5" color="green">
+              <Typography variant="h5" color="green.main">
                 {strategy.one_month_static?.profit_ratio || 'N/A'}%
               </Typography>
             </Grid>
             <Grid item container direction="row" alignItems="center">
               <Typography variant="body2">Win Ratio: </Typography>
-              <Typography variant="h5" color="green">
+              <Typography variant="h5" color="green.main">
                 {strategy.one_month_static?.win_ratio || 'N/A'}%
               </Typography>
             </Grid>
@@ -87,25 +87,25 @@ const StrategyCard = ({ strategy }) => {
             </Typography>
             <Grid item container direction="row" alignItems="center">
               <Typography variant="body2">Trade Count: </Typography>
-              <Typography variant="h5" color="green">
+              <Typography variant="h5" color="green.main">
                 {strategy.thr_month_static?.trade_count || 'N/A'}
               </Typography>
             </Grid>
             <Grid item container direction="row" alignItems="center">
               <Typography variant="body2">PNL Ratio: </Typography>
-              <Typography variant="h5" color="green">
+              <Typography variant="h5" color="green.main">
                 {strategy.thr_month_static?.pnl_ratio || 'N/A'}%
               </Typography>
             </Grid>
             <Grid item container direction="row" alignItems="center">
               <Typography variant="body2">Profit Ratio: </Typography>
-              <Typography variant="h5" color="green">
+              <Typography variant="h5" color="green.main">
                 {strategy.thr_month_static?.profit_ratio || 'N/A'}%
               </Typography>
             </Grid>
             <Grid item container direction="row" alignItems="center">
               <Typography variant="body2">Win Ratio: </Typography>
-              <Typography variant="h5" color="green">
+              <Typography variant="h5" color="green.main">
                 {strategy.thr_month_static?.win_ratio || 'N/A'}%
               </Typography>
             </Grid>

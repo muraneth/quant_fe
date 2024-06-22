@@ -7,24 +7,10 @@ import React from 'react';
 import { Box, Grid } from '@mui/material';
 
 import StrategyCard from './Strategy-card';
-const strategies = [
-  {
-    id: 1,
-    title: 'Altcoin Explosion 4x',
-    description: 'A high-risk, high-reward strategy that focuses on altcoins. Levarage x4',
-    risk: 60,
-    lastMonth: '+10.9%',
-    tradeCount: 120,
-    winRatio: '60%',
-    minInvestment: '$200',
-    coins: ['XRP', 'LTC', 'ADA', 'DOT', 'USDT']
-  }
-  
-];
 
 const Strategies = () => {
   const [products, setProducts] = useState([]);
- 
+
   useEffect(() => {
     fetchProducts();
   }, []);
@@ -41,8 +27,6 @@ const Strategies = () => {
     });
     setProducts(response.data.data);
   };
-
-
 
   return (
     <Box sx={{ flexGrow: 1, p: 3, minHeight: '100vh' }}>

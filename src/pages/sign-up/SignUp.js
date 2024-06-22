@@ -23,7 +23,7 @@ import ArrowBackRoundedIcon from '@mui/icons-material/ArrowBackRounded';
 import { useNavigate } from 'react-router-dom';
 // import getSignUpTheme from './getSignUpTheme';
 import ToggleColorMode from './ToggleColorMode';
-import Logo from 'components/Logo/Logo';
+import Logo from 'components/Logo';
 // import { GoogleIcon, FacebookIcon, SitemarkIcon } from './CustomIcons';
 import axios from 'axios';
 import CustomTextField from 'components/overrides/CustomTextField';
@@ -163,10 +163,14 @@ export default function SignUp() {
         justifyContent="space-between"
         sx={(theme) => ({
           backgroundRepeat: 'no-repeat',
+          // backgroundImage:
+          //   theme.palette.mode === 'light'
+          //     ? 'radial-gradient(ellipse at 50% 50%, hsl(210, 100%, 97%), hsl(0, 0%, 100%))'
+          //     : 'radial-gradient(at 50% 50%, hsla(210, 100%, 16%, 0.3), hsl(220, 30%, 5%))',
           backgroundImage:
             theme.palette.mode === 'light'
-              ? 'radial-gradient(ellipse at 50% 50%, hsl(210, 100%, 97%), hsl(0, 0%, 100%))'
-              : 'radial-gradient(at 50% 50%, hsla(210, 100%, 16%, 0.3), hsl(220, 30%, 5%))',
+              ? 'radial-gradient(ellipse 80% 50% at 50% -20%, hsl(210, 100%, 90%), transparent)'
+              : 'radial-gradient(ellipse 80% 50% at 50% -20%, hsl(210, 100%, 16%), transparent)',
           pb: { xs: 12, sm: 0 }
         })}
       >
@@ -179,10 +183,11 @@ export default function SignUp() {
             p: { xs: 2, sm: 4 }
           }}
         >
-          <Button startIcon={<ArrowBackRoundedIcon />} component="a" href="/sign-in">
+          {/* <Button startIcon={<ArrowBackRoundedIcon />} component="a" href="/sign-in">
             Back
-          </Button>
-          <ToggleColorMode mode={mode} toggleColorMode={toggleColorMode} />
+          </Button> */}
+          <Logo />
+          {/* <ToggleColorMode mode={mode} toggleColorMode={toggleColorMode} /> */}
         </Stack>
         <Stack justifyContent="center" sx={{ height: { xs: '100%', sm: '100dvh' }, p: 2 }}>
           <Card
@@ -273,9 +278,9 @@ export default function SignUp() {
                 Already have an account? Sign in
               </Link>
             </Box>
-            <Divider>
+            {/* <Divider>
               <Typography color="text.secondary">or</Typography>
-            </Divider>
+            </Divider> */}
             {/* <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
               <Button
                 type="submit"

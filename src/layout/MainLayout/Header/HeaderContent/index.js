@@ -10,6 +10,7 @@ import Profile from './Profile';
 import Notification from './Notification';
 import MobileSection from './MobileSection';
 import Deposit from './Deposit-balance';
+import Logo from 'components/Logo';
 
 // ==============================|| HEADER - CONTENT ||============================== //
 
@@ -18,7 +19,11 @@ const HeaderContent = () => {
 
   return (
     <>
-      {!matchesXs && <Search />}
+      {/* {!matchesXs && <Search />} */}
+      <Box sx={{ width: '100%', ml: { xs: 0, md: 1 } }}>
+        <Logo />
+      </Box>
+
       {matchesXs && <Box sx={{ width: '100%', ml: 1 }} />}
 
       {/* <IconButton

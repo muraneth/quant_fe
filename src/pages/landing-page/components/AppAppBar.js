@@ -40,7 +40,7 @@ function AppAppBar({ mode, toggleColorMode }) {
 
   return (
     <AppBar
-      position="fixed"
+      // position="fixed"
       sx={{
         boxShadow: 0,
         bgcolor: 'transparent',
@@ -52,7 +52,7 @@ function AppAppBar({ mode, toggleColorMode }) {
         <Toolbar
           variant="regular"
           sx={(theme) => ({
-            display: 'flex',
+            // display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
             flexShrink: 0,
@@ -72,29 +72,22 @@ function AppAppBar({ mode, toggleColorMode }) {
             <Logo />
           </Box>
           <Box
-          // sx={{
-          //   flexGrow: 1,
-          //   display: 'flex',
-          //   alignItems: 'center',
-          //   px: 0
-          // }}
+            sx={{
+              flexGrow: 1,
+              display: 'flex',
+              alignItems: 'center',
+              px: 0
+            }}
           >
-            {/* <Sitemark /> */}
-
             <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-              <Button variant="text" color="info" size="large" onClick={() => scrollToSection('features')}>
+              <Button variant="text" color="primary" size="large" href="/strategies/">
                 Strategies
               </Button>
-              <Button variant="text" color="info" size="small" onClick={() => scrollToSection('testimonials')}>
+              <Button variant="text" color="primary" size="large">
                 Community
               </Button>
-              {/* <Button variant="text" color="info" size="small" onClick={() => scrollToSection('highlights')}>
-                Highlights
-              </Button> */}
-              {/* <Button variant="text" color="info" size="small" onClick={() => scrollToSection('pricing')}>
-                Pricing
-              </Button> */}
-              <Button variant="text" color="info" size="small" onClick={() => scrollToSection('faq')} sx={{ minWidth: 0 }}>
+
+              <Button variant="text" color="primary" size="large" onClick={() => scrollToSection('faq')} sx={{ minWidth: 0 }}>
                 FAQ
               </Button>
             </Box>
@@ -106,24 +99,26 @@ function AppAppBar({ mode, toggleColorMode }) {
               alignItems: 'center'
             }}
           >
-            <ToggleColorMode mode={mode} toggleColorMode={toggleColorMode} />
-            {/* <Button color="primary" variant="outlined" size="small" component="a" href="/sign-in/" target="_blank" >
+            {/* <ToggleColorMode mode={mode} toggleColorMode={toggleColorMode} /> */}
+            <Button color="primary" variant="outlined" size="midium" component="a" href="/sign-in/" target="_blank">
               Sign in
-            </Button> */}
-            <Button color="primary"
-             variant="contained" 
-             size="midium" 
-             component="a"
-              href="/dashboard/" 
-              target="_blank" 
+            </Button>
+            <Button
+              color="primary"
+              variant="contained"
+              size="midium"
+              component="a"
+              href="/sign-up/"
+              target="_blank"
               sx={{
-                      bgcolor: 'secondary.main',
-                      color: 'white',
-                      '&:hover': {
-                        bgcolor: 'secondary.light'
-                      }
-                    }}>
-              Launch App
+                bgcolor: 'secondary.main',
+                color: 'white',
+                '&:hover': {
+                  bgcolor: 'secondary.light'
+                }
+              }}
+            >
+              Sign up
             </Button>
           </Box>
           <Box sx={{ display: { sm: 'flex', md: 'none' } }}>

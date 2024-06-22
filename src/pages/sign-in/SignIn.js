@@ -20,7 +20,7 @@ import AutoAwesomeRoundedIcon from '@mui/icons-material/AutoAwesomeRounded';
 
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import Logo from 'components/Logo/Logo';
+import Logo from 'components/Logo';
 import CustomTextField from 'components/overrides/CustomTextField';
 
 function ToggleCustomTheme({ showCustomTheme, toggleCustomTheme }) {
@@ -142,18 +142,21 @@ export default function SignIn() {
     <>
       {/* <CssBaseline /> */}
       <Stack
+        component="main"
         direction="column"
         justifyContent="space-between"
         sx={(theme) => ({
+          backgroundRepeat: 'no-repeat',
+          // backgroundImage:
+          //   theme.palette.mode === 'light'
+          //     ? 'radial-gradient(ellipse at 50% 50%, hsl(210, 100%, 97%), hsl(0, 0%, 100%))'
+          //     : 'radial-gradient(at 50% 50%, hsla(210, 100%, 16%, 0.3), hsl(220, 30%, 5%))',
           backgroundImage:
             theme.palette.mode === 'light'
-              ? 'radial-gradient(ellipse at 50% 50%, hsl(210, 100%, 97%), hsl(0, 0%, 100%))'
-              : 'radial-gradient(at 50% 50%, hsla(210, 100%, 16%, 0.3), hsl(220, 30%, 5%))',
-          backgroundRepeat: 'no-repeat',
-          height: { xs: 'auto', sm: '100dvh' },
+              ? 'radial-gradient(ellipse 80% 50% at 50% -20%, hsl(210, 100%, 90%), transparent)'
+              : 'radial-gradient(ellipse 80% 50% at 50% -20%, hsl(210, 100%, 16%), transparent)',
           pb: { xs: 12, sm: 0 }
         })}
-        component="main"
       >
         <Stack
           direction="row"
@@ -163,12 +166,15 @@ export default function SignIn() {
             width: '100%',
             p: { xs: 2, sm: 4 }
           }}
-        ></Stack>
+        >
+          <Logo />
+        </Stack>
+
         <Stack justifyContent="center" sx={{ height: { xs: '100%', sm: '100dvh' }, p: 2 }}>
           <Card
             variant="outlined"
             sx={(theme) => ({
-              backgroundColor: theme.palette.mode === 'light' ? 'background.paper' : 'background.default',
+              // backgroundColor: theme.palette.mode === 'light' ? 'background.paper' : 'background.default',
 
               display: 'flex',
               flexDirection: 'column',

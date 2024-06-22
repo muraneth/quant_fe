@@ -11,6 +11,7 @@ import Typography from './typography';
 import CustomShadows from './shadows';
 import componentsOverride from './overrides';
 import AppAppBar from 'components/AppappBar';
+import { green } from 'pages/landing-page/getLPTheme';
 
 // ==============================|| DEFAULT THEME - MAIN  ||============================== //
 
@@ -56,12 +57,22 @@ export default function ThemeCustomization({ children }) {
   const defaultTheme = createTheme({
     palette: {
       mode: mode,
-      primary: { main: '#fff' },
+      primary: { main: '#FFFFFF' },
       secondary: {
         main: '#7451ff',
         light: '#8f73ff'
       },
-      background: { default: '#0c1438', paper: '#0c1438' }
+      green: {
+        main: '#9AE4A7'
+      },
+      error: {
+        main: '#EF8F8F'
+      },
+      purple: {
+        main: '#BB86FC'
+      },
+
+      background: { default: '#121212', paper: '#1E1E1E' }
     },
     customShadows: themeCustomShadows
   });

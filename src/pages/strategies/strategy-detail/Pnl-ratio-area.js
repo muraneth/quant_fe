@@ -47,7 +47,7 @@ const AcumPnlRatioAraeChart = ({ productId }) => {
       try {
         const token = localStorage.getItem('token');
         const uid = localStorage.getItem('uid');
-        // const url = `http://matrixcipher.com/api/product/getWeeklyPnl?productId=${productId}`;
+
         const url = `http://matrixcipher.com/api/product/getSharePriceHistory?product=${productId}`;
 
         const response = await axios.get(url, {
@@ -68,7 +68,9 @@ const AcumPnlRatioAraeChart = ({ productId }) => {
   useEffect(() => {
     setOptions((prevState) => ({
       ...prevState,
-      colors: [green[500]],
+      // colors: [green[500]],
+      colors: ['#9AE4A7'],
+
       xaxis: {
         categories: productDailyInfo?.map((item) => item.date),
 
@@ -97,7 +99,7 @@ const AcumPnlRatioAraeChart = ({ productId }) => {
         borderColor: '#445661'
       },
       tooltip: {
-        theme: 'light',
+        theme: 'dark',
 
         y: {
           formatter: function (val) {

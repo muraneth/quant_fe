@@ -18,6 +18,7 @@ import Testimonials from './components/Testimonials';
 import FAQ from './components/FAQ';
 import Footer from './components/Footer';
 import getLPTheme from './getLPTheme';
+import DemoStrategies from './components/Strategies';
 
 function ToggleCustomTheme({ showCustomTheme, toggleCustomTheme }) {
   return (
@@ -62,28 +63,13 @@ ToggleCustomTheme.propTypes = {
 };
 
 export default function LandingPage() {
-  const [mode, setMode] = React.useState('light');
-  const [showCustomTheme, setShowCustomTheme] = React.useState(true);
-  const LPtheme = createTheme(getLPTheme(mode));
-  const defaultTheme = createTheme({ palette: { mode } });
-
-  const toggleColorMode = () => {
-    setMode((prev) => (prev === 'dark' ? 'light' : 'dark'));
-  };
-
-  const toggleCustomTheme = () => {
-    setShowCustomTheme((prev) => !prev);
-  };
-
   return (
-    // <ThemeProvider theme={showCustomTheme ? LPtheme : defaultTheme}>
     <>
-      {/* <CssBaseline /> */}
-
-      <AppAppBar mode={mode} toggleColorMode={toggleColorMode} />
+      <AppAppBar />
       <Hero />
       <Box sx={{ bgcolor: 'background.default' }}>
-        {/* <LogoCollection /> */}
+        {/* <DemoStrategies /> */}
+
         {/* <Features /> */}
         {/* <Divider /> */}
         {/* <Testimonials />
@@ -93,11 +79,8 @@ export default function LandingPage() {
         <Pricing />
         <Divider /> */}
         <FAQ />
-        {/* <Divider /> */}
         <Footer />
       </Box>
-      {/* <ToggleCustomTheme showCustomTheme={showCustomTheme} toggleCustomTheme={toggleCustomTheme} /> */}
     </>
-    // </ThemeProvider>
   );
 }

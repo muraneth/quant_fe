@@ -5,14 +5,9 @@ import LoginRoutes from './LoginRoutes';
 import MainRoutes from './MainRoutes';
 import LandingPageRoutes from './LandingRoutes';
 import UserRoutes from './User';
+import StrategyPageRoutes from './StrategyRoutes';
 // import ProductRoutes from './Products';
 
 export default function ThemeRoutes() {
-  return useRoutes([
-    LandingPageRoutes,
-    MainRoutes,
-    LoginRoutes,
-    UserRoutes
-    //  ProductRoutes
-  ]);
+  return useRoutes([LandingPageRoutes, MainRoutes, LoginRoutes, UserRoutes, StrategyPageRoutes]);
 }
