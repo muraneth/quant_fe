@@ -100,7 +100,7 @@ function AppAppBar({ mode, toggleColorMode }) {
             }}
           >
             {/* <ToggleColorMode mode={mode} toggleColorMode={toggleColorMode} /> */}
-            <Button color="primary" variant="outlined" size="midium" component="a" href="/sign-in/" target="_blank">
+            <Button color="primary" variant="outlined" size="midium" component="a" href="/sign-in/">
               Sign in
             </Button>
             <Button

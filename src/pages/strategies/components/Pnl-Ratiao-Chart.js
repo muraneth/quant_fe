@@ -9,6 +9,8 @@ import ReactApexChart from 'react-apexcharts';
 import axios from 'axios';
 import { common, green } from '@mui/material/colors';
 
+import ApexCharts from 'apexcharts';
+
 // ==============================|| INCOME AREA CHART ||============================== //
 
 const PnlRatioChart = ({ slot, product, showDetail, showGrid, strokeWidth = 1 }) => {
@@ -63,10 +65,20 @@ const PnlRatioChart = ({ slot, product, showDetail, showGrid, strokeWidth = 1 })
     setOptions(() => ({
       // colors: [green[500]],
       chart: {
+        id: 'my-chart',
         type: 'area',
         toolbar: {
           show: false
         }
+        // events: {
+        //   mounted: (chartContext, config) => {
+        //     setTimeout(() => {
+        //       const apexChart = new ApexCharts(document.querySelector('#my-chart'), chartOptions);
+        //       // Simulate mouse move event to show the tooltip
+        //       apexChart.tooltip.show({ seriesIndex: 0, dataPointIndex: 0 });
+        //     }, 300);
+        //   }
+        // }
       },
       stroke: {
         curve: 'smooth',
