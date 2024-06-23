@@ -4,8 +4,6 @@ import { Box, Grid, Paper, Stack, CardContent, Typography, Button, Container } f
 import { styled } from '@mui/material/styles';
 
 import { useState, useEffect } from 'react';
-// import ReactApexChart from 'react-apexcharts';
-import AcumPnlRatioAraeChart from './Pnl-ratio-area';
 import MainCard from 'components/MainCard';
 import TradeTable from './TradesTable';
 import { useParams } from 'react-router-dom';
@@ -15,6 +13,9 @@ import TokenProfitCard from './Token-profit';
 import { useNavigate } from 'react-router-dom';
 import InvestPopup from '../../invest/Invest-popup';
 import StrategySummary from './Summary';
+
+import Header from 'layout/MainLayout/Header/index';
+import PnlRatioChart from '../components/Pnl-Ratiao-Chart';
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -30,10 +31,9 @@ const StrategyDetail = () => {
   const [isInvestPopOpen, setIsInvestPopOpen] = useState(false);
   const [slot, setSlot] = useState('all');
 
+  const host = 'http://matrixcipher.com';
   const { id } = useParams();
   console.log(id);
-
-  const host = 'http://matrixcipher.com';
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -46,7 +46,7 @@ const StrategyDetail = () => {
       }
     };
     fetchProduct();
-  }, []);
+  }, [id]);
 
   const handleInvest = () => {
     setIsInvestPopOpen(true);
@@ -56,7 +56,21 @@ const StrategyDetail = () => {
   };
 
   return (
-    <Box sx={{ flexGrow: 1, p: 3, minHeight: '100vh', bgcolor: '#0b1836', color: '#fff' }}>
+    <Box
+      alignItems="center"
+      width="100%"
+      sx={{
+        flexGrow: 1,
+        p: 10,
+        minHeight: '100vh',
+        color: '#fff',
+
+        backgroundRepeat: 'no-repeat',
+        backgroundImage: 'radial-gradient(ellipse 80% 50% at 50% -20%, hsl(210, 100%, 16%), transparent)',
+        pb: { xs: 12, sm: 0 }
+      }}
+    >
+      <Header />
       {/* <Container>
         <Button variant="contained" color="green" onClick={handleOpenPopup}>
           Open Deposit Popup
@@ -67,17 +81,13 @@ const StrategyDetail = () => {
 
       <Grid container spacing={2}>
         <Grid item xs={12}>
-          <Typography variant="h3" component="div">
+          <Typography variant="h4" component="div">
             {productInfo?.name}
           </Typography>
         </Grid>
         <Grid item xs={8} sx={{ color: '#0b1836' }} justifyContent="space-between">
-          {/* <Typography variant="h5" component="div" sx={{ color: '#fff' }}>
-            Acum Pnl Ratio
-          </Typography> */}
-
           <Grid item>
-            <Stack direction="row" alignItems="center" spacing={0}>
+            <Stack direction="row" alignItems="right" spacing={0} justifyContent="flex-end">
               <Button
                 size="small"
                 onClick={() => setSlot('all')}
@@ -88,24 +98,40 @@ const StrategyDetail = () => {
               </Button>
               <Button
                 size="small"
+                onClick={() => setSlot('month3')}
+                color={slot === 'month3' ? 'primary' : 'secondary'}
+                variant={slot === 'month3' ? 'outlined' : 'text'}
+              >
+                3Month
+              </Button>
+              <Button
+                size="small"
                 onClick={() => setSlot('month')}
                 color={slot === 'month' ? 'primary' : 'secondary'}
                 variant={slot === 'month' ? 'outlined' : 'text'}
               >
                 Month
               </Button>
-              <Button
-                size="small"
-                onClick={() => setSlot('week')}
-                color={slot === 'week' ? 'primary' : 'secondary'}
-                variant={slot === 'week' ? 'outlined' : 'text'}
-              >
-                Week
-              </Button>
             </Stack>
           </Grid>
 
-          <AcumPnlRatioAraeChart productId={id} />
+          <Grid item xs={12} container justifyContent="center" alignItems="center">
+            <Typography variant="h5" component="div" sx={{ color: '#fff' }}>
+              Acum Pnl Ratio
+            </Typography>
+          </Grid>
+
+          <Box
+            id="image"
+            sx={(theme) => ({
+              mt: { xs: 8, sm: 10 },
+              alignSelf: 'center',
+              height: { xs: 200, sm: 200, md: 300, lg: 400 },
+              width: '100%'
+            })}
+          >
+            <PnlRatioChart slot={slot} product={id} showDetail={true} showGrid={true} />
+          </Box>
         </Grid>
 
         <Grid item xs={4}>

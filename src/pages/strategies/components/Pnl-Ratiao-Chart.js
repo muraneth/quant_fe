@@ -9,46 +9,40 @@ import ReactApexChart from 'react-apexcharts';
 import axios from 'axios';
 import { common, green } from '@mui/material/colors';
 
-// chart options
-const areaChartOptions = {
-  chart: {
-    height: 450,
-    type: 'area',
-    toolbar: {
-      show: false
-    }
-  },
-  dataLabels: {
-    enabled: false
-  },
-  stroke: {
-    curve: 'smooth',
-    width: 2
-  },
-  grid: {
-    strokeDashArray: 0
-  }
-};
-
 // ==============================|| INCOME AREA CHART ||============================== //
 
-const AcumPnlRatioAraeChart = ({ productId }) => {
+const PnlRatioChart = ({ slot, product, showDetail, showGrid }) => {
   const theme = useTheme();
 
   // const { secondary } = theme.palette.text;
   const line = theme.palette.divider;
 
-  const [options, setOptions] = useState(areaChartOptions);
+  const [options, setOptions] = useState({});
 
   const [productDailyInfo, setProductDailyInfo] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
+        const startDate = new Date();
+        // const endDate = new Date();
+        if (slot === 'month') {
+          startDate.setDate(startDate.getDate() - 30);
+        }
+        if (slot === 'month3') {
+          startDate.setDate(startDate.getDate() - 90);
+        }
+        if (slot === 'all') {
+          startDate.setFullYear(startDate.getFullYear() - 10);
+        }
+
+        // Formatting dates to 'YYYY-MM-DD' string format
+        const formattedStartDate = startDate.toISOString().slice(0, 10);
+
         const token = localStorage.getItem('token');
         const uid = localStorage.getItem('uid');
 
-        const url = `http://matrixcipher.com/api/product/getSharePriceHistory?product=${productId}`;
+        const url = `http://matrixcipher.com/api/product/getSharePriceHistory?product=${product}&start_date=${formattedStartDate}`;
 
         const response = await axios.get(url, {
           headers: {
@@ -63,29 +57,47 @@ const AcumPnlRatioAraeChart = ({ productId }) => {
     };
 
     fetchData();
-  }, []);
+  }, [slot]);
 
   useEffect(() => {
-    setOptions((prevState) => ({
-      ...prevState,
+    setOptions(() => ({
       // colors: [green[500]],
+      chart: {
+        type: 'area',
+        toolbar: {
+          show: false
+        }
+      },
+      stroke: {
+        curve: 'smooth',
+        width: 1
+      },
+      dataLabels: {
+        enabled: false
+      },
       colors: ['#9AE4A7'],
 
       xaxis: {
+        show: showDetail,
         categories: productDailyInfo?.map((item) => item.date),
 
         axisBorder: {
-          show: true,
+          show: showDetail,
           color: line
         },
         labels: {
+          show: showDetail,
           style: {
             colors: common.white
           }
-        }
-        // tickAmount: slot === 'all' ? 20 : slot === 'month' ? 11 : 7
+        },
+        axisTicks: {
+          show: showDetail
+        },
+        tickAmount: slot === 'all' ? 20 : slot === 'month' ? 11 : 7
       },
       yaxis: {
+        show: showDetail,
         labels: {
           style: {
             colors: common.white // Set the y-axis label color
@@ -96,16 +108,13 @@ const AcumPnlRatioAraeChart = ({ productId }) => {
         }
       },
       grid: {
+        show: showGrid,
+        strokeDashArray: 0,
         borderColor: '#445661'
       },
       tooltip: {
-        theme: 'dark',
-
-        y: {
-          formatter: function (val) {
-            return val + '%'; // Adding '%' symbol after the data
-          }
-        }
+        enabled: showDetail,
+        theme: 'dark'
       }
     }));
   }, [productDailyInfo]);
@@ -115,17 +124,17 @@ const AcumPnlRatioAraeChart = ({ productId }) => {
   useEffect(() => {
     setSeries([
       {
-        name: 'Acum PNL Ratio',
+        name: 'PNL Ratio',
         data: productDailyInfo?.map((item) => item.acum_pnl_ratio)
       }
     ]);
   }, [productDailyInfo]);
 
-  return <ReactApexChart options={options} series={series} type="area" height={450} />;
+  return <ReactApexChart options={options} series={series} type="area" height={'100%'} />;
 };
 
-AcumPnlRatioAraeChart.propTypes = {
+PnlRatioChart.propTypes = {
   slot: PropTypes.string
 };
 
-export default AcumPnlRatioAraeChart;
+export default PnlRatioChart;

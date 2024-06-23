@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useRef, useState,useEffect } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 // material-ui
@@ -56,17 +56,16 @@ function a11yProps(index) {
 
 const Profile = () => {
   const theme = useTheme();
-  const [username,setUsername] = useState("Myquant")
-  const navigate = useNavigate()
+  const [username, setUsername] = useState('Myquant');
+  const navigate = useNavigate();
   const handleLogout = async () => {
-    localStorage.removeItem("username")
-    localStorage.removeItem("token")
-    navigate('/sign-in');
+    localStorage.removeItem('username');
+    localStorage.removeItem('token');
+    navigate('/home');
   };
   useEffect(() => {
-    setUsername(localStorage.getItem("username"))
-  },[])
-
+    setUsername(localStorage.getItem('username'));
+  }, []);
 
   const anchorRef = useRef(null);
   const [open, setOpen] = useState(false);

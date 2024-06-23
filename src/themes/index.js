@@ -63,7 +63,8 @@ export default function ThemeCustomization({ children }) {
         light: '#8f73ff'
       },
       green: {
-        main: '#9AE4A7'
+        main: '#9AE4A7',
+        normal: '#4caf50'
       },
       error: {
         main: '#EF8F8F'

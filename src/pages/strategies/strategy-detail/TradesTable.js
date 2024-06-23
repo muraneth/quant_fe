@@ -157,7 +157,7 @@ export default function TradeTable({ productId }) {
       <TableContainer
         sx={{
           width: '100%',
-          maxHeight: '400px', // Set max height for the table container
+          maxHeight: '800px', // Set max height for the table container
           overflowY: 'auto', // Enable vertical scrolling
           position: 'relative',
           display: 'block',

@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 
 // material-ui
-import { Box, useMediaQuery } from '@mui/material';
+import { Box, useMediaQuery, Button } from '@mui/material';
 // import { GithubOutlined } from '@ant-design/icons';
 
 // project import
@@ -16,6 +16,7 @@ import Logo from 'components/Logo';
 
 const HeaderContent = () => {
   const matchesXs = useMediaQuery((theme) => theme.breakpoints.down('md'));
+  const username = localStorage.getItem('username');
 
   return (
     <>
@@ -39,8 +40,16 @@ const HeaderContent = () => {
       </IconButton> */}
 
       {/* <Notification /> */}
-      <Deposit />
-      {!matchesXs && <Profile />}
+      {username && <Deposit />}
+      {!username && (
+        <Box sx={{ width: '100%', ml: { xs: 0, md: 1 } }}>
+          <Button color="primary" variant="outlined" size="small" component="a" href="/sign-in/" target="_blank">
+            Sign in
+          </Button>
+        </Box>
+      )}
+
+      {username && <Profile />}
       {matchesXs && <MobileSection />}
     </>
   );
