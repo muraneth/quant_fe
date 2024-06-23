@@ -76,13 +76,6 @@ export default function Hero() {
               Explore Strategy
             </Button>
           </Stack>
-          {/* <Typography variant="caption" textAlign="center">
-            By clicking &quot;Launch App&quot; you agree to our&nbsp;
-            <Link href="#" color="primary">
-              Terms & Conditions
-            </Link>
-            .
-          </Typography> */}
         </Stack>
         <Box
           id="image"
@@ -102,7 +95,7 @@ export default function Hero() {
             boxShadow: theme.palette.mode === 'light' ? '0 0 12px 8px hsla(220, 25%, 80%, 0.2)' : '0 0 24px 12px hsla(210, 100%, 25%, 0.2)'
           })}
         >
-          <PnlRatioChart slot="all" product="myquant01" showDetail={true} />
+          <PnlRatioChart slot="all" product="myquant01" showDetail={true} strokeWidth={2} />
         </Box>
       </Container>
     </Box>

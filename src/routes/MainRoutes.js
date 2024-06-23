@@ -7,7 +7,7 @@ import MainLayout from 'layout/MainLayout';
 
 // render - dashboard
 const DashboardDefault = Loadable(lazy(() => import('pages/dashboard')));
-const Strategies = Loadable(lazy(() => import('pages/strategies/Strategies')));
+// const Strategies = Loadable(lazy(() => import('pages/strategies/Strategies')));
 const StrategyDetail = Loadable(lazy(() => import('pages/strategies/strategy-detail')));
 const InvestPage = Loadable(lazy(() => import('pages/invest')));
 
@@ -30,16 +30,16 @@ const MainRoutes = {
       path: 'default',
       element: <DashboardDefault />
     },
-    {
-      path: 'strategies',
-      element: <Strategies />
-      // children: [
-      //   {
-      //     path: ':id',
-      //     element: <StrategyDetail />
-      //   }
-      // ]
-    },
+    // {
+    //   path: 'strategies',
+    //   element: <Strategies />
+    //   // children: [
+    //   //   {
+    //   //     path: ':id',
+    //   //     element: <StrategyDetail />
+    //   //   }
+    //   // ]
+    // },
     {
       path: 'strategy/:id',
       element: <StrategyDetail />

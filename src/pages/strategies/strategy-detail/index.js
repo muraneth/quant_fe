@@ -16,6 +16,7 @@ import StrategySummary from './Summary';
 
 import Header from 'layout/MainLayout/Header/index';
 import PnlRatioChart from '../components/Pnl-Ratiao-Chart';
+import SharpeRatioChart from './Sharpe-ratio-chart';
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -79,7 +80,7 @@ const StrategyDetail = () => {
       </Container> */}
       <InvestPopup open={isInvestPopOpen} handleClose={handleClosePopup} product={id} />
 
-      <Grid container spacing={2}>
+      <Grid container spacing={5}>
         <Grid item xs={12}>
           <Typography variant="h4" component="div">
             {productInfo?.name}
@@ -211,6 +212,12 @@ const StrategyDetail = () => {
             Weekly Profit Ratio Bar
           </Typography>
           <WeeklyPnlBarChart productId={id} />
+        </Grid>
+        <Grid item xs={12}>
+          <Typography variant="h5" component="div">
+            Rolling 6-month Sharpe Ratio
+          </Typography>
+          <SharpeRatioChart productSymbol={id} />
         </Grid>
         <Grid item xs={8} sx={{ color: '#fff' }}>
           <Typography variant="h5" component="div">

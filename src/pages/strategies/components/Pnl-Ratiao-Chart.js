@@ -11,7 +11,7 @@ import { common, green } from '@mui/material/colors';
 
 // ==============================|| INCOME AREA CHART ||============================== //
 
-const PnlRatioChart = ({ slot, product, showDetail, showGrid }) => {
+const PnlRatioChart = ({ slot, product, showDetail, showGrid, strokeWidth = 1 }) => {
   const theme = useTheme();
 
   // const { secondary } = theme.palette.text;
@@ -70,7 +70,7 @@ const PnlRatioChart = ({ slot, product, showDetail, showGrid }) => {
       },
       stroke: {
         curve: 'smooth',
-        width: 1
+        width: strokeWidth
       },
       dataLabels: {
         enabled: false

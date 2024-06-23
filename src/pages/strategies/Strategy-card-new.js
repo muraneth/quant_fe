@@ -51,7 +51,7 @@ const StrategyCardNew = ({ strategy }) => {
           </Grid>
         </Stack>
         <Box height="300px" sx={{ pt: 2 }}>
-          <PnlRatioChart slot="all" product={strategy.symbol} showDetail="true" />
+          <PnlRatioChart slot="all" product={strategy.symbol} showDetail={true} showGrid={true} />
         </Box>
 
         <Stack direction="row-reverse" spacing={2} sx={{ pt: 1 }}>

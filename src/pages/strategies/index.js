@@ -1,13 +1,12 @@
 import * as React from 'react';
 import { Container, Stack, Box, TableContainer, Card, CardHeader, CardContent, Typography } from '@mui/material';
-import Strategies from './Strategies';
+
 import Header from 'layout/MainLayout/Header/index';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 
-import StrategyCard from './Strategy-card';
 import StrategyTable from './StrategyTable';
-import { width } from '../../../node_modules/@mui/system/index';
+
 import StrategyCardNew from './Strategy-card-new';
 
 const StrategyHeader = () => {
@@ -68,7 +67,7 @@ export default function StrategiesPage() {
           </Typography>
         </Box>
         <Box sx={{ px: 10, pt: 2 }} alignItems="center" width="50%">
-          {products.length > 0 && <StrategyCardNew strategy={products[3]} />}
+          {products.length > 0 && <StrategyCardNew strategy={products[0]} />}
         </Box>
         <Box sx={{ px: 10, width: '100%' }}>
           <StrategyTable />
