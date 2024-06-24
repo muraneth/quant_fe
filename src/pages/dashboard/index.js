@@ -75,7 +75,7 @@ import axios from 'axios';
 
 const DashboardDefault = () => {
   // const [value, setValue] = useState('today');
-  const [slot, setSlot] = useState('month');
+  const [slot, setSlot] = useState('all');
   const [userDailyCashFlowData, setUserDailyCashFlowData] = useState([]);
   const [userWeeklyCashFlowData, setUserWeeklyCashFlowData] = useState([]);
   const [userAssetBaseInfo, setUserAssetBaseInfo] = useState([]);
