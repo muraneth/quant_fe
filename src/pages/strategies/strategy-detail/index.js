@@ -17,6 +17,8 @@ import StrategySummary from './Summary';
 import Header from 'layout/MainLayout/Header/index';
 import PnlRatioChart from '../components/Pnl-Ratiao-Chart';
 import SharpeRatioChart from './Sharpe-ratio-chart';
+import ProfitLoseBarChart from './Profit-lose-chart';
+import VolatilityChart from './Volatility-chart';
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -218,6 +220,18 @@ const StrategyDetail = () => {
             Rolling 6-month Sharpe Ratio
           </Typography>
           <SharpeRatioChart productSymbol={id} />
+        </Grid>
+        <Grid item xs={12}>
+          <Typography variant="h5" component="div">
+            Profit/Lose Bar Chart
+          </Typography>
+          <ProfitLoseBarChart productSymbol={id} />
+        </Grid>
+        <Grid item xs={12}>
+          <Typography variant="h5" component="div">
+            Volatility Chart
+          </Typography>
+          <VolatilityChart productSymbol={id} />
         </Grid>
         <Grid item xs={8} sx={{ color: '#fff' }}>
           <Typography variant="h5" component="div">
