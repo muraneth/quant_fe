@@ -80,7 +80,7 @@ const DashboardDefault = () => {
   const [userWeeklyCashFlowData, setUserWeeklyCashFlowData] = useState([]);
   const [userAssetBaseInfo, setUserAssetBaseInfo] = useState([]);
   const navigate = useNavigate();
-  const host = 'http://myquant.financial';
+  const host = 'https://myquant.financial';
   // const host = 'http://localhost:5001';
   useEffect(() => {
     const fetchData = async () => {

@@ -98,7 +98,7 @@ export default function SignIn() {
     const password = data.get('password');
     console.log(email, password);
     try {
-      const response = await axios.post('http://myquant.financial/api/user/login', {
+      const response = await axios.post('https://myquant.financial/api/user/login', {
         email,
         password
       });
