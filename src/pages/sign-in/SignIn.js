@@ -83,7 +83,7 @@ export default function SignIn() {
     const password = data.get('password');
     console.log(email, password);
     try {
-      const response = await axios.post('http://matrixcipher.com/api/user/login', {
+      const response = await axios.post('https://matrixcipher.com/api/user/login', {
         email,
         password
       });

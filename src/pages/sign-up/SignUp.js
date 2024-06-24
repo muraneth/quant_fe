@@ -137,7 +137,7 @@ export default function SignUp() {
       email: data.get('email'),
       password: data.get('password')
     });
-    const response = await axios.post('http://matrixcipher.com/api/user/register', {
+    const response = await axios.post('https://matrixcipher.com/api/user/register', {
       username: data.get('name'),
       email: data.get('email'),
       password: data.get('password')

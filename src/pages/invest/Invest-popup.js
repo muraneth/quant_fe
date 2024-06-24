@@ -72,7 +72,7 @@ const InvestPopup = ({ open, handleClose, product }) => {
     try {
       // Send a POST request to the invest API
       const response = await axios.post(
-        'http://matrixcipher.com/api/invest/invest',
+        'https://matrixcipher.com/api/invest/invest',
         {
           product_symbol: product,
           amount: numericAmount
@@ -105,7 +105,7 @@ const InvestPopup = ({ open, handleClose, product }) => {
         const token = localStorage.getItem('token');
 
         try {
-          const response = await axios.get('http://matrixcipher.com/api/user/asset/getAccountBalance', {
+          const response = await axios.get('https://matrixcipher.com/api/user/asset/getAccountBalance', {
             headers: {
               Authorization: `${token}`,
               Uid: `${uid}`

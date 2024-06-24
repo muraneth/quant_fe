@@ -44,7 +44,7 @@ const PnlRatioChart = ({ slot, product, showDetail, showGrid, strokeWidth = 1 })
         const token = localStorage.getItem('token');
         const uid = localStorage.getItem('uid');
 
-        const url = `http://matrixcipher.com/api/product/getSharePriceHistory?product=${product}&start_date=${formattedStartDate}`;
+        const url = `https://matrixcipher.com/api/product/getSharePriceHistory?product=${product}&start_date=${formattedStartDate}`;
 
         const response = await axios.get(url, {
           headers: {

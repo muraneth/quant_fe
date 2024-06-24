@@ -32,7 +32,7 @@ const StrategyDetail = () => {
   const [isInvestPopOpen, setIsInvestPopOpen] = useState(false);
   const [slot, setSlot] = useState('all');
 
-  const host = 'http://matrixcipher.com';
+  const host = 'https://matrixcipher.com';
   const { id } = useParams();
   console.log(id);
 

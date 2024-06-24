@@ -38,7 +38,7 @@ const WeeklyPnlBarChart = ({ productId }) => {
         const token = localStorage.getItem('token');
         const uid = localStorage.getItem('uid');
 
-        const response = await axios.get(`http://matrixcipher.com/api/product/getWeeklyPnl?product=${productId}`, {
+        const response = await axios.get(`https://matrixcipher.com/api/product/getWeeklyPnl?product=${productId}`, {
           headers: {
             Authorization: `${token}`,
             Uid: `${uid}`

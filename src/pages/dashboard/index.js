@@ -24,7 +24,7 @@ const DashboardDefault = () => {
   const [userWeeklyCashFlowData, setUserWeeklyCashFlowData] = useState([]);
   const [authorization, setAuthorization] = useState(true);
   // const navigate = useNavigate();
-  const host = 'http://matrixcipher.com';
+  const host = 'https://matrixcipher.com';
   useEffect(() => {
     const fetchData = async () => {
       try {

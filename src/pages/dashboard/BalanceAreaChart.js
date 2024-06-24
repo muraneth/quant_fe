@@ -63,8 +63,8 @@ const BalanceAraeChart = ({ slot }) => {
         const token = localStorage.getItem('token');
         const uid = localStorage.getItem('uid');
         const response = await axios.get(
-          `http://matrixcipher.com/api/user/asset/getAllHistoryCashFlow?uid=${uid}&startDate=${formattedStartDate}`,
-          // `http://matrixcipher.com/api/user/asset/getAllHistoryCashFlow?uid=${uid}&startDate=${formattedStartDate}&endDate=${formattedEndDate}`,
+          `https://matrixcipher.com/api/user/asset/getAllHistoryCashFlow?uid=${uid}&startDate=${formattedStartDate}`,
+          // `https://matrixcipher.com/api/user/asset/getAllHistoryCashFlow?uid=${uid}&startDate=${formattedStartDate}&endDate=${formattedEndDate}`,
           {
             headers: {
               Authorization: `${token}`,
