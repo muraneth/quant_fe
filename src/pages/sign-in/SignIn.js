@@ -23,6 +23,11 @@ import { useNavigate } from 'react-router-dom';
 import Logo from 'components/Logo';
 import CustomTextField from 'components/overrides/CustomTextField';
 
+
+import { GoogleLogin } from '@react-oauth/google';
+import { jwtDecode } from 'jwt-decode';
+
+
 function ToggleCustomTheme({ showCustomTheme, toggleCustomTheme }) {
   return (
     <Box
@@ -75,6 +80,17 @@ export default function SignIn() {
   const [uid, setUid] = React.useState('');
 
   const navigate = useNavigate();
+
+  const handleGoogleLoginSuccess = (credentialResponse) => {
+    const token = credentialResponse.credential;
+    const userObject = jwtDecode(token);
+    console.log('User Object:', userObject);
+    // userObject.email will contain the user's email address
+  };
+
+  const handleGoogleLoginError = () => {
+    console.log('Login Failed');
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -137,6 +153,8 @@ export default function SignIn() {
 
     return isValid;
   };
+
+ 
 
   return (
     <>
@@ -267,6 +285,21 @@ export default function SignIn() {
                 Don&apos;t have an account? Sign up
               </Link>
             </Box>
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                mt: 2,
+              }}
+            >
+            <GoogleLogin
+                 onSuccess={handleGoogleLoginSuccess}
+                 onError={handleGoogleLoginError}
+                useOneTap
+              />
+            </Box>
+
           </Card>
         </Stack>
       </Stack>
