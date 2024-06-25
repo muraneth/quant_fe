@@ -32,10 +32,10 @@ const VolatilityChart = ({ productSymbol }) => {
     const values = data.map((item) => item.value);
 
     return {
-      title: {
-        text: 'Rolling Volatility Chart',
-        left: 'center'
-      },
+      // title: {
+      //   text: 'Rolling Volatility Chart',
+      //   left: 'center'
+      // },
       tooltip: {
         trigger: 'axis',
         formatter: function (params) {
