@@ -47,12 +47,12 @@ const headCells = [
     disablePadding: true,
     label: 'Max Drawdown'
   },
-  {
-    id: 'three-month',
-    align: 'center',
-    disablePadding: false,
-    label: '3 Month Data'
-  },
+  // {
+  //   id: 'three-month',
+  //   align: 'center',
+  //   disablePadding: false,
+  //   label: '3 Month Data'
+  // },
   {
     id: 'all-time',
     align: 'center',
@@ -237,19 +237,19 @@ export default function StrategyTable({ productId }) {
                   <TableCell align="left">
                     <ColoredTypography value={-row.mdd}>{-row.mdd}%</ColoredTypography>
                   </TableCell>
-                  <TableCell align="left" sx={{ color: '#fff' }}>
+                  {/* <TableCell align="left" sx={{ color: '#fff' }}>
                     <Stack direction="row">
-                      <ProductDataPreview data={row.thr_month_static} />
+                      <ProductDataPreview data={row} />
                       <Grid item xs={12} md={6} lg={3}>
                         <PnlRatioChart slot="month3" product={row.symbol} />
                       </Grid>
                     </Stack>
-                    {/* </Card> */}
-                  </TableCell>
+
+                  </TableCell> */}
 
                   <TableCell align="left" sx={{ color: '#fff' }}>
                     <Stack direction="row">
-                      <ProductDataPreview data={row.all_time_static} />
+                      <ProductDataPreview data={row} />
                       <Grid item xs={12} md={6} lg={3}>
                         <PnlRatioChart slot="all" product={row.symbol} />
                       </Grid>

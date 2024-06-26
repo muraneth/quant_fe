@@ -1,11 +1,16 @@
 // src/VolatilityChart.js
 import React, { useEffect, useState } from 'react';
-import ReactECharts from 'echarts-for-react';
+
+import ReactApexChart from 'react-apexcharts';
+import { common } from '@mui/material/colors';
+import { useTheme } from '@mui/material/styles';
 import axios from 'axios';
 
 const VolatilityChart = ({ productSymbol }) => {
   const [data, setData] = useState([]);
-
+  const [options, setOptions] = useState({});
+  const theme = useTheme();
+  const line = theme.palette.divider;
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -27,54 +32,77 @@ const VolatilityChart = ({ productSymbol }) => {
     fetchData();
   }, []);
 
-  const getOption = (data) => {
-    const dates = data.map((item) => item.date);
-    const values = data.map((item) => item.value);
+  useEffect(() => {
+    setOptions(() => ({
+      chart: {
+        type: 'line',
+        toolbar: {
+          show: false
+        }
+      },
+      stroke: {
+        curve: 'smooth',
+        width: 2
+      },
+      dataLabels: {
+        enabled: false
+      },
+      colors: ['#9AE4A7'],
 
-    return {
-      // title: {
-      //   text: 'Rolling Volatility Chart',
-      //   left: 'center'
-      // },
+      xaxis: {
+        show: true,
+        categories: data?.map((item) => item.date),
+
+        axisBorder: {
+          show: true,
+          color: line
+        },
+        labels: {
+          show: true,
+          style: {
+            colors: common.white
+          }
+        },
+        axisTicks: {
+          show: true
+        },
+        tickAmount: 20
+      },
+      yaxis: {
+        show: true,
+        labels: {
+          style: {
+            colors: common.white // Set the y-axis label color
+          },
+          formatter: function (val) {
+            return val + '%'; // Adding '%' symbol to y-axis labels
+          }
+        }
+      },
+      grid: {
+        show: true,
+        strokeDashArray: 0,
+        borderColor: '#445661'
+      },
       tooltip: {
-        trigger: 'axis',
-        formatter: function (params) {
-          const date = params[0].axisValue;
-          const value = params[0].data;
-          return `Date: ${date}<br/>Volatility: ${value.toFixed(2)}%`;
-        }
-      },
-      xAxis: {
-        type: 'category',
-        data: dates,
-        name: 'Date',
-        nameLocation: 'middle',
-        nameGap: 30
-      },
-      yAxis: {
-        type: 'value',
-        name: 'Volatility',
-        nameLocation: 'middle',
-        nameGap: 50,
-        axisLabel: {
-          formatter: '{value} %' // Add % symbol
-        }
-      },
-      series: [
-        {
-          data: values,
-          type: 'line',
-          smooth: true
-        }
-      ]
-    };
-  };
+        enabled: true,
+        theme: 'dark'
+      }
+    }));
+  }, [data]);
 
-  return (
-    <div>
-      <ReactECharts option={getOption(data)} style={{ height: '600px', width: '100%' }} />
-    </div>
-  );
+  const [series, setSeries] = useState([]);
+
+  useEffect(() => {
+    setSeries([
+      {
+        name: 'PNL Ratio',
+        data: data?.map((item) => item.value)
+      }
+    ]);
+  }, [data]);
+
+  return <ReactApexChart options={options} series={series} height={'100%'} />;
 };
 
 export default VolatilityChart;

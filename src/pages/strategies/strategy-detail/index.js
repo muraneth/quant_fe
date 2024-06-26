@@ -96,9 +96,9 @@ const StrategyDetail = () => {
                 sx={{
                   width: '150px', // Adjust the width as needed
                   height: '50px', // Adjust the height as needed
-                  bgcolor: '#4caf50',
+                  bgcolor: 'secondary.main',
                   // color: '#fff',
-                  '&:hover': { bgcolor: '#388e3c' }
+                  '&:hover': { bgcolor: 'secondary.light' }
                 }}
                 onClick={handleInvest}
               >
@@ -122,6 +122,19 @@ const StrategyDetail = () => {
             features="Diversifies  spreads risk across multiple cryptocurrency pairs, flexibility that adapts to market conditions by incorporating additional pairs when advantageous, controlled leverage, which maintains leverage at safe levels, ensuring stability and minimizing risk, and strong performance metrics such as a high Sharpe ratio and low drawdown, indicating effective risk-adjusted returns."
           />
         </Grid>
+        <Grid item xs={12}>
+          <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+            <Divider sx={{ my: 1, borderColor: 'gray', width: '80%' }} />
+          </Box>
+        </Grid>
+
+        <Grid item xs={12}>
+          <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+            <Typography variant="h5" component="div">
+              Statistics Detail
+            </Typography>
+          </Box>
+        </Grid>
 
         <Grid item xs={12} sx={{ color: '#0b1836' }}>
           <Typography variant="h5" component="div" sx={{ color: '#fff' }}>
@@ -135,19 +148,20 @@ const StrategyDetail = () => {
           </Typography>
           <SharpeRatioChart productSymbol={id} />
         </Grid>
-        <Grid item xs={12}>
+        {/* <Grid item xs={12}>
           <Typography variant="h5" component="div">
             Profit/Lose Bar Chart
           </Typography>
           <ProfitLoseBarChart productSymbol={id} />
-        </Grid>
+        </Grid> */}
         <Grid item xs={12}>
           <Typography variant="h5" component="div">
             Volatility Chart
           </Typography>
+
           <VolatilityChart productSymbol={id} />
         </Grid>
-        <Grid item xs={8} sx={{ color: '#fff' }}>
+        <Grid item xs={12} sx={{ color: '#fff' }}>
           <Typography variant="h5" component="div">
             Last 3 Months Trades
           </Typography>
@@ -157,7 +171,7 @@ const StrategyDetail = () => {
             </CardContent>
           </MainCard>
         </Grid>
-        <Grid item xs={4}>
+        {/* <Grid item xs={4}>
           <Typography variant="h5" component="div">
             Last 3 Months Profit By Token{' '}
           </Typography>
@@ -166,7 +180,7 @@ const StrategyDetail = () => {
               <TokenProfitCard productId={id} />
             </CardContent>
           </MainCard>
-        </Grid>
+        </Grid> */}
       </Grid>
     </Box>
   );

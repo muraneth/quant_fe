@@ -3,7 +3,8 @@ import { Box, Grid, Divider, Stack, CardContent, Typography, Button, Container }
 import axios from 'axios';
 import PnlRatioChart from '../components/Pnl-Ratiao-Chart';
 import { useState, useEffect } from 'react';
-import { width } from '../../../../node_modules/@mui/system/index';
+import moment from 'moment';
+import { get } from 'lodash';
 
 const getTitleBySlot = (slot) => {
   switch (slot) {
@@ -17,6 +18,18 @@ const getTitleBySlot = (slot) => {
       return 'All Time';
   }
 };
+const getTimeBySlot = (slot) => {
+  switch (slot) {
+    case 'all':
+      return '2021-01-01';
+    case 'month3':
+      return moment().subtract(3, 'months').format('YYYY-MM-DD');
+    case 'month':
+      return moment().subtract(1, 'months').format('YYYY-MM-DD');
+    default:
+      return '2021-01-01';
+  }
+};
 
 const MainArea = ({ productSymbol }) => {
   const [productInfo, setProductInfo] = useState({});
@@ -24,7 +37,9 @@ const MainArea = ({ productSymbol }) => {
   const host = 'https://matrixcipher.com';
   useEffect(() => {
     const fetchProduct = async () => {
-      const url = `${host}/api/product/getProductBaseById?product=${productSymbol}`;
+      var startDate = getTimeBySlot(slot);
+
+      const url = `${host}/api/product/getProductBaseById?product=${productSymbol}&start_date=${startDate}`;
       try {
         const response = await axios.get(url);
         setProductInfo(response.data.data);
@@ -32,8 +47,9 @@ const MainArea = ({ productSymbol }) => {
         console.error(error);
       }
     };
+
     fetchProduct();
-  }, [productSymbol]);
+  }, [productSymbol, slot]);
   const handleInvest = () => {
     setIsInvestPopOpen(true);
   };
@@ -95,9 +111,9 @@ const MainArea = ({ productSymbol }) => {
             </Typography>
           </Grid>
           <Grid alignItems="center">
-            <Typography variant="body3">SharpeRatio : </Typography>
+            <Typography variant="body3">PnlRatio : </Typography>
             <Typography variant="h5" color="green.main" pt={1}>
-              {productInfo?.sharpe_ratio}
+              {productInfo?.pnl_ratio}%
             </Typography>
           </Grid>
           <Grid alignItems="center">
@@ -119,19 +135,19 @@ const MainArea = ({ productSymbol }) => {
           <Grid alignItems="center">
             <Typography variant="body3">Trade Count : </Typography>
             <Typography variant="h5" color="green.main" pt={2}>
-              {productInfo?.apy}%
+              {productInfo?.trade_count}
             </Typography>
           </Grid>
           <Grid alignItems="center">
             <Typography variant="body3">Win Rate : </Typography>
             <Typography variant="h5" color="green.main" pt={2}>
-              {productInfo?.sharpe_ratio}
+              {productInfo?.win_ratio}%
             </Typography>
           </Grid>
           <Grid alignItems="center">
             <Typography variant="body3">Reward Risk Ratio : </Typography>
-            <Typography variant="h5" color="error.main" pt={2}>
-              -{productInfo?.mdd}%
+            <Typography variant="h5" color="green.main" pt={2}>
+              {productInfo?.profit_ratio}
             </Typography>
           </Grid>
         </Grid>
