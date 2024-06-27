@@ -9,8 +9,6 @@ import ReactApexChart from 'react-apexcharts';
 import axios from 'axios';
 import { common, green } from '@mui/material/colors';
 
-import ApexCharts from 'apexcharts';
-
 // ==============================|| INCOME AREA CHART ||============================== //
 
 const PnlRatioChart = ({ slot, product, showDetail, showGrid, strokeWidth = 1 }) => {
