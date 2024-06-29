@@ -54,7 +54,7 @@ const WeeklyPnlBarChart = ({ data }) => {
         },
         labels: {
           style: {
-            colors: common.white
+            colors: 'gray'
           }
         }
       },
@@ -62,7 +62,7 @@ const WeeklyPnlBarChart = ({ data }) => {
         show: true,
         labels: {
           style: {
-            colors: common.white
+            colors: 'gray'
           }
         }
       },
@@ -71,6 +71,11 @@ const WeeklyPnlBarChart = ({ data }) => {
       },
       grid: {
         borderColor: '#445661'
+      },
+      legend: {
+        labels: {
+          colors: 'gray'
+        }
       }
     }));
   }, [data]);

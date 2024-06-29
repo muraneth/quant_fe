@@ -69,12 +69,12 @@ const DashboardDefault = () => {
         rowSpacing={4.5}
         columnSpacing={2.75}
         sx={(theme) => ({
-          width: '100%',
-          backgroundImage:
-            theme.palette.mode === 'light'
-              ? 'radial-gradient(ellipse 80% 50% at 50% -20%, hsl(210, 100%, 90%), transparent)'
-              : 'radial-gradient(ellipse 80% 50% at 50% -20%, hsl(210, 100%, 16%), transparent)',
-          backgroundRepeat: 'no-repeat'
+          width: '100%'
+          // backgroundImage:
+          //   theme.palette.mode === 'light'
+          //     ? 'radial-gradient(ellipse 80% 50% at 50% -20%, hsl(210, 100%, 90%), transparent)'
+          //     : 'radial-gradient(ellipse 80% 50% at 50% -20%, hsl(210, 100%, 16%), transparent)',
+          // backgroundRepeat: 'no-repeat'
         })}
       >
         {/* row 1 */}
@@ -144,7 +144,7 @@ const DashboardDefault = () => {
               </Stack>
             </Grid>
           </Grid>
-          <MainCard content={false} sx={{ mt: 1.5, bgcolor: '#0b1836' }}>
+          <MainCard content={false} sx={{ mt: 1.5, bgcolor: 'background.paper' }}>
             <Box sx={{ pt: 1, pr: 2 }}>
               <AcumPnlAraeChart slot={slot} />
             </Box>
@@ -186,7 +186,7 @@ const DashboardDefault = () => {
               </Stack>
             </Grid>
           </Grid>
-          <MainCard content={false} sx={{ mt: 1.5, bgcolor: '#0b1836' }}>
+          <MainCard content={false} sx={{ mt: 1.5, bgcolor: 'background.paper' }}>
             <Box sx={{ pt: 1, pr: 2 }}>
               <BalanceAraeChart slot={slot} />
             </Box>
@@ -199,7 +199,7 @@ const DashboardDefault = () => {
             </Grid>
             <Grid item />
           </Grid>
-          <MainCard sx={{ mt: 2, bgcolor: '#0b1836' }} content={false}>
+          <MainCard sx={{ mt: 2, bgcolor: 'background.paper' }} content={false}>
             <WeeklyPnlBarChart data={recent7WeekPnl} />
           </MainCard>
         </Grid>

@@ -98,7 +98,7 @@ const AcumPnlAraeChart = ({ slot }) => {
         },
         labels: {
           style: {
-            colors: common.white
+            colors: 'gray'
           }
         },
         tickAmount: slot === 'all' ? 20 : slot === 'month' ? 11 : 7

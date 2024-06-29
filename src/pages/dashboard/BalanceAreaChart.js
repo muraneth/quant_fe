@@ -94,7 +94,7 @@ const BalanceAraeChart = ({ slot }) => {
         },
         labels: {
           style: {
-            colors: common.white
+            colors: 'gray'
           }
         },
         tickAmount: slot === 'all' ? 20 : slot === 'month' ? 11 : 7
@@ -102,7 +102,7 @@ const BalanceAraeChart = ({ slot }) => {
       yaxis: {
         labels: {
           style: {
-            colors: common.white
+            colors: 'gray'
           }
         }
       },
