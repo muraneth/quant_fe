@@ -14,7 +14,6 @@ import Breadcrumbs from 'components/@extended/Breadcrumbs';
 
 // types
 import { openDrawer } from 'store/reducers/menu';
-import { bgcolor } from '../../../node_modules/@mui/system/index';
 
 // ==============================|| MAIN LAYOUT ||============================== //
 
@@ -44,12 +43,12 @@ const MainLayout = () => {
   }, [drawerOpen]);
 
   return (
-    <Box sx={{ display: 'flex', width: '100%' }}>
+    <Box sx={{ display: 'flex', width: '100%', bgcolor: 'background.deep' }}>
       <Header open={open} handleDrawerToggle={handleDrawerToggle} />
 
       <Drawer open={open} handleDrawerToggle={handleDrawerToggle} />
 
-      <Box component="main" sx={{ width: '100%', flexGrow: 1, p: { xs: 2, sm: 3 }, bgcolor: '#0b0e1b' }}>
+      <Box component="main" sx={{ width: '100%', flexGrow: 1, p: { xs: 2, sm: 3 }, bgcolor: 'background.deep' }}>
         <Toolbar />
         {/* <Breadcrumbs navigation={navigation} title /> */}
         <Outlet />

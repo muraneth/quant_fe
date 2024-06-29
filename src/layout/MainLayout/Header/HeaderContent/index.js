@@ -42,9 +42,26 @@ const HeaderContent = () => {
       {/* <Notification /> */}
       {username && <Deposit />}
       {!username && (
-        <Box sx={{ width: '100%', ml: { xs: 0, md: 1 } }}>
-          <Button color="primary" variant="outlined" size="small" component="a" href="/sign-in/" target="_blank">
+        <Box sx={{ flexShrink: 0, ml: 0.75, gap: 0.5, alignItems: 'center' }}>
+          <Button color="primary" variant="outlined" size="midium" component="a" href="/sign-in/">
             Sign in
+          </Button>
+          <Button
+            color="primary"
+            variant="contained"
+            size="midium"
+            component="a"
+            href="/sign-up/"
+            target="_blank"
+            sx={{
+              bgcolor: 'secondary.main',
+              color: 'white',
+              '&:hover': {
+                bgcolor: 'secondary.light'
+              }
+            }}
+          >
+            Sign up
           </Button>
         </Box>
       )}

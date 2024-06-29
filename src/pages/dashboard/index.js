@@ -19,7 +19,7 @@ import NoAuthorityPage from 'pages/authentication/NoAuthority';
 // ==============================|| DASHBOARD - DEFAULT ||============================== //
 
 const DashboardDefault = () => {
-  const [slot, setSlot] = useState('month');
+  const [slot, setSlot] = useState('all');
   const [userDailyCashFlowData, setUserDailyCashFlowData] = useState([]);
   const [userWeeklyCashFlowData, setUserWeeklyCashFlowData] = useState([]);
   const [authorization, setAuthorization] = useState(true);
@@ -64,14 +64,26 @@ const DashboardDefault = () => {
     );
   } else {
     return (
-      <Grid container rowSpacing={4.5} columnSpacing={2.75} sx={{ color: '#fff', bgcolor: 'background.paper' }}>
+      <Grid
+        container
+        rowSpacing={4.5}
+        columnSpacing={2.75}
+        sx={(theme) => ({
+          width: '100%',
+          backgroundImage:
+            theme.palette.mode === 'light'
+              ? 'radial-gradient(ellipse 80% 50% at 50% -20%, hsl(210, 100%, 90%), transparent)'
+              : 'radial-gradient(ellipse 80% 50% at 50% -20%, hsl(210, 100%, 16%), transparent)',
+          backgroundRepeat: 'no-repeat'
+        })}
+      >
         {/* row 1 */}
-        <Grid item xs={12} sx={{ mb: -2.25 }}>
+        {/* <Grid item xs={12} sx={{ mb: -2.25 }}>
           <Typography variant="h5">Dashboard</Typography>
-        </Grid>
+        </Grid> */}
         <Grid item xs={12} sm={6} md={3} lg={3}>
           <AnalyticEcommerce
-            title="Current balance"
+            title="Balance"
             count={`$${lastRecord ? lastRecord.balance : 0}`}
             // percentage={lastRecord ? lastRecord.daily_pnl_ratio : 0}
             extra={`$${lastRecord ? lastRecord.daily_pnl : 0}`}
@@ -82,7 +94,7 @@ const DashboardDefault = () => {
         </Grid>
         <Grid item xs={12} sm={6} md={3} lg={3}>
           <AnalyticEcommerce
-            title="Accumulative PNL"
+            title="PNL"
             count={`$${lastRecord ? lastRecord.acum_pnl : 0}`}
             // percentage={lastRecord ? lastRecord.daily_pnl_ratio : 0}
             extra={`$${lastRecord ? lastRecord.daily_pnl : 0}`}
@@ -93,7 +105,7 @@ const DashboardDefault = () => {
         </Grid>
         <Grid item xs={12} sm={6} md={3} lg={3}>
           <AnalyticEcommerce
-            title="Accumulative PNLRatio"
+            title="PNLRatio"
             count={`${lastRecord ? lastRecord.acum_pnl_ratio : 0}%`}
             extra={`$${lastRecord ? lastRecord.daily_pnl_ratio : 0}%`}
             msg="daily pnl ratio"
@@ -110,29 +122,24 @@ const DashboardDefault = () => {
             </Grid>
             <Grid item>
               <Stack direction="row" alignItems="center" spacing={0}>
+                <Button size="small" onClick={() => setSlot('all')} color={slot === 'all' ? 'primary' : 'secondary'} variant={'outlined'}>
+                  ALL
+                </Button>
                 <Button
                   size="small"
-                  onClick={() => setSlot('all')}
-                  color={slot === 'all' ? 'primary' : 'secondary'}
-                  variant={slot === 'all' ? 'outlined' : 'text'}
+                  onClick={() => setSlot('month3')}
+                  color={slot === 'month3' ? 'primary' : 'secondary'}
+                  variant={'outlined'}
                 >
-                  ALL
+                  3Months
                 </Button>
                 <Button
                   size="small"
                   onClick={() => setSlot('month')}
                   color={slot === 'month' ? 'primary' : 'secondary'}
-                  variant={slot === 'month' ? 'outlined' : 'text'}
+                  variant={'outlined'}
                 >
                   Month
-                </Button>
-                <Button
-                  size="small"
-                  onClick={() => setSlot('week')}
-                  color={slot === 'week' ? 'primary' : 'secondary'}
-                  variant={slot === 'week' ? 'outlined' : 'text'}
-                >
-                  Week
                 </Button>
               </Stack>
             </Grid>
@@ -162,19 +169,19 @@ const DashboardDefault = () => {
                 </Button>
                 <Button
                   size="small"
-                  onClick={() => setSlot('month')}
-                  color={slot === 'month' ? 'primary' : 'secondary'}
-                  variant={slot === 'month' ? 'outlined' : 'text'}
+                  onClick={() => setSlot('month3')}
+                  color={slot === 'month3' ? 'primary' : 'secondary'}
+                  variant={'outlined'}
                 >
-                  Month
+                  3Months
                 </Button>
                 <Button
                   size="small"
-                  onClick={() => setSlot('week')}
-                  color={slot === 'week' ? 'primary' : 'secondary'}
-                  variant={slot === 'week' ? 'outlined' : 'text'}
+                  onClick={() => setSlot('month')}
+                  color={slot === 'month' ? 'primary' : 'secondary'}
+                  variant={'outlined'}
                 >
-                  Week
+                  Month
                 </Button>
               </Stack>
             </Grid>

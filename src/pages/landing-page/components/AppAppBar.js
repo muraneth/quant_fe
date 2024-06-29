@@ -1,11 +1,9 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 
-import Box from '@mui/material/Box';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
 import Container from '@mui/material/Container';
 import Divider from '@mui/material/Divider';
 import MenuItem from '@mui/material/MenuItem';
@@ -13,16 +11,22 @@ import Drawer from '@mui/material/Drawer';
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import ToggleColorMode from './ToggleColorMode';
+import { Avatar, Box, ButtonBase, IconButton, Stack, Typography } from '@mui/material';
+import avatar1 from 'assets/images/users/avatar-3.png';
 
-import Sitemark from './SitemarkIcon';
 import Logo from 'components/Logo';
+import Profile from 'layout/MainLayout/Header/HeaderContent/Profile/index';
 
 function AppAppBar({ mode, toggleColorMode }) {
   const [open, setOpen] = React.useState(false);
   const [uid, setUid] = React.useState();
+  const [username, setUsername] = React.useState('');
 
   React.useEffect(() => {
     const uid = localStorage.getItem('uid');
+
+    const username = localStorage.getItem('username');
+    setUsername(username);
     setUid(uid);
   }, []);
 
@@ -98,7 +102,7 @@ function AppAppBar({ mode, toggleColorMode }) {
               </Button>
             </Box>
           </Box>
-          {uid ? (
+          {uid && uid.length > 0 ? (
             <Box
               sx={{
                 display: { xs: 'none', md: 'flex' },
@@ -106,9 +110,29 @@ function AppAppBar({ mode, toggleColorMode }) {
                 alignItems: 'center'
               }}
             >
-              <Button color="primary" variant="outlined" size="midium" component="a" href="/sign-in/">
-                Sign in
-              </Button>
+              {/* <Button color="primary" variant="outlined" size="midium" component="a" href="/user/dashboard">
+                Dashboard
+              </Button> */}
+              <ButtonBase
+                sx={{
+                  p: 0.25,
+                  bgcolor: 'transparent',
+                  borderRadius: 1,
+                  '&:hover': { bgcolor: 'gray' }
+                }}
+                aria-label="open profile"
+                // ref={anchorRef}
+                aria-controls={open ? 'profile-grow' : undefined}
+                aria-haspopup="true"
+                // onClick={handleToggle}
+                href="/user/dashboard"
+              >
+                <Stack direction="row" spacing={2} alignItems="center" sx={{ p: 0.5 }}>
+                  <Avatar alt="profile user" src={avatar1} sx={{ width: 32, height: 32 }} />
+                  <Typography variant="subtitle1">{username}</Typography>
+                </Stack>
+              </ButtonBase>
+              {/* <Profile /> */}
             </Box>
           ) : (
             <Box

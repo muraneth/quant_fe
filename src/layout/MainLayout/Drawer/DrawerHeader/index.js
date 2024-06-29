@@ -17,9 +17,9 @@ const DrawerHeader = ({ open }) => {
 
   return (
     // only available in paid version
-    <DrawerHeaderStyled theme={theme} open={open}>
+    <DrawerHeaderStyled theme={theme} open={open} sx={{ bgcolor: 'background.deep' }}>
       <Stack direction="row" spacing={1} alignItems="center">
-        <div style={{width: '200px'}}>
+        <div style={{ width: '200px' }}>
           <Logo />
         </div>
         {/* <Chip

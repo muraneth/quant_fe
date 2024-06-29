@@ -74,7 +74,7 @@ const WeeklyPnlBarChart = ({ productId }) => {
         },
         labels: {
           style: {
-            colors: common.white // Set the y-axis label color
+            colors: 'gray'
           }
         }
       },
@@ -82,7 +82,7 @@ const WeeklyPnlBarChart = ({ productId }) => {
         show: true,
         labels: {
           style: {
-            colors: common.white // Set the y-axis label color
+            colors: 'gray'
           },
           formatter: function (val) {
             return val + '%'; // Adding '%' symbol to y-axis labels
@@ -94,6 +94,11 @@ const WeeklyPnlBarChart = ({ productId }) => {
       },
       tooltip: {
         theme: 'light'
+      },
+      legend: {
+        labels: {
+          colors: 'gray'
+        }
       }
     }));
   }, [data]);

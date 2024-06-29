@@ -54,7 +54,20 @@ const Deposit = () => {
         <Typography variant="body1">Portfolio: ${userBalance.in_position_balance}</Typography>
         <Typography variant="body1">Available: ${userBalance.avaliable_balance}</Typography>
       </Box>
-      <Button variant="outlined" color="primary" onClick={handleOpenPopup}>
+      <Button
+        color="primary"
+        variant="outlined"
+        sx={
+          {
+            // bgcolor: 'secondary.main',
+            // color: 'white',
+            // '&:hover': {
+            //   bgcolor: 'secondary.light'
+            // }
+          }
+        }
+        onClick={handleOpenPopup}
+      >
         Deposit
       </Button>
       <DepositCryptoPopup open={isDepositOpen} handleClose={handleClosePopup} />

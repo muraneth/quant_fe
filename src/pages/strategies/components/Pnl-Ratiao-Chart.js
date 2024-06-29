@@ -8,7 +8,6 @@ import { useTheme } from '@mui/material/styles';
 import ReactApexChart from 'react-apexcharts';
 import axios from 'axios';
 import { common, green } from '@mui/material/colors';
-import { color } from '../../../../node_modules/echarts/index';
 
 // ==============================|| INCOME AREA CHART ||============================== //
 
@@ -97,6 +96,10 @@ const PnlRatioChart = ({ slot, product, showDetail, showGrid, strokeWidth = 1, s
           show: false
         }
       },
+      // title: {
+      //   text: 'Acum Pnl Ratio',
+      //   align: 'left'
+      // },
       stroke: {
         curve: 'smooth',
         width: strokeWidth
@@ -118,7 +121,7 @@ const PnlRatioChart = ({ slot, product, showDetail, showGrid, strokeWidth = 1, s
         labels: {
           show: showDetail,
           style: {
-            colors: common.white
+            colors: 'gray'
           }
         },
         axisTicks: {
@@ -130,7 +133,7 @@ const PnlRatioChart = ({ slot, product, showDetail, showGrid, strokeWidth = 1, s
         show: showDetail,
         labels: {
           style: {
-            colors: common.white // Set the y-axis label color
+            colors: 'gray'
           },
           formatter: function (val) {
             return val + '%'; // Adding '%' symbol to y-axis labels
@@ -145,6 +148,16 @@ const PnlRatioChart = ({ slot, product, showDetail, showGrid, strokeWidth = 1, s
       tooltip: {
         enabled: showDetail,
         theme: 'dark'
+      },
+      legend: {
+        position: 'top',
+        horizontalAlign: 'right',
+        floating: true,
+        offsetY: -5,
+        offsetX: -5,
+        labels: {
+          colors: 'gray' // Set the legend text color here
+        }
       }
     }));
   }, [productData, btcPnlData, showDetail, showGrid, strokeWidth]);

@@ -50,11 +50,11 @@ const BalanceAraeChart = ({ slot }) => {
         if (slot === 'month') {
           startDate.setDate(startDate.getDate() - 30);
         }
-        if (slot === 'week') {
-          startDate.setDate(startDate.getDate() - 7);
+        if (slot === 'month3') {
+          startDate.setDate(startDate.getDate() - 90);
         }
         if (slot === 'all') {
-          startDate.setFullYear(startDate.getFullYear() - 10);
+          startDate.setFullYear(2024, 0, 1);
         }
 
         // Formatting dates to 'YYYY-MM-DD' string format

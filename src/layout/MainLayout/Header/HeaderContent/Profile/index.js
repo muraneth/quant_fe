@@ -61,6 +61,7 @@ const Profile = () => {
   const handleLogout = async () => {
     localStorage.removeItem('username');
     localStorage.removeItem('token');
+    localStorage.removeItem('uid');
     navigate('/home');
   };
   useEffect(() => {

@@ -25,9 +25,9 @@ const MainDrawer = ({ open, handleDrawerToggle, window }) => {
   const drawerHeader = useMemo(() => <DrawerHeader open={open} />, [open]);
 
   return (
-    <Box component="nav" sx={{ flexShrink: { md: 0 }, zIndex: 1300 }} aria-label="mailbox folders">
+    <Box component="nav" sx={{ flexShrink: { md: 0 }, zIndex: 1300, bgcolor: 'background.deep' }} aria-label="mailbox folders">
       {!matchDownMD ? (
-        <MiniDrawerStyled variant="permanent" open={open}>
+        <MiniDrawerStyled variant="permanent" open={open} sx={{ bgcolor: 'background.deep' }}>
           {drawerHeader}
           {drawerContent}
         </MiniDrawerStyled>
@@ -36,7 +36,7 @@ const MainDrawer = ({ open, handleDrawerToggle, window }) => {
           container={container}
           variant="temporary"
           open={open}
-          onClose={handleDrawerToggle}
+          // onClose={handleDrawerToggle}
           ModalProps={{ keepMounted: true }}
           sx={{
             display: { xs: 'block', lg: 'none' },
@@ -46,7 +46,8 @@ const MainDrawer = ({ open, handleDrawerToggle, window }) => {
               borderRight: `1px solid ${theme.palette.divider}`,
               backgroundImage: 'none',
               boxShadow: 'inherit'
-            }
+            },
+            bgcolor: 'background.deep'
           }}
         >
           {open && drawerHeader}

@@ -110,7 +110,7 @@ const VolatilityChart = ({ productSymbol }) => {
         labels: {
           show: true,
           style: {
-            colors: common.white
+            colors: 'gray'
           }
         },
         axisTicks: {
@@ -122,7 +122,7 @@ const VolatilityChart = ({ productSymbol }) => {
         show: true,
         labels: {
           style: {
-            colors: common.white // Set the y-axis label color
+            colors: 'gray'
           },
           formatter: function (val) {
             return val + '%'; // Adding '%' symbol to y-axis labels
@@ -137,6 +137,11 @@ const VolatilityChart = ({ productSymbol }) => {
       tooltip: {
         enabled: true,
         theme: 'dark'
+      },
+      legend: {
+        labels: {
+          colors: 'gray'
+        }
       }
     }));
   }, [data, line, btcData]);

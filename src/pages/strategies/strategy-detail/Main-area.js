@@ -89,6 +89,7 @@ const MainArea = ({ productSymbol }) => {
             alignSelf: 'center',
             height: { xs: 200, sm: 200, md: 300, lg: 400 },
             width: '100%'
+            // color: '#fff'
           })}
         >
           <Grid container xs={12} justifyContent="center" alignItems="center">

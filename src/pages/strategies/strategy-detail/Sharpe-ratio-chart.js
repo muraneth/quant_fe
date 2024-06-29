@@ -102,7 +102,7 @@ const SharpeRatioChart = ({ productSymbol }) => {
         },
         labels: {
           style: {
-            colors: common.white // Set the y-axis label color
+            colors: 'gray'
           }
         }
       },
@@ -110,7 +110,7 @@ const SharpeRatioChart = ({ productSymbol }) => {
         show: true,
         labels: {
           style: {
-            colors: common.white // Set the y-axis label color
+            colors: 'gray'
           }
           //   formatter: function (val) {
           //     return val + '%'; // Adding '%' symbol to y-axis labels
@@ -122,6 +122,11 @@ const SharpeRatioChart = ({ productSymbol }) => {
       },
       tooltip: {
         theme: 'dark'
+      },
+      legend: {
+        labels: {
+          colors: 'gray'
+        }
       }
     }));
   }, [data]);
