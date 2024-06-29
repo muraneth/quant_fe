@@ -73,7 +73,7 @@ export default function ThemeCustomization({ children }) {
         main: '#BB86FC'
       },
 
-      background: { default: '#121212', paper: '#1E1E1E' }
+      background: { default: '#121212', paper: '#1E1E1E', deep: '#0b0e1b' }
     },
     customShadows: themeCustomShadows
   });

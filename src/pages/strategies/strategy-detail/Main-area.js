@@ -96,7 +96,7 @@ const MainArea = ({ productSymbol }) => {
               Acum Pnl Ratio
             </Typography>
           </Grid>
-          <PnlRatioChart slot={slot} product={productSymbol} showDetail={true} showGrid={true} />
+          <PnlRatioChart slot={slot} product={productSymbol} showDetail={true} showGrid={true} showBtc={true} />
         </Box>
       </Grid>
       <Grid item xs={4} container>

@@ -7,14 +7,14 @@ import { green, red, common } from '@mui/material/colors';
 
 const chartOptions = {
   chart: {
-    type: 'area',
+    type: 'line',
     toolbar: {
       show: false
     }
   },
   stroke: {
     curve: 'smooth',
-    width: 2
+    width: 1
   },
   dataLabels: {
     enabled: false
@@ -28,6 +28,7 @@ const SharpeRatioChart = ({ productSymbol }) => {
   const [series, setSeries] = useState([]);
   const [options, setOptions] = useState(chartOptions);
   const [data, setData] = useState([]);
+  const [btcData, setBtcData] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -41,7 +42,16 @@ const SharpeRatioChart = ({ productSymbol }) => {
             Uid: `${uid}`
           }
         });
+
+        const btcResponse = await axios.get('https://matrixcipher.com/api/common/getBTCSharpeRatio', {
+          headers: {
+            Authorization: `${token}`,
+            Uid: `${uid}`
+          }
+        });
+
         setData(response.data.data ? response.data.data : []);
+        setBtcData(btcResponse.data.data ? btcResponse.data.data : []);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -51,14 +61,39 @@ const SharpeRatioChart = ({ productSymbol }) => {
   }, []);
 
   useEffect(() => {
-    const positiveData = data.map((item) => item.value);
+    const padArrayAhead = (arr, length) => {
+      while (arr.length < length) {
+        arr.unshift(null);
+      }
+      return arr;
+    };
 
-    setSeries([{ name: 'Sharpe Ratio', data: positiveData }]);
+    if (btcData.length > data.length) {
+      padArrayAhead(data, btcData.length);
+    }
+
+    setSeries([
+      { name: 'Sharpe Ratio', data: data.map((item) => (item ? item.value : null)) },
+      { name: 'BTC Sharpe Ratio', data: btcData.map((item) => (item ? item.value : null)) }
+    ]);
     setOptions((prevState) => ({
-      ...prevState,
+      // ...prevState,
+      chart: {
+        type: 'line',
+        toolbar: {
+          show: false
+        }
+      },
+      stroke: {
+        curve: 'smooth',
+        width: 1
+      },
+      dataLabels: {
+        enabled: false
+      },
       colors: [green[500], error.light],
       xaxis: {
-        categories: data?.map((item) => item.date),
+        categories: btcData?.map((item) => item.key),
         axisBorder: {
           show: true
         },
@@ -93,7 +128,7 @@ const SharpeRatioChart = ({ productSymbol }) => {
 
   return (
     <div id="chart">
-      <ReactApexChart options={options} series={series} type="area" height={365} />
+      <ReactApexChart options={options} series={series} height={365} />
     </div>
   );
 };

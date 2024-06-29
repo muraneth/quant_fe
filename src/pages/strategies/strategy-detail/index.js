@@ -144,7 +144,7 @@ const StrategyDetail = () => {
         </Grid>
         <Grid item xs={12}>
           <Typography variant="h5" component="div">
-            Rolling 6-month Sharpe Ratio
+            Rolling 3-months Sharpe Ratio
           </Typography>
           <SharpeRatioChart productSymbol={id} />
         </Grid>
@@ -156,7 +156,7 @@ const StrategyDetail = () => {
         </Grid> */}
         <Grid item xs={12}>
           <Typography variant="h5" component="div">
-            Volatility Chart
+            Rolling 30-Days Volatility Chart
           </Typography>
 
           <VolatilityChart productSymbol={id} />

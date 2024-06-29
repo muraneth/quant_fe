@@ -76,7 +76,7 @@ const DashboardDefault = () => {
             // percentage={lastRecord ? lastRecord.daily_pnl_ratio : 0}
             extra={`$${lastRecord ? lastRecord.daily_pnl : 0}`}
             isLoss={isLoss}
-            // color= {isLoss ? 'warning' : 'success'}
+            color={isLoss ? 'warning' : 'success'}
             msg="daily banlane change"
           />
         </Grid>
@@ -87,7 +87,7 @@ const DashboardDefault = () => {
             // percentage={lastRecord ? lastRecord.daily_pnl_ratio : 0}
             extra={`$${lastRecord ? lastRecord.daily_pnl : 0}`}
             isLoss={isLoss}
-            // color= {isLoss ? 'warning' : 'success'}
+            color={isLoss ? 'warning' : 'success'}
             msg="daily pnl change"
           />
         </Grid>

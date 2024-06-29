@@ -49,13 +49,13 @@ const headCells = [
   },
   {
     id: 'direction',
-    align: 'right',
+    align: 'left',
     disablePadding: false,
     label: 'Direction'
   },
   {
     id: 'pnl-ratio',
-    align: 'right',
+    align: 'left',
     disablePadding: false,
     label: 'PNL Ratio'
   },
@@ -201,11 +201,11 @@ export default function TradeTable({ productId }) {
                   <TableCell align="left" sx={{ color: '#fff' }}>
                     {row.uly}
                   </TableCell>
-                  <TableCell align="right" sx={{ color: '#fff' }}>
+                  <TableCell align="left" sx={{ color: '#fff' }}>
                     {row.direction}
                   </TableCell>
 
-                  <TableCell align="right" sx={{ color: '#fff' }}>
+                  <TableCell align="left" sx={{ color: '#fff' }}>
                     <NumericFormat value={row.pnl_ratio} displayType="text" thousandSeparator suffix="%" />
                   </TableCell>
                   <TableCell align="left" sx={{ color: '#fff' }}>

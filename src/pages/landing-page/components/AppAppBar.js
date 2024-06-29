@@ -19,6 +19,12 @@ import Logo from 'components/Logo';
 
 function AppAppBar({ mode, toggleColorMode }) {
   const [open, setOpen] = React.useState(false);
+  const [uid, setUid] = React.useState();
+
+  React.useEffect(() => {
+    const uid = localStorage.getItem('uid');
+    setUid(uid);
+  }, []);
 
   const toggleDrawer = (newOpen) => () => {
     setOpen(newOpen);
@@ -92,35 +98,49 @@ function AppAppBar({ mode, toggleColorMode }) {
               </Button>
             </Box>
           </Box>
-          <Box
-            sx={{
-              display: { xs: 'none', md: 'flex' },
-              gap: 0.5,
-              alignItems: 'center'
-            }}
-          >
-            {/* <ToggleColorMode mode={mode} toggleColorMode={toggleColorMode} /> */}
-            <Button color="primary" variant="outlined" size="midium" component="a" href="/sign-in/">
-              Sign in
-            </Button>
-            <Button
-              color="primary"
-              variant="contained"
-              size="midium"
-              component="a"
-              href="/sign-up/"
-              target="_blank"
+          {uid ? (
+            <Box
               sx={{
-                bgcolor: 'secondary.main',
-                color: 'white',
-                '&:hover': {
-                  bgcolor: 'secondary.light'
-                }
+                display: { xs: 'none', md: 'flex' },
+                gap: 0.5,
+                alignItems: 'center'
               }}
             >
-              Sign up
-            </Button>
-          </Box>
+              <Button color="primary" variant="outlined" size="midium" component="a" href="/sign-in/">
+                Sign in
+              </Button>
+            </Box>
+          ) : (
+            <Box
+              sx={{
+                display: { xs: 'none', md: 'flex' },
+                gap: 0.5,
+                alignItems: 'center'
+              }}
+            >
+              {/* <ToggleColorMode mode={mode} toggleColorMode={toggleColorMode} /> */}
+              <Button color="primary" variant="outlined" size="midium" component="a" href="/sign-in/">
+                Sign in
+              </Button>
+              <Button
+                color="primary"
+                variant="contained"
+                size="midium"
+                component="a"
+                href="/sign-up/"
+                target="_blank"
+                sx={{
+                  bgcolor: 'secondary.main',
+                  color: 'white',
+                  '&:hover': {
+                    bgcolor: 'secondary.light'
+                  }
+                }}
+              >
+                Sign up
+              </Button>
+            </Box>
+          )}
           <Box sx={{ display: { sm: 'flex', md: 'none' } }}>
             <IconButton aria-label="Menu button" onClick={toggleDrawer(true)}>
               <MenuIcon />

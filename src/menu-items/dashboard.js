@@ -18,17 +18,17 @@ const dashboard = {
       id: 'dashboard',
       title: 'Dashboard',
       type: 'item',
-      url: '/dashboard/default',
+      url: '/user/dashboard',
       icon: icons.DashboardOutlined,
       breadcrumbs: false
-    },
-    {
-      id: 'strategies',
-      title: 'Strategies',
-      type: 'item',
-      url: '/dashboard/strategies',
-      icon: icons.LineChartOutlined
     }
+    // {
+    //   id: 'strategies',
+    //   title: 'Strategies',
+    //   type: 'item',
+    //   url: '/dashboard/strategies',
+    //   icon: icons.LineChartOutlined
+    // }
   ]
 };
 

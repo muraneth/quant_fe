@@ -22,7 +22,7 @@ const Header = ({ open, handleDrawerToggle }) => {
 
   // common header
   const mainHeader = (
-    <Toolbar>
+    <Toolbar sx={{ bgcolor: 'background.deep', boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.3)' }}>
       {/* <IconButton
         disableRipple
         aria-label="open drawer"
@@ -33,6 +33,7 @@ const Header = ({ open, handleDrawerToggle }) => {
       >
         {!open ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
       </IconButton> */}
+      {/* <IconButton /> */}
       <HeaderContent />
     </Toolbar>
   );

@@ -1,5 +1,5 @@
 # Use an official Node.js runtime as the base image
-FROM node:16
+FROM  --platform=linux/amd64  node:20
 
 # Set the working directory
 WORKDIR /usr/src/app
