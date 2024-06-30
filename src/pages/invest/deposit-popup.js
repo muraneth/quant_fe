@@ -62,7 +62,7 @@ const DepositCryptoPopup = ({ open, handleClose }) => {
         const token = localStorage.getItem('token');
 
         try {
-          const response = await axios.get('https://matrixcipher.com/api/user/info/getUserInfo', {
+          const response = await axios.get('https://myquant.financial/api/user/info/getUserInfo', {
             headers: {
               Authorization: `${token}`,
               Uid: `${uid}`

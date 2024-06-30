@@ -47,7 +47,7 @@ const PnlRatioChart = ({ slot, product, showDetail, showGrid, strokeWidth = 1, s
         const token = localStorage.getItem('token');
         const uid = localStorage.getItem('uid');
 
-        const url = `https://matrixcipher.com/api/product/getSharePriceHistory?product=${product}&start_date=${formattedStartDate}`;
+        const url = `https://myquant.financial/api/product/getSharePriceHistory?product=${product}&start_date=${formattedStartDate}`;
 
         const response = await axios.get(url, {
           headers: {
@@ -74,7 +74,7 @@ const PnlRatioChart = ({ slot, product, showDetail, showGrid, strokeWidth = 1, s
           return;
         }
 
-        const btcResponse = await axios.get(`https://matrixcipher.com/api/common/getBTCPNLRatio?&start_date=${startDate}`, {
+        const btcResponse = await axios.get(`https://myquant.financial/api/common/getBTCPNLRatio?&start_date=${startDate}`, {
           headers: {
             Authorization: `${token}`,
             Uid: `${uid}`

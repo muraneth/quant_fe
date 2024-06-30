@@ -20,14 +20,14 @@ const VolatilityChart = ({ productSymbol }) => {
         const token = localStorage.getItem('token');
         const uid = localStorage.getItem('uid');
 
-        const response = await axios.get(`https://matrixcipher.com/api/product/getProductRollingVolatility?product=${productSymbol}`, {
+        const response = await axios.get(`https://myquant.financial/api/product/getProductRollingVolatility?product=${productSymbol}`, {
           headers: {
             Authorization: `${token}`,
             Uid: `${uid}`
           }
         });
 
-        const btcResponse = await axios.get('https://matrixcipher.com/api/common/getBTCVolatility', {
+        const btcResponse = await axios.get('https://myquant.financial/api/common/getBTCVolatility', {
           headers: {
             Authorization: `${token}`,
             Uid: `${uid}`
@@ -54,7 +54,7 @@ const VolatilityChart = ({ productSymbol }) => {
         //   return;
         // }
 
-        const btcResponse = await axios.get(`https://matrixcipher.com/api/common/getBTCVolatility?start_date=${startDate}`, {
+        const btcResponse = await axios.get(`https://myquant.financial/api/common/getBTCVolatility?start_date=${startDate}`, {
           headers: {
             Authorization: `${token}`,
             Uid: `${uid}`

@@ -34,7 +34,7 @@ const getTimeBySlot = (slot) => {
 const MainArea = ({ productSymbol }) => {
   const [productInfo, setProductInfo] = useState({});
   const [slot, setSlot] = useState('all');
-  const host = 'https://matrixcipher.com';
+  const host = 'https://myquant.financial';
   useEffect(() => {
     const fetchProduct = async () => {
       var startDate = getTimeBySlot(slot);

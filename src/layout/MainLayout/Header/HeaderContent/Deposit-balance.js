@@ -21,7 +21,7 @@ const Deposit = () => {
       const token = localStorage.getItem('token');
 
       try {
-        const response = await axios.get('https://matrixcipher.com/api/user/asset/getAccountBalance', {
+        const response = await axios.get('https://myquant.financial/api/user/asset/getAccountBalance', {
           headers: {
             Authorization: `${token}`,
             Uid: `${uid}`

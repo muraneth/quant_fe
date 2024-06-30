@@ -162,7 +162,7 @@ export default function StrategyTable({ productId }) {
   const fetchProducts = async () => {
     const token = localStorage.getItem('token');
     const uid = localStorage.getItem('uid');
-    const host = 'https://matrixcipher.com';
+    const host = 'https://myquant.financial';
     const response = await axios.get(`${host}/api/product/getAll`, {
       headers: {
         Authorization: token,

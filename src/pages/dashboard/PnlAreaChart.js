@@ -67,7 +67,7 @@ const AcumPnlAraeChart = ({ slot }) => {
         const uid = localStorage.getItem('uid');
 
         const response = await axios.get(
-          `https://matrixcipher.com/api/user/asset/getAllHistoryCashFlow?uid=${uid}&startDate=${formattedStartDate}`,
+          `https://myquant.financial/api/user/asset/getAllHistoryCashFlow?uid=${uid}&startDate=${formattedStartDate}`,
           {
             headers: {
               Authorization: `${token}`,
