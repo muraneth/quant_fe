@@ -24,7 +24,7 @@ const areaChartOptions = {
   },
   stroke: {
     curve: 'smooth',
-    width: 2
+    width: 1
   },
   grid: {
     strokeDashArray: 0,

@@ -193,22 +193,18 @@ export default function TradeTable({ productId }) {
                   key={row.trade_id}
                   selected={isItemSelected}
                 >
-                  <TableCell component="th" sx={{ color: '#fff' }} id={labelId} scope="row" align="left">
+                  <TableCell component="th" id={labelId} scope="row" align="left">
                     {/* <Link color="secondary" component={RouterLink} to=""> */}
                     {row.c_time_date}
                     {/* </Link> */}
                   </TableCell>
-                  <TableCell align="left" sx={{ color: '#fff' }}>
-                    {row.uly}
-                  </TableCell>
-                  <TableCell align="left" sx={{ color: '#fff' }}>
-                    {row.direction}
-                  </TableCell>
+                  <TableCell align="left">{row.uly}</TableCell>
+                  <TableCell align="left">{row.direction}</TableCell>
 
-                  <TableCell align="left" sx={{ color: '#fff' }}>
+                  <TableCell align="left">
                     <NumericFormat value={row.pnl_ratio} displayType="text" thousandSeparator suffix="%" />
                   </TableCell>
-                  <TableCell align="left" sx={{ color: '#fff' }}>
+                  <TableCell align="left">
                     <WinStatus status={row.pnl_ratio} />
                   </TableCell>
                 </TableRow>

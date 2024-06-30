@@ -165,7 +165,7 @@ const StrategyDetail = () => {
           <Typography variant="h5" component="div">
             Last 3 Months Trades
           </Typography>
-          <MainCard sx={{ minWidth: 275, bgcolor: '#0b1836', color: '#fff', m: 2 }}>
+          <MainCard sx={{ minWidth: 275, bgcolor: 'background.paper', color: 'gray', m: 2 }}>
             <CardContent>
               <TradeTable productId={id} />
             </CardContent>

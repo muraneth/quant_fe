@@ -22,7 +22,7 @@ const NavCard = () => (
       </Stack>
       <AnimateButton>
         <Button component={Link} target="_blank" href="/strategies" variant="contained" color="success" size="small">
-          Check Now
+          Take a tour
         </Button>
       </AnimateButton>
     </Stack>

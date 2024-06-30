@@ -121,7 +121,7 @@ export default function SignIn() {
 
   useEffect(() => {
     if (uid !== '') {
-      navigate('/dashboard/default');
+      navigate('/user/dashboard');
     }
   }, [uid]);
 

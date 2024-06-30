@@ -108,6 +108,8 @@ const DashboardDefault = () => {
             title="PNLRatio"
             count={`${lastRecord ? lastRecord.acum_pnl_ratio : 0}%`}
             extra={`$${lastRecord ? lastRecord.daily_pnl_ratio : 0}%`}
+            isLoss={isLoss}
+            color={isLoss ? 'warning' : 'success'}
             msg="daily pnl ratio"
           />
         </Grid>
@@ -152,7 +154,7 @@ const DashboardDefault = () => {
         </Grid>
 
         {/* row 2 balance */}
-        <Grid item xs={12} md={7} lg={8}>
+        <Grid item xs={12} md={7} lg={12}>
           <Grid container alignItems="center" justifyContent="space-between">
             <Grid item>
               <Typography variant="h5">History Balance</Typography>
@@ -192,7 +194,7 @@ const DashboardDefault = () => {
             </Box>
           </MainCard>
         </Grid>
-        <Grid item xs={12} md={5} lg={4}>
+        <Grid item xs={12} md={5} lg={12}>
           <Grid container alignItems="center" justifyContent="space-between">
             <Grid item>
               <Typography variant="h5">Recent Weekly PNL</Typography>
@@ -200,7 +202,7 @@ const DashboardDefault = () => {
             <Grid item />
           </Grid>
           <MainCard sx={{ mt: 2, bgcolor: 'background.paper' }} content={false}>
-            <WeeklyPnlBarChart data={recent7WeekPnl} />
+            <WeeklyPnlBarChart data={userWeeklyCashFlowData} />
           </MainCard>
         </Grid>
       </Grid>
