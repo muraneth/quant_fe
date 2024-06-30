@@ -16,7 +16,7 @@ import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import TwitterIcon from '@mui/icons-material/X';
 import TelegramIcon from '@mui/icons-material/Telegram';
 
-import SitemarkIcon from './SitemarkIcon';
+import axios from 'axios';
 
 function Copyright() {
   return (
@@ -29,6 +29,12 @@ function Copyright() {
 }
 
 export default function Footer() {
+  const [email, setEmail] = React.useState('');
+
+  const handleSubscribe = () => {
+    console.log('Subscribe');
+  };
+
   return (
     <Container
       sx={{
@@ -57,10 +63,10 @@ export default function Footer() {
           }}
         >
           <Box sx={{ width: { xs: '100%', sm: '60%' } }}>
-            {/* <SitemarkIcon />
+            {/* <SitemarkIcon /> */}
             <Typography variant="body2" fontWeight={600} gutterBottom sx={{ mt: 2 }}>
               Join the newsletter
-            </Typography> */}
+            </Typography>
             <Typography variant="body2" color="text.secondary" mb={2}>
               Subscribe for weekly updates. No spams ever!
             </Typography>
@@ -73,15 +79,18 @@ export default function Footer() {
                 hiddenLabel
                 size="small"
                 variant="outlined"
+                type="email"
                 fullWidth
                 aria-label="Enter your email address"
                 placeholder="Your email address"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 inputProps={{
                   autocomplete: 'off',
                   ariaLabel: 'Enter your email address'
                 }}
               />
-              <Button variant="contained" color="primary" sx={{ flexShrink: 0 }}>
+              <Button variant="contained" color="primary" sx={{ flexShrink: 0 }} onClick={handleSubscribe}>
                 Subscribe
               </Button>
             </Stack>
@@ -104,9 +113,9 @@ export default function Footer() {
             Community
           </Link>
 
-          <Link color="text.secondary" variant="body2" href="#">
+          {/* <Link color="text.secondary" variant="body2" href="#">
             FAQs
-          </Link>
+          </Link> */}
         </Box>
         <Box
           sx={{
@@ -141,7 +150,7 @@ export default function Footer() {
           borderColor: 'divider'
         }}
       >
-        {/* <div>
+        <div>
           <Link color="text.secondary" variant="body2" href="#">
             Privacy Policy
           </Link>
@@ -152,7 +161,7 @@ export default function Footer() {
             Terms of Service
           </Link>
           <Copyright />
-        </div> */}
+        </div>
         <Stack
           direction="row"
           justifyContent="left"
@@ -162,10 +171,10 @@ export default function Footer() {
             color: 'text.secondary'
           }}
         >
-          <IconButton color="inherit" href="" aria-label="X" sx={{ alignSelf: 'center' }}>
+          {/* <IconButton color="inherit" href="" aria-label="X" sx={{ alignSelf: 'center' }}>
             <TwitterIcon />
-          </IconButton>
-          <IconButton color="inherit" href="" aria-label="Telegram" sx={{ alignSelf: 'center' }}>
+          </IconButton> */}
+          <IconButton color="inherit" href="https://t.me/+zyabuhvPEtM0ZGU9" aria-label="Telegram" sx={{ alignSelf: 'center' }}>
             <TelegramIcon />
           </IconButton>
         </Stack>

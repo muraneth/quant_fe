@@ -23,10 +23,8 @@ import { useNavigate } from 'react-router-dom';
 import Logo from 'components/Logo';
 import CustomTextField from 'components/overrides/CustomTextField';
 
-
 import { GoogleLogin } from '@react-oauth/google';
 import { jwtDecode } from 'jwt-decode';
-
 
 function ToggleCustomTheme({ showCustomTheme, toggleCustomTheme }) {
   return (
@@ -154,8 +152,6 @@ export default function SignIn() {
     return isValid;
   };
 
- 
-
   return (
     <>
       {/* <CssBaseline /> */}
@@ -236,7 +232,7 @@ export default function SignIn() {
                   fullWidth
                   variant="outlined"
                   color={emailError ? 'error' : 'primary'}
-                  // sx={{ ariaLabel: 'email' }}
+                  sx={{ ariaLabel: 'email' }}
                 />
               </FormControl>
               <FormControl>
@@ -290,16 +286,11 @@ export default function SignIn() {
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',
-                mt: 2,
+                mt: 2
               }}
             >
-            <GoogleLogin
-                 onSuccess={handleGoogleLoginSuccess}
-                 onError={handleGoogleLoginError}
-                useOneTap
-              />
+              <GoogleLogin onSuccess={handleGoogleLoginSuccess} onError={handleGoogleLoginError} useOneTap />
             </Box>
-
           </Card>
         </Stack>
       </Stack>

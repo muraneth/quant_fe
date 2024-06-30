@@ -78,7 +78,7 @@ export default function LandingPage() {
         <Divider />
         <Pricing />
         <Divider /> */}
-        <FAQ />
+        {/* <FAQ /> */}
         <Footer />
       </Box>
     </>

@@ -110,7 +110,7 @@ const BalanceAraeChart = ({ slot }) => {
         borderColor: '#445661'
       },
       tooltip: {
-        theme: 'light'
+        theme: 'dark'
       }
     }));
   }, [userDailyCashFlowData, slot]);

@@ -67,7 +67,7 @@ const WeeklyPnlBarChart = ({ data }) => {
         }
       },
       tooltip: {
-        theme: 'light'
+        theme: 'dark'
       },
       grid: {
         borderColor: '#445661'

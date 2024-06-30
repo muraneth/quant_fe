@@ -117,7 +117,7 @@ const AcumPnlAraeChart = ({ slot }) => {
         borderColor: '#445661'
       },
       tooltip: {
-        theme: 'light',
+        theme: 'dark',
         y: {
           formatter: function (val) {
             return val + '%'; // Adding '%' symbol after the data

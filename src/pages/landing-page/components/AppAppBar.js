@@ -11,16 +11,59 @@ import Drawer from '@mui/material/Drawer';
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import ToggleColorMode from './ToggleColorMode';
+import ClickAwayListener from '@mui/material/ClickAwayListener';
+import Grow from '@mui/material/Grow';
+import Paper from '@mui/material/Paper';
+import Popper from '@mui/material/Popper';
+import ListItemIcon from '@mui/material/ListItemIcon';
+
+import MenuList from '@mui/material/MenuList';
+
 import { Avatar, Box, ButtonBase, IconButton, Stack, Typography } from '@mui/material';
 import avatar1 from 'assets/images/users/avatar-3.png';
 
 import Logo from 'components/Logo';
 import Profile from 'layout/MainLayout/Header/HeaderContent/Profile/index';
+import TelegramIcon from '@mui/icons-material/Telegram';
+import { bgcolor } from '../../../../node_modules/@mui/system/index';
 
 function AppAppBar({ mode, toggleColorMode }) {
   const [open, setOpen] = React.useState(false);
   const [uid, setUid] = React.useState();
   const [username, setUsername] = React.useState('');
+
+  const anchorRef = React.useRef(null);
+
+  const handleToggle = () => {
+    setOpen((prevOpen) => !prevOpen);
+  };
+
+  const handleClose = (event) => {
+    if (anchorRef.current && anchorRef.current.contains(event.target)) {
+      return;
+    }
+
+    setOpen(false);
+  };
+
+  function handleListKeyDown(event) {
+    if (event.key === 'Tab') {
+      event.preventDefault();
+      setOpen(false);
+    } else if (event.key === 'Escape') {
+      setOpen(false);
+    }
+  }
+
+  // return focus to the button when we transitioned from !open -> open
+  const prevOpen = React.useRef(open);
+  React.useEffect(() => {
+    if (prevOpen.current === true && open === false) {
+      anchorRef.current.focus();
+    }
+
+    prevOpen.current = open;
+  }, [open]);
 
   React.useEffect(() => {
     const uid = localStorage.getItem('uid');
@@ -93,13 +136,65 @@ function AppAppBar({ mode, toggleColorMode }) {
               <Button variant="text" color="primary" size="large" href="/strategies/">
                 Strategies
               </Button>
-              <Button variant="text" color="primary" size="large">
+              {/* <Button variant="text" color="primary" size="large">
                 Community
-              </Button>
+              </Button> */}
+              <div>
+                <Button
+                  variant="text"
+                  color="primary"
+                  size="large"
+                  ref={anchorRef}
+                  id="composition-button"
+                  aria-controls={open ? 'composition-menu' : undefined}
+                  aria-expanded={open ? 'true' : undefined}
+                  aria-haspopup="true"
+                  onClick={handleToggle}
+                >
+                  Community
+                </Button>
+                <Popper open={open} anchorEl={anchorRef.current} role={undefined} placement="bottom-start" transition disablePortal>
+                  {({ TransitionProps, placement }) => (
+                    <Grow
+                      {...TransitionProps}
+                      style={{
+                        transformOrigin: placement === 'bottom-start' ? 'left top' : 'left bottom'
+                      }}
+                    >
+                      <Paper>
+                        <ClickAwayListener onClickAway={handleClose}>
+                          <MenuList
+                            autoFocusItem={open}
+                            id="composition-menu"
+                            aria-labelledby="composition-button"
+                            onKeyDown={handleListKeyDown}
+                            sx={{ bgcolor: 'transparent' }}
+                          >
+                            {/* <ListItemIcon> */}
+                            <IconButton
+                              color="inherit"
+                              href="https://t.me/+zyabuhvPEtM0ZGU9"
+                              aria-label="Telegram"
+                              sx={{ alignSelf: 'center', bgcolor: 'transparent' }}
+                              size="small"
+                            >
+                              <TelegramIcon sx={{ px: 0.5 }} /> Telegram
+                            </IconButton>
+                            {/* </ListItemIcon> */}
+                            {/* <MenuItem onClick={handleClose}>Telegram</MenuItem> */}
+                            {/* <MenuItem onClick={handleClose}>My account</MenuItem> */}
+                            {/* <MenuItem onClick={handleClose}>Logout</MenuItem> */}
+                          </MenuList>
+                        </ClickAwayListener>
+                      </Paper>
+                    </Grow>
+                  )}
+                </Popper>
+              </div>
 
-              <Button variant="text" color="primary" size="large" onClick={() => scrollToSection('faq')} sx={{ minWidth: 0 }}>
+              {/* <Button variant="text" color="primary" size="large" onClick={() => scrollToSection('faq')} sx={{ minWidth: 0 }}>
                 FAQ
-              </Button>
+              </Button> */}
             </Box>
           </Box>
           {uid && uid.length > 0 ? (
@@ -165,7 +260,7 @@ function AppAppBar({ mode, toggleColorMode }) {
               </Button>
             </Box>
           )}
-          <Box sx={{ display: { sm: 'flex', md: 'none' } }}>
+          {/* <Box sx={{ display: { sm: 'flex', md: 'none' } }}>
             <IconButton aria-label="Menu button" onClick={toggleDrawer(true)}>
               <MenuIcon />
             </IconButton>
@@ -189,11 +284,11 @@ function AppAppBar({ mode, toggleColorMode }) {
                   </IconButton>
                 </Box>
                 <Divider sx={{ my: 3 }} />
-                {/* <MenuItem onClick={() => scrollToSection('features')}>Features</MenuItem>
+                <MenuItem onClick={() => scrollToSection('features')}>Features</MenuItem>
                 <MenuItem onClick={() => scrollToSection('testimonials')}>Testimonials</MenuItem>
                 <MenuItem onClick={() => scrollToSection('highlights')}>Highlights</MenuItem>
                 <MenuItem onClick={() => scrollToSection('pricing')}>Pricing</MenuItem>
-                <MenuItem onClick={() => scrollToSection('faq')}>FAQ</MenuItem> */}
+                <MenuItem onClick={() => scrollToSection('faq')}>FAQ</MenuItem>
                 <MenuItem>
                   <Button
                     // color="primary"
@@ -221,20 +316,14 @@ function AppAppBar({ mode, toggleColorMode }) {
                     href="/sign-in/"
                     target="_blank"
                     fullWidth
-                    // sx={{
-                    //   bgcolor: 'secondary.main',
-                    //   color: 'white',
-                    //   '&:hover': {
-                    //     bgcolor: 'secondary.light'
-                    //   }
-                    // }}
+
                   >
                     Sign in
                   </Button>
                 </MenuItem>
               </Box>
             </Drawer>
-          </Box>
+          </Box> */}
         </Toolbar>
       </Container>
     </AppBar>
