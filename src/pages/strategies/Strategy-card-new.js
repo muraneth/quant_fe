@@ -8,14 +8,15 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 const StrategyCardNew = ({ strategy }) => {
   const navigate = useNavigate();
 
-  const handleButtonClick = async () => {
-    // navigate to the product page
-    navigate(`/strategies/${strategy.symbol}`);
+  const handleInvest = (value) => {
+    const uid = localStorage.getItem('uid');
+    const token = localStorage.getItem('token');
+    if (uid && token) {
+      navigate(`/invest/${value}`);
+    } else {
+      navigate('/sign-in');
+    }
   };
-  // const handleButtonClick = () => {
-  //   // Call the onClick handler with the strategy title
-  //   onClick(strategy.id);
-  // };
   const RiskBar = ({ value }) => (
     <Box sx={{ width: '100%', mt: 1, bgcolor: '#4caf50' }}>
       <LinearProgress variant="determinate" value={value} />
@@ -31,19 +32,19 @@ const StrategyCardNew = ({ strategy }) => {
 
         <RiskBar value={strategy.risk} />
         <Stack item direction="row" pt={2}>
-          <Grid container alignItems="center">
+          <Grid container alignItems="center" direction="column">
             <Typography variant="body3">APY : </Typography>
             <Typography variant="h5" color="green.main">
               {strategy.apy}%
             </Typography>
           </Grid>
-          <Grid container alignItems="center">
+          <Grid container alignItems="center" direction="column">
             <Typography variant="body3">SharpeRatio : </Typography>
             <Typography variant="h5" color="green.main">
               {strategy.sharpe_ratio}
             </Typography>
           </Grid>
-          <Grid container alignItems="center">
+          <Grid container alignItems="center" direction="column">
             <Typography variant="body3">MaxDownDraw : </Typography>
             <Typography variant="h5" color="error">
               -{strategy.mdd}%
@@ -54,7 +55,7 @@ const StrategyCardNew = ({ strategy }) => {
           <PnlRatioChart slot="all" product={strategy.symbol} showDetail={true} showGrid={true} />
         </Box>
 
-        <Stack direction="row-reverse" spacing={2} sx={{ pt: 1 }}>
+        <Stack direction="row" spacing={2} sx={{ pt: 1, justifyContent: 'flex-end' }}>
           <Button
             variant="contained"
             sx={{
@@ -69,7 +70,7 @@ const StrategyCardNew = ({ strategy }) => {
                 bgcolor: 'secondary.light'
               }
             }}
-            onClick={handleButtonClick}
+            onClick={() => handleInvest(strategy.symbol)}
           >
             Invest
           </Button>

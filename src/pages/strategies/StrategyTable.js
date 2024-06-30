@@ -25,6 +25,7 @@ import axios from 'axios';
 import PnlRatioChart from './components/Pnl-Ratiao-Chart';
 
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import InvestPopup from 'pages/invest/Invest-popup';
 
 // ==============================|| ORDER TABLE - HEADER CELL ||============================== //
 
@@ -152,6 +153,7 @@ const ProductDataPreview = ({ data }) => (
 export default function StrategyTable({ productId }) {
   const navigate = useNavigate();
   const [products, setProducts] = useState([]);
+  const [isInvestPopOpen, setIsInvestPopOpen] = useState(false);
 
   useEffect(() => {
     fetchProducts();
@@ -176,11 +178,16 @@ export default function StrategyTable({ productId }) {
   const handleInvest = (value) => {
     const uid = localStorage.getItem('uid');
     const token = localStorage.getItem('token');
+    console.log('invest value: ', value);
     if (uid && token) {
       navigate(`/invest/${value}`);
+      // setIsInvestPopOpen(true);
     } else {
       navigate('/sign-in');
     }
+  };
+  const handleClosePopup = () => {
+    setIsInvestPopOpen(false);
   };
 
   return (
@@ -224,6 +231,7 @@ export default function StrategyTable({ productId }) {
                   key={row.symbol}
                   selected={isItemSelected}
                 >
+                  <InvestPopup open={isInvestPopOpen} handleClose={handleClosePopup} product={row.symbol} />
                   <TableCell component="th" id={labelId} scope="row" align="left">
                     <Link color="secondary" href="" variant="body1" onClick={() => navigate(`/strategies/${row.symbol}`)}>
                       {row.name}
@@ -258,12 +266,41 @@ export default function StrategyTable({ productId }) {
                   <TableCell align="right" sx={{ color: '#fff' }}>
                     {/* <WinStatus status={row.pnl_ratio} />
                      */}
-                    <Stack direction="column" spacing={1} alignItems="center">
+                    {/* <Stack direction="column" spacing={1} alignItems="center">
                       <Button
                         variant="contained"
                         // href={`/strategies/${row.symbol}`}
                         size="large"
                         sx={{ color: 'primary.main', bgcolor: 'secondary.main', '&:hover': { bgcolor: 'secondary.light' } }}
+                        onClick={() => handleInvest(row.symbol)}
+                      >
+                        Invest
+                      </Button>
+                      <Button
+                        variant="text"
+                        size="large"
+                        endIcon={<ChevronRightIcon />}
+                        sx={{ color: 'secondary.main' }}
+                        href={`/strategies/${row.symbol}`}
+                      >
+                        Info
+                      </Button>
+                    </Stack> */}
+                    <Stack direction="row" spacing={2} sx={{ pt: 1, justifyContent: 'flex-end' }}>
+                      <Button
+                        variant="contained"
+                        sx={{
+                          mt: 2,
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+
+                          bgcolor: 'secondary.main',
+                          color: 'white',
+                          '&:hover': {
+                            bgcolor: 'secondary.light'
+                          }
+                        }}
                         onClick={() => handleInvest(row.symbol)}
                       >
                         Invest

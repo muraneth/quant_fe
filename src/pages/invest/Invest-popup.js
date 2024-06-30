@@ -124,8 +124,8 @@ const InvestPopup = ({ open, handleClose, product }) => {
   return (
     <div>
       <CustomDialog open={open} onClose={handleClose}>
-        <DialogTitle>Invest into strategy</DialogTitle>
-        <DialogContent>
+        <DialogTitle>Invest into strategy: {product}</DialogTitle>
+        {/* <DialogContent>
           <Box component="form" noValidate autoComplete="off">
             <TextField
               fullWidth
@@ -149,7 +149,17 @@ const InvestPopup = ({ open, handleClose, product }) => {
           <Button variant="contained" onClick={handleInvest} color="primary">
             Commit
           </Button>
-        </DialogActions>
+        </DialogActions> */}
+        <DialogContent>
+          <Box sx={{ minWidth: 275 }}>
+            <Typography variant="body4" component="div">
+              Incoming{' '}
+            </Typography>
+            <Typography variant="body4" component="div">
+              Contact on Telegram: @mura202211
+            </Typography>
+          </Box>
+        </DialogContent>
       </CustomDialog>
     </div>
   );

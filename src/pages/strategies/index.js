@@ -61,6 +61,7 @@ export default function StrategiesPage() {
         })}
       >
         <Header />
+
         <Box sx={{ flexGrow: 1, pt: 10, bgcolor: '#0b1836', color: '#fff' }}>
           <Typography variant="h5" component="div">
             Chose strategies that suit you

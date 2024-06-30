@@ -178,14 +178,14 @@ const PnlRatioChart = ({ slot, product, showDetail, showGrid, strokeWidth = 1, s
     if (!showBtc) {
       setSeries([
         {
-          name: 'PNL Ratio',
+          name: 'Strategy PNL Ratio',
           data: paddedProductData?.map((item) => (item ? item.acum_pnl_ratio : null))
         }
       ]);
     } else {
       setSeries([
         {
-          name: 'PNL Ratio',
+          name: 'Strategy PNL Ratio',
           data: paddedProductData?.map((item) => (item ? item.acum_pnl_ratio : null))
         },
         {
