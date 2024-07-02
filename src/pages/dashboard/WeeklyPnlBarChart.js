@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import ReactApexChart from 'react-apexcharts';
 import { useTheme } from '@mui/material/styles';
-import { common, green } from '@mui/material/colors';
+import { common, green, orange } from '@mui/material/colors';
 
 const barChartOptions = {
   chart: {
@@ -43,7 +43,7 @@ const WeeklyPnlBarChart = ({ data }) => {
     ]);
     setOptions((prevState) => ({
       ...prevState,
-      colors: [green[700], error.light],
+      colors: [green[700], orange[500]],
       xaxis: {
         categories: data.map((item) => item.week_start_date),
         axisBorder: {

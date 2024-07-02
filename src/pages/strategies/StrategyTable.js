@@ -26,6 +26,7 @@ import PnlRatioChart from './components/Pnl-Ratiao-Chart';
 
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import InvestPopup from 'pages/invest/Invest-popup';
+import { set } from 'lodash';
 
 // ==============================|| ORDER TABLE - HEADER CELL ||============================== //
 
@@ -80,7 +81,7 @@ function OrderTableHead() {
             align={headCell.align}
             padding={headCell.disablePadding ? 'none' : 'normal'}
             // sortDirection={orderBy === headCell.id ? order : false}
-            sx={{ color: '#fff', fontSize: '1.2rem' }}
+            sx={{ color: 'primary.main', fontSize: '1.2rem' }}
           >
             {headCell.label}
           </TableCell>
@@ -136,12 +137,12 @@ const ColoredTypography = styled(Typography)(({ theme, value }) => ({
 }));
 
 const ProductDataPreview = ({ data }) => (
-  <Grid item xs={12} md={6} lg={3}>
+  <Grid item xs={12} md={6} lg={3} sx={{ pt: 3 }}>
     {['trade_count', 'pnl_ratio', 'profit_ratio', 'win_ratio'].map((key, i) => (
       <Grid item container direction="row" alignItems="center" key={i}>
         <Typography variant="body2">{`${key.replace('_', ' ').replace(/\b\w/g, (char) => char.toUpperCase())}: `}</Typography>
-        <ColoredTypography value={data?.[key]}>
-          {key === 'trade_count' ? data?.[key] || 'N/A' : `${data?.[key] || 'N/A'}%`}
+        <ColoredTypography value={data?.[key]} sx={{ pt: 0.5 }}>
+          {key === 'trade_count' || key === 'profit_ratio' ? data?.[key] || 'N/A' : `${data?.[key] || 'N/A'}%`}
         </ColoredTypography>
       </Grid>
     ))}
@@ -180,10 +181,19 @@ export default function StrategyTable({ productId }) {
     const token = localStorage.getItem('token');
     console.log('invest value: ', value);
     if (uid && token) {
-      navigate(`/invest/${value}`);
+      navigate(`/user/strategies/invest/${value}`);
       // setIsInvestPopOpen(true);
     } else {
       navigate('/sign-in');
+    }
+  };
+  const handleClickInfo = (value) => {
+    const uid = localStorage.getItem('uid');
+    const token = localStorage.getItem('token');
+    if (uid && token) {
+      navigate(`/user/strategies/${value}`);
+    } else {
+      navigate(`/strategies/${value}`);
     }
   };
   const handleClosePopup = () => {
@@ -231,7 +241,7 @@ export default function StrategyTable({ productId }) {
                   key={row.symbol}
                   selected={isItemSelected}
                 >
-                  <InvestPopup open={isInvestPopOpen} handleClose={handleClosePopup} product={row.symbol} />
+                  {/* <InvestPopup open={isInvestPopOpen} handleClose={handleClosePopup} product={row.symbol} /> */}
                   <TableCell component="th" id={labelId} scope="row" align="left">
                     <Link color="secondary" href="" variant="body1" onClick={() => navigate(`/strategies/${row.symbol}`)}>
                       {row.name}
@@ -255,7 +265,7 @@ export default function StrategyTable({ productId }) {
 
                   </TableCell> */}
 
-                  <TableCell align="left" sx={{ color: '#fff' }}>
+                  <TableCell align="right" sx={{ color: '#fff' }}>
                     <Stack direction="row">
                       <ProductDataPreview data={row} />
                       <Grid item xs={12} md={6} lg={3}>
@@ -306,11 +316,12 @@ export default function StrategyTable({ productId }) {
                         Invest
                       </Button>
                       <Button
-                        variant="text"
-                        size="large"
+                        variant="outlined"
+                        size="medium"
                         endIcon={<ChevronRightIcon />}
                         sx={{ color: 'secondary.main' }}
-                        href={`/strategies/${row.symbol}`}
+                        // href={isLogin ? `/user/strategies/${row.symbol}` : `/strategies/${row.symbol}`}
+                        onClick={() => handleClickInfo(row.symbol)}
                       >
                         Info
                       </Button>

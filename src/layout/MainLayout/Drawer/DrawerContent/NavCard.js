@@ -21,7 +21,7 @@ const NavCard = () => (
         </Typography>
       </Stack>
       <AnimateButton>
-        <Button component={Link} target="_blank" href="/strategies" variant="contained" color="success" size="small">
+        <Button component={Link} href="/user/strategies" variant="contained" color="success" size="small">
           Take a tour
         </Button>
       </AnimateButton>

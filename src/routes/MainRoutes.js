@@ -4,33 +4,35 @@ import { lazy } from 'react';
 import Loadable from 'components/Loadable';
 import MainLayout from 'layout/MainLayout';
 
-
 // render - dashboard
 const DashboardDefault = Loadable(lazy(() => import('pages/dashboard')));
 const StrategyDetail = Loadable(lazy(() => import('pages/strategies/strategy-detail')));
 const InvestPage = Loadable(lazy(() => import('pages/invest')));
-
+const Strategies = Loadable(lazy(() => import('pages/strategies')));
 
 // ==============================|| MAIN ROUTING ||============================== //
 
 const MainRoutes = {
-  path: '/dashboard',
+  path: '/user',
   element: <MainLayout />,
   children: [
     {
-      path: 'default',
+      path: 'dashboard',
       element: <DashboardDefault />
+    },
+    {
+      path: 'strategies',
+      element: <Strategies />
     },
 
     {
-      path: 'strategy/:id',
+      path: 'strategies/:id',
       element: <StrategyDetail />
     },
     {
-      path: 'strategy/invest/:id',
+      path: 'strategies/invest/:id',
       element: <InvestPage />
-    },
-
+    }
   ]
 };
 

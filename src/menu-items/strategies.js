@@ -5,22 +5,15 @@ const icons = {
   GoldOutlined
 };
 const products = {
-  id: 'products',
-  title: 'Products',
+  id: 'strategies',
+  title: 'Straregies',
   type: 'group',
   children: [
     {
-      id: 'product-1',
-      title: 'Product X',
+      id: 'strategies',
+      title: 'Straregies',
       type: 'item',
-      url: '/dashboard/product/1',
-      icon: icons.GoldOutlined
-    },
-    {
-      id: 'product-2',
-      title: 'Product Y',
-      type: 'item',
-      url: '/dashboard/product/2',
+      url: '/user/strategies',
       icon: icons.GoldOutlined
     }
   ]

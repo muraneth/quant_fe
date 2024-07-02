@@ -67,7 +67,7 @@ export default function StrategiesPage() {
             Chose strategies that suit you
           </Typography>
         </Box>
-        <Box sx={{ px: 10, pt: 2 }} alignItems="center" width="50%">
+        <Box sx={{ px: 10, pt: 2 }} alignItems="center" width="60%">
           {products.length > 0 && <StrategyCardNew strategy={products[0]} />}
         </Box>
         <Box sx={{ px: 10, width: '100%' }}>

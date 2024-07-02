@@ -12,9 +12,18 @@ const StrategyCardNew = ({ strategy }) => {
     const uid = localStorage.getItem('uid');
     const token = localStorage.getItem('token');
     if (uid && token) {
-      navigate(`/invest/${value}`);
+      navigate(`/user/strategies/invest/${value}`);
     } else {
       navigate('/sign-in');
+    }
+  };
+  const handleClickInfo = (value) => {
+    const uid = localStorage.getItem('uid');
+    const token = localStorage.getItem('token');
+    if (uid && token) {
+      navigate(`/user/strategies/${value}`);
+    } else {
+      navigate(`/strategies/${value}`);
     }
   };
   const RiskBar = ({ value }) => (
@@ -75,11 +84,12 @@ const StrategyCardNew = ({ strategy }) => {
             Invest
           </Button>
           <Button
-            variant="text"
-            size="large"
+            variant="outlined"
+            size="medium"
             endIcon={<ChevronRightIcon />}
             sx={{ color: 'secondary.main' }}
-            href={`/strategies/${strategy.symbol}`}
+            // href={`/strategies/${strategy.symbol}`}
+            onClick={() => handleClickInfo(strategy.symbol)}
           >
             Info
           </Button>

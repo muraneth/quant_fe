@@ -227,6 +227,21 @@ function AppAppBar({ mode, toggleColorMode }) {
                   <Typography variant="subtitle1">{username}</Typography>
                 </Stack>
               </ButtonBase>
+              <Button
+                variant="contained"
+                size="large"
+                sx={{
+                  p: 0.5,
+                  px: 1,
+                  color: 'primary.main',
+                  bgcolor: 'secondary.main',
+                  borderRadius: 1,
+                  '&:hover': { bgcolor: 'secondary.light' }
+                }}
+                href="/user/dashboard"
+              >
+                Dashboard
+              </Button>
               {/* <Profile /> */}
             </Box>
           ) : (

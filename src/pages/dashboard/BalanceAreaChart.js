@@ -64,7 +64,6 @@ const BalanceAraeChart = ({ slot }) => {
         const uid = localStorage.getItem('uid');
         const response = await axios.get(
           `https://myquant.financial/api/user/asset/getAllHistoryCashFlow?uid=${uid}&startDate=${formattedStartDate}`,
-          // `https://myquant.financial/api/user/asset/getAllHistoryCashFlow?uid=${uid}&startDate=${formattedStartDate}&endDate=${formattedEndDate}`,
           {
             headers: {
               Authorization: `${token}`,

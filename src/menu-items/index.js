@@ -1,5 +1,5 @@
 import dashboard from './dashboard';
-// import products from './products';
+import strategies from './strategies';
 // import support from './support';
 
 // ==============================|| MENU ITEMS ||============================== //
@@ -7,7 +7,7 @@ import dashboard from './dashboard';
 const menuItems = {
   items: [
     dashboard
-    // products
+    // strategies
     //support
   ]
 };

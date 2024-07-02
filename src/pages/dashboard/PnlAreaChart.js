@@ -9,6 +9,7 @@ import { common, green, orange } from '@mui/material/colors';
 // third-party
 import ReactApexChart from 'react-apexcharts';
 import axios from 'axios';
+import { use } from '../../../node_modules/echarts/index';
 
 // chart options
 const areaChartOptions = {
@@ -41,7 +42,7 @@ const AcumPnlAraeChart = ({ slot }) => {
   const line = theme.palette.divider;
 
   const [options, setOptions] = useState(areaChartOptions);
-  const [chartColor, setChartColor] = useState([green[700]]);
+  const [chartColor, setChartColor] = useState([green[500]]);
   const [userDailyCashFlowData, setUserDailyCashFlowData] = useState([]);
 
   useEffect(() => {
@@ -85,9 +86,12 @@ const AcumPnlAraeChart = ({ slot }) => {
   }, [slot]);
 
   useEffect(() => {
+    userDailyCashFlowData.slice(-1)[0]?.acum_pnl_ratio < 0 ? setChartColor([orange[500]]) : setChartColor([green[500]]);
+  }, [userDailyCashFlowData]);
+
+  useEffect(() => {
     setOptions((prevState) => ({
       ...prevState,
-      // colors: [theme.palette.primary.main, theme.palette.primary[700]],
       colors: chartColor,
       xaxis: {
         categories: userDailyCashFlowData.map((item) => item.date),
@@ -125,7 +129,7 @@ const AcumPnlAraeChart = ({ slot }) => {
         }
       }
     }));
-  }, [userDailyCashFlowData, slot]);
+  }, [userDailyCashFlowData, slot, chartColor]);
 
   const [series, setSeries] = useState([]);
 
