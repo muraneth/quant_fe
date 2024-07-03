@@ -7,9 +7,17 @@ import LandingPageRoutes from './LandingRoutes';
 import UserRoutes from './User';
 import StrategyPageRoutes from './StrategyRoutes';
 import InvestRoutes from './InvestRoutes';
+import MyquantDashBoardRoutes from './dashboard';
 
 // import ProductRoutes from './Products';
 
 export default function ThemeRoutes() {
-  return useRoutes([LandingPageRoutes, MainRoutes, LoginRoutes, UserRoutes, StrategyPageRoutes, InvestRoutes]);
+  return useRoutes([
+    LandingPageRoutes, 
+    MyquantDashBoardRoutes,
+    MainRoutes, 
+    LoginRoutes, 
+    UserRoutes, 
+    StrategyPageRoutes, 
+    InvestRoutes]);
 }

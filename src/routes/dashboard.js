@@ -3,18 +3,17 @@ import Loadable from 'components/Loadable';
 
 const LandingPage = Loadable(lazy(() => import('pages/landing-page/LandingPage')));
 import MainLayout from 'layout/MainLayout';
-import MinimalLayout from 'layout/MinimalLayout/index';
 
 // render - dashboard
 const DashboardDefault = Loadable(lazy(() => import('pages/dashboard')));
-const LandingPageRoutes = {
-  path: '/home',
-  element: <MinimalLayout />,
+const MyquantDashBoardRoutes = {
+  path: '/',
+  element: <MainLayout />,
   children: [
     {
       path: '',
-      element: <LandingPage />
+      element: <DashboardDefault />
     }
   ]
 };
-export default LandingPageRoutes;
+export default MyquantDashBoardRoutes;
