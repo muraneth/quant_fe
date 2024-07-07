@@ -36,14 +36,14 @@ const SharpeRatioChart = ({ productSymbol }) => {
         const token = localStorage.getItem('token');
         const uid = localStorage.getItem('uid');
 
-        const response = await axios.get(`https://myquant.financial/api/product/getRollingSharpeRatio?product=${productSymbol}`, {
+        const response = await axios.get(`https://matrixcipher.com/api/product/getRollingSharpeRatio?product=${productSymbol}`, {
           headers: {
             Authorization: `${token}`,
             Uid: `${uid}`
           }
         });
 
-        const btcResponse = await axios.get('https://myquant.financial/api/common/getBTCSharpeRatio', {
+        const btcResponse = await axios.get('https://matrixcipher.com/api/common/getBTCSharpeRatio', {
           headers: {
             Authorization: `${token}`,
             Uid: `${uid}`

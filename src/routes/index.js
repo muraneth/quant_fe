@@ -7,9 +7,10 @@ import LandingPageRoutes from './LandingRoutes';
 import UserRoutes from './User';
 import StrategyPageRoutes from './StrategyRoutes';
 import InvestRoutes from './InvestRoutes';
+import AdminRoutes from './AdminRoutes';
 
 // import ProductRoutes from './Products';
 
 export default function ThemeRoutes() {
-  return useRoutes([LandingPageRoutes, MainRoutes, LoginRoutes, UserRoutes, StrategyPageRoutes, InvestRoutes]);
+  return useRoutes([AdminRoutes, LandingPageRoutes, MainRoutes, LoginRoutes, UserRoutes, StrategyPageRoutes, InvestRoutes]);
 }

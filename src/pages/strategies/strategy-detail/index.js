@@ -35,7 +35,7 @@ const StrategyDetail = () => {
   const [isInvestPopOpen, setIsInvestPopOpen] = useState(false);
   const [slot, setSlot] = useState('all');
 
-  const host = 'https://myquant.financial';
+  const host = 'https://matrixcipher.com';
   const { id } = useParams();
 
   useEffect(() => {

@@ -1,4 +1,4 @@
-version = 0.2.2
+version = 0.2.3_position
 container_name = quant_fe_pre_container
 image_name = quant_fe_pre:$(version)
 

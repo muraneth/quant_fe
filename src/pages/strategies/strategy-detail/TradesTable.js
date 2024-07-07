@@ -139,7 +139,7 @@ export default function TradeTable({ productId }) {
   const [trades, setTrades] = useState([]);
   useEffect(() => {
     const fetchTrades = async () => {
-      const url = `https://myquant.financial/api/product/getProductTrades?product=${productId}`;
+      const url = `https://matrixcipher.com/api/product/getProductTrades?product=${productId}`;
       try {
         const response = await axios.get(url);
         setTrades(response.data.data ? response.data.data : []);

@@ -3,7 +3,7 @@ import axios from 'axios';
 
 import { useState } from 'react';
 const Billing = () => {
-  const url = 'https://myquant.financial/api/user/asset/getDepositeAddress';
+  const url = 'https://matrixcipher.com/api/user/asset/getDepositeAddress';
 
   const token = localStorage.getItem('token');
   const uid = localStorage.getItem('uid');

@@ -24,7 +24,7 @@ const DashboardDefault = () => {
   const [userWeeklyCashFlowData, setUserWeeklyCashFlowData] = useState([]);
   const [authorization, setAuthorization] = useState(true);
   // const navigate = useNavigate();
-  const host = 'https://myquant.financial';
+  const host = 'https://matrixcipher.com';
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -42,7 +42,6 @@ const DashboardDefault = () => {
         setAuthorization(true);
       } catch (error) {
         console.error('Error fetching data:', error);
-        // navigate('/sign-in', { replace: true });
         setAuthorization(false);
       }
     };

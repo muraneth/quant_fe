@@ -63,7 +63,7 @@ const BalanceAraeChart = ({ slot }) => {
         const token = localStorage.getItem('token');
         const uid = localStorage.getItem('uid');
         const response = await axios.get(
-          `https://myquant.financial/api/user/asset/getAllHistoryCashFlow?uid=${uid}&startDate=${formattedStartDate}`,
+          `https://matrixcipher.com/api/user/asset/getAllHistoryCashFlow?uid=${uid}&startDate=${formattedStartDate}`,
           {
             headers: {
               Authorization: `${token}`,
