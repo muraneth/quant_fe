@@ -6,7 +6,7 @@ import { Box, Button, Grid, Stack, Typography, Divider } from '@mui/material';
 import Header from 'layout/MainLayout/Header/index';
 import axios from 'axios';
 
-const accounts = ['helen', 'mudidi', 'linda001', 'myquant_alpha', 'jizhou', 'mydreamy'];
+const accounts = ['helen', 'myquant_alpha', 'jizhou', 'mydreamy', 'linda001', 'mudidi'];
 const AdminPage = () => {
   return (
     <div>
@@ -15,21 +15,20 @@ const AdminPage = () => {
         Positions
       </Typography>
       {accounts.map((account, key) => (
-        <Box key={key} sx={{ pt: 1, m: 2, border: '2px dashed white' }} component="section">
+        <Box key={key} sx={{ pt: 1, m: 5, border: '2px  white' }} component="section">
           <PositionTable accountId={account} />
-          <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2, pt: 1 }}>
-            <Divider sx={{ borderColor: 'gray', width: '80%' }} />
-          </Box>
-          <Box sx={{ pt: 1, px: 5, border: '1px  grey' }}>
+
+          <Box sx={{ pt: 3, px: 5, border: '1px  grey' }}>
             <Typography variant="h7" component="div" sx={{ color: 'gray' }}>
               System Orders
             </Typography>
             <SystemOrderTable accountId={account} />
           </Box>
+          <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2, pt: 1 }}>
+            <Divider sx={{ borderColor: 'white', width: '120%' }} />
+          </Box>
         </Box>
       ))}
-
-      {/* <PositionTable productSymbol="exp" /> */}
     </div>
   );
 };

@@ -65,7 +65,7 @@ const StrategyCardNew = ({ strategy }) => {
         </Box>
 
         <Stack direction="row" spacing={2} sx={{ pt: 1, justifyContent: 'flex-end' }}>
-          <Button
+          {/* <Button
             variant="contained"
             sx={{
               mt: 2,
@@ -82,13 +82,12 @@ const StrategyCardNew = ({ strategy }) => {
             onClick={() => handleInvest(strategy.symbol)}
           >
             Invest
-          </Button>
+          </Button> */}
           <Button
             variant="outlined"
-            size="medium"
+            size="large"
             endIcon={<ChevronRightIcon />}
             sx={{ color: 'secondary.main' }}
-            // href={`/strategies/${strategy.symbol}`}
             onClick={() => handleClickInfo(strategy.symbol)}
           >
             Info

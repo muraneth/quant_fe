@@ -16,15 +16,15 @@ const StrategySummary = ({ overview, allocation, features }) => {
       </Grid>
       <Grid item xs={12}>
         <Typography variant="body1">
-          <strong>Allocation and Risk Management:</strong> {allocation}
+          <strong>Trading Pairs </strong> {allocation}
         </Typography>
       </Grid>
-
+      {/* 
       <Grid item xs={12}>
         <Typography variant="body1">
           <strong>Key Features:</strong> {features}
         </Typography>
-      </Grid>
+      </Grid> */}
     </Grid>
   );
 };

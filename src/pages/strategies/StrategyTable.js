@@ -297,7 +297,7 @@ export default function StrategyTable({ productId }) {
                       </Button>
                     </Stack> */}
                     <Stack direction="row" spacing={2} sx={{ pt: 1, justifyContent: 'flex-end' }}>
-                      <Button
+                      {/* <Button
                         variant="contained"
                         sx={{
                           mt: 2,
@@ -314,7 +314,7 @@ export default function StrategyTable({ productId }) {
                         onClick={() => handleInvest(row.symbol)}
                       >
                         Invest
-                      </Button>
+                      </Button> */}
                       <Button
                         variant="outlined"
                         size="medium"

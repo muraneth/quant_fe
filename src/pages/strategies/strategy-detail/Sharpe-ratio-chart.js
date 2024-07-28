@@ -70,6 +70,8 @@ const SharpeRatioChart = ({ productSymbol }) => {
 
     if (btcData.length > data.length) {
       padArrayAhead(data, btcData.length);
+    } else if (data.length > btcData.length) {
+      padArrayAhead(btcData, data.length);
     }
 
     setSeries([
@@ -93,7 +95,7 @@ const SharpeRatioChart = ({ productSymbol }) => {
       },
       colors: [green[500], error.light],
       xaxis: {
-        categories: btcData?.map((item) => item.key),
+        categories: btcData?.filter((item) => item !== null).map((item) => item.key),
         axisBorder: {
           show: true
         },

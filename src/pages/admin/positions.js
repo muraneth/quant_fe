@@ -12,7 +12,6 @@ import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import Alert from '@mui/material/Alert';
 import { useNavigate } from 'react-router-dom';
-import { use } from 'echarts';
 
 const columns = [
   { id: 'instId', label: 'Token', minWidth: 80, align: 'left', format: (value) => value.slice(0, -5) },
@@ -168,7 +167,7 @@ const PositionTable = ({ accountId }) => {
         <Typography variant="h5" component="div" sx={{ pl: 2 }}>
           {accountId}
         </Typography>
-        <Typography variant="body6" component="div" sx={{ pl: 2 }}>
+        <Typography variant="body6" component="div" sx={{ pl: 2, color: 'orange' }}>
           ( Balance: {balance.toFixed(2)}$)
         </Typography>
       </Stack>
@@ -195,7 +194,7 @@ const PositionTable = ({ accountId }) => {
                   {columns.map((column) => {
                     const value = row[column.id];
                     return (
-                      <TableCell key={column.id} align={column.align}>
+                      <TableCell key={column.id} align={column.align} sx={{ color: 'orange', fontSize: '1.1rem' }}>
                         {column.format ? column.format(value) : value}
                       </TableCell>
                     );

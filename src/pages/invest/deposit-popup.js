@@ -13,8 +13,10 @@ import {
   MenuItem,
   InputLabel,
   FormControl,
+  IconButton,
   Box
 } from '@mui/material';
+import TelegramIcon from '@mui/icons-material/Telegram';
 import { styled } from '@mui/system';
 import QRCode from 'qrcode';
 import axios from 'axios';
@@ -96,11 +98,10 @@ const DepositCryptoPopup = ({ open, handleClose }) => {
       <CustomDialog open={open} onClose={handleClose}>
         <DialogTitle>Deposit Crypto</DialogTitle>
         <StyledDialogContent>
-          <StyledFormControl>
+          {/* <StyledFormControl>
             <InputLabel>Coin</InputLabel>
             <Select value={coin} onChange={(e) => setCoin(e.target.value)}>
               <MenuItem value="USDT">USDT TetherUS</MenuItem>
-              {/* Add more coins as needed */}
             </Select>
           </StyledFormControl>
           <StyledFormControl>
@@ -112,7 +113,6 @@ const DepositCryptoPopup = ({ open, handleClose }) => {
                 </MenuItem>
               ))}
 
-              {/* Add more networks as needed */}
             </Select>
           </StyledFormControl>
           <TextField
@@ -127,7 +127,19 @@ const DepositCryptoPopup = ({ open, handleClose }) => {
           <Typography variant="body2" color="error">
             Only send Arbitrum One TetherUS tokens to this address
           </Typography>
-          <QRCodeImage src={qrCodeUrl} alt="QR Code" />
+          <QRCodeImage src={qrCodeUrl} alt="QR Code" /> */}
+          <Typography variant="body1" color="error">
+            Contact on Telegram for detail
+          </Typography>
+          <IconButton
+            color="inherit"
+            href="https://t.me/mura202211"
+            aria-label="Telegram"
+            sx={{ alignSelf: 'center', bgcolor: 'transparent' }}
+            size="small"
+          >
+            <TelegramIcon sx={{ px: 0.5 }} /> Telegram
+          </IconButton>
         </StyledDialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="primary">

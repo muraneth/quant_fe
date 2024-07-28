@@ -289,7 +289,7 @@ export default function SignIn() {
                 mt: 2
               }}
             >
-              <GoogleLogin onSuccess={handleGoogleLoginSuccess} onError={handleGoogleLoginError} useOneTap />
+              {/* <GoogleLogin onSuccess={handleGoogleLoginSuccess} onError={handleGoogleLoginError} useOneTap /> */}
             </Box>
           </Card>
         </Stack>

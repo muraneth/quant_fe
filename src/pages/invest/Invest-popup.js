@@ -13,8 +13,10 @@ import {
   Box,
   Link,
   Dialog,
-  InputLabel
+  InputLabel,
+  IconButton
 } from '@mui/material';
+import TelegramIcon from '@mui/icons-material/Telegram';
 
 import axios from 'axios';
 import { styled } from '@mui/system';
@@ -153,10 +155,16 @@ const InvestPopup = ({ open, handleClose, product }) => {
         <DialogContent>
           <Box sx={{ minWidth: 275 }}>
             <Typography variant="body4" component="div">
-              Incoming{' '}
-            </Typography>
-            <Typography variant="body4" component="div">
               Contact on Telegram: @mura202211
+              <IconButton
+                color="inherit"
+                href="https://t.me/mura202211"
+                aria-label="Telegram"
+                sx={{ alignSelf: 'center', bgcolor: 'transparent' }}
+                size="small"
+              >
+                <TelegramIcon sx={{ px: 0.5 }} /> Telegram
+              </IconButton>
             </Typography>
           </Box>
         </DialogContent>

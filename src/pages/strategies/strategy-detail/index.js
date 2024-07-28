@@ -20,6 +20,7 @@ import SharpeRatioChart from './Sharpe-ratio-chart';
 import ProfitLoseBarChart from './Profit-lose-chart';
 import VolatilityChart from './Volatility-chart';
 import MainArea from './Main-area';
+import NoAuthorityPage from 'pages/authentication/NoAuthority';
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -35,7 +36,25 @@ const StrategyDetail = () => {
   const [isInvestPopOpen, setIsInvestPopOpen] = useState(false);
   const [slot, setSlot] = useState('all');
 
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
   const host = 'https://matrixcipher.com';
+
+  useEffect(() => {
+    // Check if the user is logged in
+    const checkLoginStatus = () => {
+      // Replace this with your actual login check logic
+      const loggedIn = Boolean(localStorage.getItem('token') && localStorage.getItem('uid')); // Example: check if a token exists in localStorage
+      if (!loggedIn) {
+        navigate('/sign-in');
+        return;
+      }
+      setIsLoggedIn(true);
+    };
+
+    checkLoginStatus();
+  }, [navigate]);
+
   const { id } = useParams();
 
   useEffect(() => {
@@ -44,12 +63,17 @@ const StrategyDetail = () => {
       try {
         const response = await axios.get(url);
         setProductInfo(response.data.data);
+        // setAuthorization(true);
       } catch (error) {
         console.error(error);
+        // setAuthorization(false);
+        navigate('/sign-in');
       }
     };
-    fetchProduct();
-  }, [id]);
+    if (isLoggedIn) {
+      fetchProduct();
+    }
+  }, [id, isLoggedIn]);
 
   const handleInvest = () => {
     setIsInvestPopOpen(true);
@@ -101,6 +125,7 @@ const StrategyDetail = () => {
                   '&:hover': { bgcolor: 'secondary.light' }
                 }}
                 onClick={handleInvest}
+                disabled="true"
               >
                 Invest
               </Button>
@@ -117,9 +142,11 @@ const StrategyDetail = () => {
 
         <Grid item xs={12}>
           <StrategySummary
-            overview="This Strategy primarily engages with cryptocurrency pairs including ETH-USDT, PEPE-USDT, DOGE-USDT, and SOL-USDT, while retaining the flexibility to trade other pairs as market opportunities arise. This strategy is designed with a strong emphasis on risk management and consistent performance. "
-            allocation="The strategy employs a structured approach to allocation and risk management. It limits ETH-USDT exposure to a maximum of 50% of total capital, while other pairs are allocated up to 30% each. Leverage, though occasionally surpassing 100% with multiple positions, generally stays below 50%, maintaining a conservative risk profile that balances potential returns with controlled market exposure."
-            features="Diversifies  spreads risk across multiple cryptocurrency pairs, flexibility that adapts to market conditions by incorporating additional pairs when advantageous, controlled leverage, which maintains leverage at safe levels, ensuring stability and minimizing risk, and strong performance metrics such as a high Sharpe ratio and low drawdown, indicating effective risk-adjusted returns."
+            overview={productInfo?.description}
+            allocation={productInfo?.coin_pairs}
+            // overview="This Strategy primarily engages with cryptocurrency pairs including ETH-USDT, PEPE-USDT, DOGE-USDT, and SOL-USDT, while retaining the flexibility to trade other pairs as market opportunities arise. This strategy is designed with a strong emphasis on risk management and consistent performance. "
+            // allocation="The strategy employs a structured approach to allocation and risk management. It limits ETH-USDT exposure to a maximum of 50% of total capital, while other pairs are allocated up to 30% each. Leverage, though occasionally surpassing 100% with multiple positions, generally stays below 50%, maintaining a conservative risk profile that balances potential returns with controlled market exposure."
+            // features="Diversifies  spreads risk across multiple cryptocurrency pairs, flexibility that adapts to market conditions by incorporating additional pairs when advantageous, controlled leverage, which maintains leverage at safe levels, ensuring stability and minimizing risk, and strong performance metrics such as a high Sharpe ratio and low drawdown, indicating effective risk-adjusted returns."
           />
         </Grid>
         <Grid item xs={12}>
