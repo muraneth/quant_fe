@@ -40,20 +40,20 @@ const StrategyDetail = () => {
 
   const host = 'https://matrixcipher.com';
 
-  useEffect(() => {
-    // Check if the user is logged in
-    const checkLoginStatus = () => {
-      // Replace this with your actual login check logic
-      const loggedIn = Boolean(localStorage.getItem('token') && localStorage.getItem('uid')); // Example: check if a token exists in localStorage
-      if (!loggedIn) {
-        navigate('/sign-in');
-        return;
-      }
-      setIsLoggedIn(true);
-    };
+  // useEffect(() => {
+  //   // Check if the user is logged in
+  //   const checkLoginStatus = () => {
+  //     // Replace this with your actual login check logic
+  //     const loggedIn = Boolean(localStorage.getItem('token') && localStorage.getItem('uid')); // Example: check if a token exists in localStorage
+  //     if (!loggedIn) {
+  //       navigate('/sign-in');
+  //       return;
+  //     }
+  //     setIsLoggedIn(true);
+  //   };
 
-    checkLoginStatus();
-  }, [navigate]);
+  //   checkLoginStatus();
+  // }, [navigate]);
 
   const { id } = useParams();
 
@@ -67,13 +67,12 @@ const StrategyDetail = () => {
       } catch (error) {
         console.error(error);
         // setAuthorization(false);
-        navigate('/sign-in');
+        // navigate('/sign-in');
       }
     };
-    if (isLoggedIn) {
-      fetchProduct();
-    }
-  }, [id, isLoggedIn]);
+
+    fetchProduct();
+  }, [id]);
 
   const handleInvest = () => {
     setIsInvestPopOpen(true);

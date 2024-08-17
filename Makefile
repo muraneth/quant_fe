@@ -13,7 +13,7 @@ pull:
 
 # Uncomment the line below if you need to run a build command
 build:
-	npm install
+	# npm install
 	npm run build
 
 build-docker: build
