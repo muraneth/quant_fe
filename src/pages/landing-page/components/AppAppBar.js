@@ -139,6 +139,9 @@ function AppAppBar({ mode, toggleColorMode }) {
               {/* <Button variant="text" color="primary" size="large">
                 Community
               </Button> */}
+              <Button variant="text" color="primary" size="large" href="/analyze/">
+                Analyze
+              </Button>
               <div>
                 <Button
                   variant="text"
