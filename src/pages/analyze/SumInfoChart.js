@@ -34,7 +34,7 @@ const areaChartOptions = {
 
 // ==============================|| INCOME AREA CHART ||============================== //
 
-const WalletChart = ({ lower_balance, upper_balance }) => {
+const SumInfoChart = () => {
   const theme = useTheme();
 
   const { secondary } = theme.palette.text;
@@ -50,16 +50,13 @@ const WalletChart = ({ lower_balance, upper_balance }) => {
         const startDate = new Date();
 
         const postData = {
-          contract_address: '0x8ed97a637a790be1feff5e888d43629dc05408f6',
-          upper_balance: upper_balance,
-          lower_balance: lower_balance
+          contract_address: '0x8ed97a637a790be1feff5e888d43629dc05408f6'
         };
-        const formattedStartDate = startDate.toISOString().slice(0, 10);
 
         const token = localStorage.getItem('token');
         const uid = localStorage.getItem('uid');
 
-        const response = await axios.post(`http://127.0.0.1:5005/api/data/getTokenHolder`, postData, {
+        const response = await axios.post(`http://127.0.0.1:5005/api/data/getSumInfoByToken`, postData, {
           headers: {
             Authorization: `${token}`,
             Uid: `${uid}`
@@ -73,7 +70,7 @@ const WalletChart = ({ lower_balance, upper_balance }) => {
     };
 
     fetchData();
-  }, [lower_balance, upper_balance]);
+  }, []);
 
   useEffect(() => {
     userDailyCashFlowData.slice(-1)[0]?.acum_pnl_ratio < 0 ? setChartColor([orange[500]]) : setChartColor([green[500]]);
@@ -97,16 +94,25 @@ const WalletChart = ({ lower_balance, upper_balance }) => {
         },
         tickAmount: 20
       },
-      yaxis: {
-        labels: {
-          style: {
-            colors: [secondary]
-          },
-          formatter: function (val) {
-            return val + '%'; // Adding '%' symbol to y-axis labels
+      yaxis: [
+        {
+          labels: {
+            style: {
+              colors: [secondary]
+            },
+            formatter: function (val) {
+              return val + '%'; // Adding '%' symbol to y-axis labels
+            }
+          }
+        },
+
+        {
+          opposite: true,
+          title: {
+            text: 'Series B'
           }
         }
-      },
+      ],
       grid: {
         borderColor: '#445661'
       },
@@ -126,8 +132,14 @@ const WalletChart = ({ lower_balance, upper_balance }) => {
   useEffect(() => {
     setSeries([
       {
-        name: 'Acum PNL Ratio',
-        data: userDailyCashFlowData.map((item) => item.count)
+        name: 'avg cost',
+        type: 'area',
+        data: userDailyCashFlowData.map((item) => item.avg_cost)
+      },
+      {
+        name: 'price',
+        type: 'area',
+        data: userDailyCashFlowData.map((item) => item.idx_price)
       }
     ]);
   }, [userDailyCashFlowData]);
@@ -135,8 +147,8 @@ const WalletChart = ({ lower_balance, upper_balance }) => {
   return <ReactApexChart options={options} series={series} type="area" height={450} />;
 };
 
-WalletChart.propTypes = {
+SumInfoChart.propTypes = {
   slot: PropTypes.string
 };
 
-export default WalletChart;
+export default SumInfoChart;
