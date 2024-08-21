@@ -34,7 +34,7 @@ const areaChartOptions = {
 
 // ==============================|| INCOME AREA CHART ||============================== //
 
-const ExchangeBalanceChart = () => {
+const MVRVChart = () => {
   const theme = useTheme();
 
   const { secondary } = theme.palette.text;
@@ -56,7 +56,7 @@ const ExchangeBalanceChart = () => {
         const token = localStorage.getItem('token');
         const uid = localStorage.getItem('uid');
 
-        const response = await axios.post(`http://127.0.0.1:5005/api/data/GetTokenOnExchangeInfo`, postData, {
+        const response = await axios.post(`http://127.0.0.1:5005/api/data/getSumInfoByToken`, postData, {
           headers: {
             Authorization: `${token}`,
             Uid: `${uid}`
@@ -71,10 +71,6 @@ const ExchangeBalanceChart = () => {
 
     fetchData();
   }, []);
-
-  // useEffect(() => {
-  //   userDailyCashFlowData.slice(-1)[0]?.acum_pnl_ratio < 0 ? setChartColor([orange[500]]) : setChartColor([green[500]]);
-  // }, [userDailyCashFlowData]);
 
   useEffect(() => {
     setOptions((prevState) => ({
@@ -101,7 +97,7 @@ const ExchangeBalanceChart = () => {
               colors: [secondary]
             },
             formatter: function (val) {
-              return val + '%'; // Adding '%' symbol to y-axis labels
+              return val; // Adding '%' symbol to y-axis labels
             }
           }
         },
@@ -120,7 +116,7 @@ const ExchangeBalanceChart = () => {
         theme: 'dark',
         y: {
           formatter: function (val) {
-            return val + '%'; // Adding '%' symbol after the data
+            return val; // Adding '%' symbol after the data
           }
         }
       }
@@ -131,20 +127,15 @@ const ExchangeBalanceChart = () => {
 
   useEffect(() => {
     setSeries([
-      //   {
-      //     name: 'Exchange balance',
-      //     type: 'area',
-      //     data: userDailyCashFlowData.map((item) => item.total_value)
-      //   },
+      {
+        name: 'MVRV',
+        type: 'area',
+        data: userDailyCashFlowData.map((item) => item.mvrv)
+      },
       {
         name: 'price',
         type: 'area',
         data: userDailyCashFlowData.map((item) => item.idx_price)
-      },
-      {
-        name: 'Exchange tokern balance',
-        type: 'area',
-        data: userDailyCashFlowData.map((item) => item.balance_token)
       }
     ]);
   }, [userDailyCashFlowData]);
@@ -152,8 +143,8 @@ const ExchangeBalanceChart = () => {
   return <ReactApexChart options={options} series={series} type="area" height={450} />;
 };
 
-ExchangeBalanceChart.propTypes = {
+MVRVChart.propTypes = {
   slot: PropTypes.string
 };
 
-export default ExchangeBalanceChart;
+export default MVRVChart;

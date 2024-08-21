@@ -1,10 +1,12 @@
 /* eslint-disable no-unused-vars */
 
 import AraeChart from './AreaChart';
+import ExchangeBalanceChart from './ExchangeChart';
 import NUPLChart from './NUPLChart';
 import SumInfoChart from './SumInfoChart';
 import TokenProfitAndLossChart from './TokenProfitAndLossChart';
 import WalletChart from './WalletChart';
+import MVRVChart from './MVRVChart';
 
 export default function AnalyzePage() {
   return (
@@ -19,7 +21,11 @@ export default function AnalyzePage() {
       <SumInfoChart />
       <div>NUPL</div>
       <NUPLChart />
+      --MVRV--
+      <MVRVChart />
       <TokenProfitAndLossChart />
+      -- exchange --
+      <ExchangeBalanceChart />
     </div>
   );
 }

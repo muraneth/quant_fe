@@ -51,7 +51,7 @@ const AraeChart2 = () => {
 
         const postData = {
           contract_address: '0x8ed97a637a790be1feff5e888d43629dc05408f6',
-          wallet_address: '0x000000fee13a103a10d593b9ae06b3e05f2e7e1c'.toLowerCase()
+          wallet_address: '0xcb2116dC5C94a47A1493dC70208eE41C1237b6CD'.toLowerCase()
         };
         const formattedStartDate = startDate.toISOString().slice(0, 10);
 
@@ -74,9 +74,9 @@ const AraeChart2 = () => {
     fetchData();
   }, []);
 
-  useEffect(() => {
-    userDailyCashFlowData.slice(-1)[0]?.acum_pnl_ratio < 0 ? setChartColor([orange[500]]) : setChartColor([green[500]]);
-  }, [userDailyCashFlowData]);
+  // useEffect(() => {
+  //   userDailyCashFlowData.slice(-1)[0]?.acum_pnl_ratio < 0 ? setChartColor([orange[500]]) : setChartColor([green[500]]);
+  // }, [userDailyCashFlowData]);
 
   useEffect(() => {
     setOptions((prevState) => ({

@@ -72,9 +72,9 @@ const SumInfoChart = () => {
     fetchData();
   }, []);
 
-  useEffect(() => {
-    userDailyCashFlowData.slice(-1)[0]?.acum_pnl_ratio < 0 ? setChartColor([orange[500]]) : setChartColor([green[500]]);
-  }, [userDailyCashFlowData]);
+  // useEffect(() => {
+  //   userDailyCashFlowData.slice(-1)[0]?.acum_pnl_ratio < 0 ? setChartColor([orange[500]]) : setChartColor([green[500]]);
+  // }, [userDailyCashFlowData]);
 
   useEffect(() => {
     setOptions((prevState) => ({
