@@ -8,6 +8,24 @@ import menuItem from 'menu-items';
 // ==============================|| DRAWER CONTENT - NAVIGATION ||============================== //
 
 const Navigation = () => {
+  const [menuItems, setMenuItems] = useState([]);
+
+  useEffect(() => {
+    fetchMenuItems();
+  }, []);
+
+  const fetchMenuItems = async () => {
+    try {
+      const response = await fetch('your_api_endpoint_here');
+      const data = await response.json();
+      setMenuItems(data.data); // Assuming the API returns an object with an 'items' array
+    } catch (error) {
+      console.error('Error fetching menu items:', error);
+      // Optionally, set some default menu items or show an error message
+    }
+  };
+
+
   const navGroups = menuItem.items.map((item) => {
     switch (item.type) {
       case 'group':
