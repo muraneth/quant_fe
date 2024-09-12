@@ -16,9 +16,10 @@ const Navigation = () => {
 
   const fetchMenuItems = async () => {
     try {
-      const response = await fetch('your_api_endpoint_here');
+      const response = await fetch('http://127.0.0.1:5005/api/data/menu');
       const data = await response.json();
-      setMenuItems(data.data); // Assuming the API returns an object with an 'items' array
+      setMenuItems(data.data); 
+      // Assuming the API returns an object with an 'items' array
     } catch (error) {
       console.error('Error fetching menu items:', error);
       // Optionally, set some default menu items or show an error message
