@@ -5,11 +5,15 @@ import MinimalLayout from 'layout/MinimalLayout/index';
 
 const AnalyzePage = Loadable(lazy(() => import('pages/analyze')));
 const AnalyzePageRoutes = {
-  path: '/',
-  element: <MinimalLayout />,
+  path: '/analyze',
+  element: <MainLayout />,
   children: [
     {
-      path: 'analyze',
+      path: '',
+      element: <AnalyzePage />
+    },
+    {
+      path: 'chart/:id',
       element: <AnalyzePage />
     }
   ]

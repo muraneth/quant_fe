@@ -1,30 +1,26 @@
 /* eslint-disable no-unused-vars */
 import PropTypes from 'prop-types';
 import { useState, useEffect } from 'react';
-
-// material-ui
 import { useTheme } from '@mui/material/styles';
 import { common, green, orange } from '@mui/material/colors';
-
-// third-party
 import ReactApexChart from 'react-apexcharts';
 import axios from 'axios';
 
 // chart options
 const areaChartOptions = {
-  chart: {
-    height: 450,
-    type: 'area',
-    toolbar: {
-      show: false
-    }
-  },
+  // chart: {
+  //   height: 450,
+  //   type: 'line',
+  //   toolbar: {
+  //     show: false
+  //   }
+  // },
   dataLabels: {
     enabled: false
   },
   stroke: {
     curve: 'smooth',
-    width: 1
+    width: 2
   },
   grid: {
     strokeDashArray: 0,
@@ -32,9 +28,7 @@ const areaChartOptions = {
   }
 };
 
-// ==============================|| INCOME AREA CHART ||============================== //
-
-const WalletChart = ({ lower_balance, upper_balance }) => {
+const WalletChart = ({ symbol,chart }) => {
   const theme = useTheme();
 
   const { secondary } = theme.palette.text;
@@ -50,16 +44,16 @@ const WalletChart = ({ lower_balance, upper_balance }) => {
         const startDate = new Date();
 
         const postData = {
-          contract_address: '0x8ed97a637a790be1feff5e888d43629dc05408f6',
-          upper_balance: upper_balance,
-          lower_balance: lower_balance
+        
+          token_symbol: symbol,
+          chart_label: chart
         };
         const formattedStartDate = startDate.toISOString().slice(0, 10);
 
         const token = localStorage.getItem('token');
         const uid = localStorage.getItem('uid');
 
-        const response = await axios.post(`http://127.0.0.1:5005/api/data/getTokenHolder`, postData, {
+        const response = await axios.post(`http://127.0.0.1:5005/api/data/chart`, postData, {
           headers: {
             Authorization: `${token}`,
             Uid: `${uid}`
@@ -73,7 +67,7 @@ const WalletChart = ({ lower_balance, upper_balance }) => {
     };
 
     fetchData();
-  }, [lower_balance, upper_balance]);
+  }, [symbol, chart]);
 
   useEffect(() => {
     userDailyCashFlowData.slice(-1)[0]?.acum_pnl_ratio < 0 ? setChartColor([orange[500]]) : setChartColor([green[500]]);
@@ -97,16 +91,25 @@ const WalletChart = ({ lower_balance, upper_balance }) => {
         },
         tickAmount: 20
       },
-      yaxis: {
-        labels: {
-          style: {
-            colors: [secondary]
-          },
-          formatter: function (val) {
-            return val + '%'; // Adding '%' symbol to y-axis labels
+     
+      yaxis: [
+        {
+          labels: {
+            style: {
+              colors: [secondary]
+            },
+            formatter: function (val) {
+              return val; // Adding '%' symbol to y-axis labels
+            }
+          }
+        },
+        {
+          opposite: true,
+          title: {
+            text: 'Series B'
           }
         }
-      },
+      ],
       grid: {
         borderColor: '#445661'
       },
@@ -126,8 +129,15 @@ const WalletChart = ({ lower_balance, upper_balance }) => {
   useEffect(() => {
     setSeries([
       {
-        name: 'Acum PNL Ratio',
-        data: userDailyCashFlowData.map((item) => item.count)
+        name: chart,
+        type: 'area',
+        data: userDailyCashFlowData.map((item) => item.value)
+      },
+      {
+        name: 'price',
+        type: 'line',
+        data: userDailyCashFlowData.map((item) => item.price),
+      
       }
     ]);
   }, [userDailyCashFlowData]);

@@ -1,33 +1,38 @@
 // material-ui
 import { Box, Typography } from '@mui/material';
+import { useState, useEffect } from 'react';
 
 // project import
 import NavGroup from './NavGroup';
 import menuItem from 'menu-items';
+import { useLocation } from 'react-router-dom';
+import axios from 'axios';
 
 // ==============================|| DRAWER CONTENT - NAVIGATION ||============================== //
 
 const Navigation = () => {
-  const [menuItems, setMenuItems] = useState([]);
+  const [menuItems, setMenuItems] = useState(menuItem.items);
+  const location = useLocation();
 
   useEffect(() => {
-    fetchMenuItems();
-  }, []);
+    if (location.pathname.includes('/analyze/')) {
+      console.log('fetching menu items');
+      
+      fetchMenuItems();
+    }
+  }, [location.pathname]);
 
   const fetchMenuItems = async () => {
     try {
-      const response = await fetch('http://127.0.0.1:5005/api/data/menu');
-      const data = await response.json();
-      setMenuItems(data.data); 
-      // Assuming the API returns an object with an 'items' array
+      const response =await axios.get('http://127.0.0.1:5005/api/data/menu');
+      setMenuItems(response.data.data); 
     } catch (error) {
       console.error('Error fetching menu items:', error);
-      // Optionally, set some default menu items or show an error message
     }
   };
 
 
-  const navGroups = menuItem.items.map((item) => {
+  const navGroups = menuItems.map((item) => {
     switch (item.type) {
       case 'group':
         return <NavGroup key={item.id} item={item} />;
