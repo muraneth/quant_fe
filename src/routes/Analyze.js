@@ -9,11 +9,15 @@ const AnalyzePageRoutes = {
   element: <MainLayout />,
   children: [
     {
-      path: '',
+      path: 'chart',
       element: <AnalyzePage />
     },
     {
       path: 'chart/:id',
+      element: <AnalyzePage />
+    },
+    {
+      path: 'topwallet',
       element: <AnalyzePage />
     }
   ]

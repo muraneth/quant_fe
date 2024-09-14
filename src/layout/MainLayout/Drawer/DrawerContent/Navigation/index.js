@@ -25,7 +25,22 @@ const Navigation = () => {
   const fetchMenuItems = async () => {
     try {
       const response =await axios.get('http://127.0.0.1:5005/api/data/menu');
-      setMenuItems(response.data.data); 
+      const chartMenu = response.data.data;
+      const walletItem = {
+        id: 'topwallet',
+        title: 'TopWallet',
+        type: 'group',
+        children: [
+        {
+          id: 'topwallet',
+          title: 'TopWallet',
+          type: 'item',
+          url: '/analyze/topwallet',
+        }
+        ]
+      }
+      chartMenu.push(walletItem);
+      setMenuItems(chartMenu);
     } catch (error) {
       console.error('Error fetching menu items:', error);
     }
