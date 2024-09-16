@@ -1,30 +1,19 @@
 /* eslint-disable no-unused-vars */
 import PropTypes from 'prop-types';
 import { useState, useEffect } from 'react';
-
-// material-ui
 import { useTheme } from '@mui/material/styles';
 import { common, green, orange } from '@mui/material/colors';
-
-// third-party
 import ReactApexChart from 'react-apexcharts';
 import axios from 'axios';
 
 // chart options
 const areaChartOptions = {
-  chart: {
-    height: 450,
-    type: 'area',
-    toolbar: {
-      show: false
-    }
-  },
   dataLabels: {
     enabled: false
   },
   stroke: {
     curve: 'smooth',
-    width: 1
+    width: 2
   },
   grid: {
     strokeDashArray: 0,
@@ -32,9 +21,7 @@ const areaChartOptions = {
   }
 };
 
-// ==============================|| INCOME AREA CHART ||============================== //
-
-const MVRVChart = () => {
+const BalanceChart = ({ chartData, dataKey }) => {
   const theme = useTheme();
 
   const { secondary } = theme.palette.text;
@@ -42,42 +29,20 @@ const MVRVChart = () => {
 
   const [options, setOptions] = useState(areaChartOptions);
   const [chartColor, setChartColor] = useState([green[500]]);
-  const [userDailyCashFlowData, setUserDailyCashFlowData] = useState([]);
+  const [series, setSeries] = useState([]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const startDate = new Date();
+    // If chartData is undefined or empty, avoid running the logic
+    if (!chartData || chartData.length === 0) {
+      return;
+    }
 
-        const postData = {
-          contract_address: '0x8ed97a637a790be1feff5e888d43629dc05408f6'
-        };
-
-        const token = localStorage.getItem('token');
-        const uid = localStorage.getItem('uid');
-
-        const response = await axios.post(`http://127.0.0.1:5005/api/data/getSumInfoByToken`, postData, {
-          headers: {
-            Authorization: `${token}`,
-            Uid: `${uid}`
-          }
-        });
-
-        setUserDailyCashFlowData(response.data.data);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  useEffect(() => {
+    // Update chart options
     setOptions((prevState) => ({
       ...prevState,
       colors: chartColor,
       xaxis: {
-        categories: userDailyCashFlowData.map((item) => item.day),
+        categories: chartData.map((item) => item.day),
 
         axisBorder: {
           show: true,
@@ -97,15 +62,14 @@ const MVRVChart = () => {
               colors: [secondary]
             },
             formatter: function (val) {
-              return val; // Adding '%' symbol to y-axis labels
+              return val;
             }
           }
         },
-
         {
           opposite: true,
           title: {
-            text: 'Series B'
+            text: 'Price'
           }
         }
       ],
@@ -116,35 +80,38 @@ const MVRVChart = () => {
         theme: 'dark',
         y: {
           formatter: function (val) {
-            return val; // Adding '%' symbol after the data
+            return val;
           }
         }
       }
     }));
-  }, [userDailyCashFlowData, chartColor]);
 
-  const [series, setSeries] = useState([]);
-
-  useEffect(() => {
+    // Update chart series
     setSeries([
       {
-        name: 'MVRV',
+        name: `${dataKey}`,
         type: 'area',
-        data: userDailyCashFlowData.map((item) => item.mvrv)
+        data: chartData.map((item) => item[dataKey] || 0)
       },
       {
         name: 'price',
-        type: 'area',
-        data: userDailyCashFlowData.map((item) => item.idx_price)
+        type: 'line',
+        data: chartData.map((item) => item.idx_price)
       }
     ]);
-  }, [userDailyCashFlowData]);
+  }, [chartData, dataKey, chartColor, line, secondary]);
 
   return <ReactApexChart options={options} series={series} type="area" height={450} />;
 };
 
-MVRVChart.propTypes = {
-  slot: PropTypes.string
+BalanceChart.propTypes = {
+  chartData: PropTypes.arrayOf(
+    PropTypes.shape({
+      day: PropTypes.string.isRequired,
+      idx_price: PropTypes.number.isRequired
+    })
+  ).isRequired,
+  dataKey: PropTypes.string.isRequired
 };
 
-export default MVRVChart;
+export default BalanceChart;

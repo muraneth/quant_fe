@@ -19,12 +19,13 @@ const Logo = () => {
     /**
      * if you want to use image instead of svg uncomment following, and comment out <svg> element.
      *
-     * 
+     *
      *
      */
     // <img src={logo} alt="Mantis" width="100%" />
-    <Typography component="span"
-    variant="h5" > M&Y Quant</Typography>
+    <Typography component="span" variant="h5">
+      MatrixCipher
+    </Typography>
     // <>
     //   <svg width="118" height="35" viewBox="0 0 118 35" fill="none" xmlns="http://www.w3.org/2000/svg">
     //     <path

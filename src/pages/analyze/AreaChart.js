@@ -5,6 +5,7 @@ import { useTheme } from '@mui/material/styles';
 import { common, green, orange } from '@mui/material/colors';
 import ReactApexChart from 'react-apexcharts';
 import axios from 'axios';
+import { set } from 'lodash';
 
 // chart options
 const areaChartOptions = {
@@ -28,7 +29,7 @@ const areaChartOptions = {
   }
 };
 
-const WalletChart = ({ symbol,chart }) => {
+const WalletChart = ({ symbol, chart }) => {
   const theme = useTheme();
 
   const { secondary } = theme.palette.text;
@@ -36,7 +37,7 @@ const WalletChart = ({ symbol,chart }) => {
 
   const [options, setOptions] = useState(areaChartOptions);
   const [chartColor, setChartColor] = useState([green[500]]);
-  const [userDailyCashFlowData, setUserDailyCashFlowData] = useState([]);
+  const [chartData, setChartData] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -44,7 +45,6 @@ const WalletChart = ({ symbol,chart }) => {
         const startDate = new Date();
 
         const postData = {
-        
           token_symbol: symbol,
           chart_label: chart
         };
@@ -59,9 +59,9 @@ const WalletChart = ({ symbol,chart }) => {
             Uid: `${uid}`
           }
         });
-
-        setUserDailyCashFlowData(response.data.data);
+        setChartData(response.data.data ? response.data.data : []);
       } catch (error) {
+        setChartData([]);
         console.error('Error fetching data:', error);
       }
     };
@@ -69,16 +69,16 @@ const WalletChart = ({ symbol,chart }) => {
     fetchData();
   }, [symbol, chart]);
 
-  useEffect(() => {
-    userDailyCashFlowData.slice(-1)[0]?.acum_pnl_ratio < 0 ? setChartColor([orange[500]]) : setChartColor([green[500]]);
-  }, [userDailyCashFlowData]);
+  // useEffect(() => {
+  //   userDailyCashFlowData.slice(-1)[0]?.acum_pnl_ratio < 0 ? setChartColor([orange[500]]) : setChartColor([green[500]]);
+  // }, [userDailyCashFlowData]);
 
   useEffect(() => {
     setOptions((prevState) => ({
       ...prevState,
       colors: chartColor,
       xaxis: {
-        categories: userDailyCashFlowData.map((item) => item.day),
+        categories: chartData.map((item) => item.day),
 
         axisBorder: {
           show: true,
@@ -91,7 +91,7 @@ const WalletChart = ({ symbol,chart }) => {
         },
         tickAmount: 20
       },
-     
+
       yaxis: [
         {
           labels: {
@@ -122,7 +122,7 @@ const WalletChart = ({ symbol,chart }) => {
         }
       }
     }));
-  }, [userDailyCashFlowData, chartColor]);
+  }, [chartData, chartColor]);
 
   const [series, setSeries] = useState([]);
 
@@ -131,16 +131,15 @@ const WalletChart = ({ symbol,chart }) => {
       {
         name: chart,
         type: 'area',
-        data: userDailyCashFlowData.map((item) => item.value)
+        data: chartData.map((item) => item.value)
       },
       {
         name: 'price',
         type: 'line',
-        data: userDailyCashFlowData.map((item) => item.price),
-      
+        data: chartData.map((item) => item.price)
       }
     ]);
-  }, [userDailyCashFlowData]);
+  }, [chartData]);
 
   return <ReactApexChart options={options} series={series} type="area" height={450} />;
 };

@@ -1,24 +1,29 @@
 import { lazy } from 'react';
 import Loadable from 'components/Loadable';
-import MainLayout from 'layout/MainLayout';
+import MainLayout from 'layout/ChartLayout';
 import MinimalLayout from 'layout/MinimalLayout/index';
 
-const AnalyzePage = Loadable(lazy(() => import('pages/analyze')));
+const ChartPage = Loadable(lazy(() => import('pages/analyze')));
+const WalletDetailPage = Loadable(lazy(() => import('pages/wallet-detail')));
 const AnalyzePageRoutes = {
   path: '/analyze',
   element: <MainLayout />,
   children: [
     {
-      path: 'chart',
-      element: <AnalyzePage />
+      path: ':symbol/chart',
+      element: <ChartPage />
     },
     {
-      path: 'chart/:id',
-      element: <AnalyzePage />
+      path: ':symbol/chart/:chartId',
+      element: <ChartPage />
     },
     {
-      path: 'topwallet',
-      element: <AnalyzePage />
+      path: ':symbol/topwallet',
+      element: <ChartPage />
+    },
+    {
+      path: ':symbol/wallet/:wallet',
+      element: <WalletDetailPage />
     }
   ]
 };

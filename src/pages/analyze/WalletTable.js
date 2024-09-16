@@ -5,6 +5,7 @@ import { Box, Stack, Table, TableBody, TableCell, TableContainer, TableHead, Tab
 import { NumericFormat } from 'react-number-format';
 import Dot from 'components/@extended/Dot';
 import axios from 'axios';
+import { useParams } from 'react-router-dom';
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -137,6 +138,8 @@ export default function WalletTable() {
   const [orderBy] = useState('balance');
   const [selected] = useState([]);
   const [data, setData] = useState([]);
+  const { symbol } = useParams();
+
   useEffect(() => {
     const fetchTrades = async () => {
       const token = localStorage.getItem('token');
@@ -144,8 +147,8 @@ export default function WalletTable() {
       const url = `http://127.0.0.1:5005/api/data/topWallet`;
       try {
         const postData = {
-          token_symbol: "NPC",
-          order_by:"balance",
+          token_symbol: `${symbol}`,
+          order_by: 'balance'
         };
         const response = await axios.post(url, postData, {
           headers: {
@@ -159,7 +162,7 @@ export default function WalletTable() {
       }
     };
     fetchTrades();
-  }, []);
+  }, [symbol]);
 
   const isSelected = (trackingNo) => selected.indexOf(trackingNo) !== -1;
 
