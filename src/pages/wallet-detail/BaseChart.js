@@ -20,7 +20,10 @@ const areaChartOptions = {
     borderColor: '#90A4AE'
   }
 };
-
+function isNotSeperatePrice(dataKey) {
+  const items = ['avg_cost'];
+  return items.includes(dataKey);
+}
 const BalanceChart = ({ chartData, dataKey }) => {
   const theme = useTheme();
 
@@ -62,17 +65,28 @@ const BalanceChart = ({ chartData, dataKey }) => {
               colors: [secondary]
             },
             formatter: function (val) {
-              return val;
+              return val; // Formatting Y-axis labels
             }
+          },
+          title: {
+            text: 'Value & Price'
           }
         },
-        {
+        isNotSeperatePrice(dataKey) === false && {
           opposite: true,
+          labels: {
+            style: {
+              colors: [secondary]
+            },
+            formatter: function (val) {
+              return val;
+            }
+          },
           title: {
             text: 'Price'
           }
         }
-      ],
+      ].filter(Boolean),
       grid: {
         borderColor: '#445661'
       },

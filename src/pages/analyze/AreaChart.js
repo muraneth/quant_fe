@@ -5,17 +5,12 @@ import { useTheme } from '@mui/material/styles';
 import { common, green, orange } from '@mui/material/colors';
 import ReactApexChart from 'react-apexcharts';
 import axios from 'axios';
-import { set } from 'lodash';
+import { Switch, FormControlLabel } from '@mui/material';
+
+const SMALL_VALUE = 1e-10; // Small value to replace 0s
 
 // chart options
 const areaChartOptions = {
-  // chart: {
-  //   height: 450,
-  //   type: 'line',
-  //   toolbar: {
-  //     show: false
-  //   }
-  // },
   dataLabels: {
     enabled: false
   },
@@ -28,6 +23,10 @@ const areaChartOptions = {
     borderColor: '#90A4AE'
   }
 };
+function isNotSeperatePrice(chart) {
+  const items = ['avgCost'];
+  return items.includes(chart);
+}
 
 const WalletChart = ({ symbol, chart }) => {
   const theme = useTheme();
@@ -38,6 +37,8 @@ const WalletChart = ({ symbol, chart }) => {
   const [options, setOptions] = useState(areaChartOptions);
   const [chartColor, setChartColor] = useState([green[500]]);
   const [chartData, setChartData] = useState([]);
+
+  const [logScale, setLogScale] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -69,16 +70,12 @@ const WalletChart = ({ symbol, chart }) => {
     fetchData();
   }, [symbol, chart]);
 
-  // useEffect(() => {
-  //   userDailyCashFlowData.slice(-1)[0]?.acum_pnl_ratio < 0 ? setChartColor([orange[500]]) : setChartColor([green[500]]);
-  // }, [userDailyCashFlowData]);
-
   useEffect(() => {
     setOptions((prevState) => ({
       ...prevState,
       colors: chartColor,
       xaxis: {
-        categories: chartData.map((item) => item.day),
+        categories: chartData.map((item) => item.time),
 
         axisBorder: {
           show: true,
@@ -99,17 +96,30 @@ const WalletChart = ({ symbol, chart }) => {
               colors: [secondary]
             },
             formatter: function (val) {
-              return val; // Adding '%' symbol to y-axis labels
+              return val; // Formatting Y-axis labels
             }
-          }
-        },
-        {
-          opposite: true,
+          },
           title: {
-            text: 'Series B'
+            text: 'Value & Price'
+          },
+          logarithmic: logScale
+        },
+        isNotSeperatePrice(chart) === false && {
+          opposite: true,
+          labels: {
+            style: {
+              colors: [secondary]
+            },
+            formatter: function (val) {
+              return val;
+            }
+          },
+          title: {
+            text: 'Price'
           }
+          // logarithmic: logScale
         }
-      ],
+      ].filter(Boolean),
       grid: {
         borderColor: '#445661'
       },
@@ -117,31 +127,48 @@ const WalletChart = ({ symbol, chart }) => {
         theme: 'dark',
         y: {
           formatter: function (val) {
-            return val + '%'; // Adding '%' symbol after the data
+            return val;
           }
         }
       }
     }));
-  }, [chartData, chartColor]);
+  }, [chartData, chartColor, logScale]);
 
   const [series, setSeries] = useState([]);
 
   useEffect(() => {
+    const adjustedData1 = chartData.map((item) => ({
+      ...item,
+      value: logScale && item.value === 0 ? SMALL_VALUE : item.value
+      // price: logScale && item.price === 0 ? SMALL_VALUE : item.price
+    }));
+    const adjustedData = adjustedData1.map((item) => ({
+      ...item,
+      value: logScale && item.value > 0 ? Math.log10(item.value) : item.value
+      // price: logScale && item.price > 0 ? Math.log10(item.price) : item.price
+    }));
+
     setSeries([
       {
         name: chart,
         type: 'area',
-        data: chartData.map((item) => item.value)
+        data: adjustedData.map((item) => item.value)
       },
       {
         name: 'price',
         type: 'line',
-        data: chartData.map((item) => item.price)
+        data: adjustedData.map((item) => item.price)
       }
     ]);
-  }, [chartData]);
+  }, [chartData, logScale]);
 
-  return <ReactApexChart options={options} series={series} type="area" height={450} />;
+  return (
+    <div>
+      {/* Switch for log/linear scale */}
+      <FormControlLabel control={<Switch checked={logScale} onChange={() => setLogScale((prev) => !prev)} />} label="Logarithmic Scale" />
+      <ReactApexChart options={options} series={series} type="area" height={450} />
+    </div>
+  );
 };
 
 WalletChart.propTypes = {

@@ -1,12 +1,11 @@
 import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
-// import { Link as RouterLink } from 'react-router-dom';
 import { Box, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
-import { NumericFormat } from 'react-number-format';
-import Dot from 'components/@extended/Dot';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
+import Dot from 'components/@extended/Dot';
 
+// Comparator and sorting helpers
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
     return -1;
@@ -33,54 +32,33 @@ function stableSort(array, comparator) {
   return stabilizedThis.map((el) => el[0]);
 }
 
-// ==============================|| ORDER TABLE - HEADER CELL ||============================== //
-
+// Table header cells
 const headCells = [
-  {
-    id: 'wallet_address',
-    align: 'left',
-    disablePadding: false,
-    label: 'Wallet'
-  },
-  {
-    id: 'token',
-    align: 'left',
-    disablePadding: true,
-    label: 'Token Name'
-  },
-  {
-    id: 'direction',
-    align: 'left',
-    disablePadding: false,
-    label: 'Direction'
-  },
-  {
-    id: 'pnl-ratio',
-    align: 'left',
-    disablePadding: false,
-    label: 'PNL Ratio'
-  },
-  {
-    id: 'status',
-    align: 'left',
-    disablePadding: false,
-    label: 'WIN/LOSE'
-  }
+  { id: 'wallet_address', align: 'left', label: 'Wallet' },
+  { id: 'balance', align: 'left', label: 'Token Balance' },
+  { id: 'total_pnl', align: 'left', label: 'Total PNL' },
+  { id: 'unrealized_pnl', align: 'left', label: 'Unrealized PNL' },
+  { id: 'avg_token_day', align: 'left', label: 'Avg Token Day' }
 ];
 
-// ==============================|| ORDER TABLE - HEADER ||============================== //
-
+// Sticky Table Header
 function OrderTableHead({ order, orderBy }) {
   return (
     <TableHead>
       <TableRow>
-        {headCells?.map((headCell) => (
+        {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
             align={headCell.align}
-            padding={headCell.disablePadding ? 'none' : 'normal'}
             sortDirection={orderBy === headCell.id ? order : false}
-            sx={{ color: '#fff' }}
+            sx={{
+              position: 'sticky',
+              top: 0,
+              zIndex: 1,
+              backgroundColor: 'background.default',
+              color: '#fff',
+              borderBottom: '2px solid #e0e0e0'
+            }}
           >
             {headCell.label}
           </TableCell>
@@ -95,8 +73,7 @@ OrderTableHead.propTypes = {
   orderBy: PropTypes.string
 };
 
-// ==============================|| ORDER TABLE - STATUS ||============================== //
-
+// Status display
 const WinStatus = ({ status }) => {
   let color;
   let title;
@@ -110,13 +87,6 @@ const WinStatus = ({ status }) => {
       color = 'success';
       title = 'WIN';
       break;
-    // case 2:
-    //   color = 'error';
-    //   title = 'Rejected';
-    //   break;
-    // default:
-    //   color = 'primary';
-    //   title = 'None';
   }
 
   return (
@@ -131,14 +101,14 @@ WinStatus.propTypes = {
   status: PropTypes.number
 };
 
-// ==============================|| ORDER TABLE ||============================== //
-
+// Main Table component
 export default function WalletTable() {
   const [order] = useState('desc');
   const [orderBy] = useState('balance');
   const [selected] = useState([]);
   const [data, setData] = useState([]);
   const { symbol } = useParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchTrades = async () => {
@@ -147,7 +117,7 @@ export default function WalletTable() {
       const url = `http://127.0.0.1:5005/api/data/topWallet`;
       try {
         const postData = {
-          token_symbol: `${symbol}`,
+          token_symbol: symbol,
           order_by: 'balance'
         };
         const response = await axios.post(url, postData, {
@@ -156,7 +126,7 @@ export default function WalletTable() {
             Uid: `${uid}`
           }
         });
-        setData(response.data.data ? response.data.data : []);
+        setData(response.data.data || []);
       } catch (error) {
         console.error(error);
       }
@@ -164,8 +134,10 @@ export default function WalletTable() {
     fetchTrades();
   }, [symbol]);
 
-  const isSelected = (trackingNo) => selected.indexOf(trackingNo) !== -1;
-
+  const isSelected = (walletAddress) => selected.indexOf(walletAddress) !== -1;
+  const handleCellClick = (walletAddress) => {
+    navigate(`/analyze/${symbol}/wallet/${walletAddress}`);
+  };
   return (
     <Box>
       <TableContainer
@@ -174,9 +146,7 @@ export default function WalletTable() {
           maxHeight: '800px', // Set max height for the table container
           overflowY: 'auto', // Enable vertical scrolling
           position: 'relative',
-          display: 'block',
           maxWidth: '100%',
-
           '& td, & th': { whiteSpace: 'nowrap' }
         }}
       >
@@ -207,22 +177,20 @@ export default function WalletTable() {
                   key={row.wallet_address}
                   selected={isItemSelected}
                 >
-                  <TableCell component="th" id={labelId} scope="row" align="left">
-                    {/* <Link color="secondary" component={RouterLink} to=""> */}
+                  <TableCell
+                    component="th"
+                    id={labelId}
+                    scope="row"
+                    align="left"
+                    onClick={() => handleCellClick(row.wallet_address)} // Handle click for navigation
+                    sx={{ cursor: 'pointer', color: 'green' }}
+                  >
                     {row.wallet_address}
-                    {/* </Link> */}
                   </TableCell>
                   <TableCell align="left">{row.balance}</TableCell>
                   <TableCell align="left">{row.total_pnl}</TableCell>
-
-                  <TableCell align="left">
-                    {/* <NumericFormat value={row.unrealiazed_pnl} displayType="text" thousandSeparator suffix="%" /> */}
-                    {row.unrealiazed_pnl}
-                  </TableCell>
-                  <TableCell align="left">
-                    {/* <WinStatus status={row.avg_token_day} /> */}
-                    {row.avg_token_day}
-                  </TableCell>
+                  <TableCell align="left">{row.unrealized_pnl}</TableCell>
+                  <TableCell align="left">{row.avg_token_day}</TableCell>
                 </TableRow>
               );
             })}
