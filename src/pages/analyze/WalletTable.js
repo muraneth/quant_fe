@@ -17,7 +17,9 @@ function descendingComparator(a, b, orderBy) {
 }
 
 function getComparator(order, orderBy) {
-  return order === 'desc' ? (a, b) => descendingComparator(a, b, orderBy) : (a, b) => -descendingComparator(a, b, orderBy);
+  // return order === 'desc' ? (a, b) => descendingComparator(a, b, orderBy) : (a, b) => -descendingComparator(a, b, orderBy);
+  return  (a, b) => descendingComparator(a, b, orderBy)
+
 }
 
 function stableSort(array, comparator) {
@@ -39,11 +41,15 @@ const headCells = [
   { id: 'total_pnl', align: 'left', label: 'Total PNL' },
   { id: 'unrealized_pnl', align: 'left', label: 'Unrealized PNL' },
   { id: 'avg_token_day', align: 'left', label: 'Avg Token Day' },
-  {id:'total_txs', align: 'left', label: 'Total Txs' }
+  { id: 'total_txs', align: 'left', label: 'Total Txs' }
 ];
 
 // Sticky Table Header
-function OrderTableHead({ order, orderBy }) {
+function OrderTableHead({ order, orderBy, onRequestSort }) {
+  const createSortHandler = (property) => (event) => {
+    onRequestSort(event, property);
+  };
+
   return (
     <TableHead>
       <TableRow>
@@ -58,8 +64,10 @@ function OrderTableHead({ order, orderBy }) {
               zIndex: 1,
               backgroundColor: 'background.default',
               color: '#fff',
-              borderBottom: '2px solid #e0e0e0'
+              borderBottom: '2px solid #e0e0e0',
+              cursor: 'pointer'
             }}
+            onClick={createSortHandler(headCell.id)}
           >
             {headCell.label}
           </TableCell>
@@ -71,41 +79,14 @@ function OrderTableHead({ order, orderBy }) {
 
 OrderTableHead.propTypes = {
   order: PropTypes.string,
-  orderBy: PropTypes.string
-};
-
-// Status display
-const WinStatus = ({ status }) => {
-  let color;
-  let title;
-
-  switch (status < 0) {
-    case true:
-      color = 'warning';
-      title = 'LOSE';
-      break;
-    case false:
-      color = 'success';
-      title = 'WIN';
-      break;
-  }
-
-  return (
-    <Stack direction="row" spacing={1} alignItems="center">
-      <Dot color={color} />
-      <Typography>{title}</Typography>
-    </Stack>
-  );
-};
-
-WinStatus.propTypes = {
-  status: PropTypes.number
+  orderBy: PropTypes.string,
+  onRequestSort: PropTypes.func.isRequired,
 };
 
 // Main Table component
 export default function WalletTable() {
-  const [order] = useState('desc');
-  const [orderBy] = useState('balance');
+  const [order, setOrder] = useState('desc');
+  const [orderBy, setOrderBy] = useState('balance');
   const [selected] = useState([]);
   const [data, setData] = useState([]);
   const { symbol } = useParams();
@@ -119,7 +100,7 @@ export default function WalletTable() {
       try {
         const postData = {
           token_symbol: symbol,
-          order_by: 'balance'
+          order_by: orderBy
         };
         const response = await axios.post(url, postData, {
           headers: {
@@ -133,19 +114,26 @@ export default function WalletTable() {
       }
     };
     fetchTrades();
-  }, [symbol]);
+  }, [symbol, orderBy]);
 
   const isSelected = (walletAddress) => selected.indexOf(walletAddress) !== -1;
   const handleCellClick = (walletAddress) => {
     navigate(`/analyze/${symbol}/wallet/${walletAddress}`);
   };
+
+  const handleRequestSort = (event, property) => {
+    const isAsc = orderBy === property && order === 'asc';
+    setOrder(isAsc ? 'desc' : 'asc');
+    setOrderBy(property);
+  };
+
   return (
     <Box>
       <TableContainer
         sx={{
           width: '100%',
-          maxHeight: '800px', // Set max height for the table container
-          overflowY: 'auto', // Enable vertical scrolling
+          maxHeight: '800px',
+          overflowY: 'auto',
           position: 'relative',
           maxWidth: '100%',
           '& td, & th': { whiteSpace: 'nowrap' }
@@ -162,7 +150,7 @@ export default function WalletTable() {
             }
           }}
         >
-          <OrderTableHead order={order} orderBy={orderBy} />
+          <OrderTableHead order={order} orderBy={orderBy} onRequestSort={handleRequestSort} />
           <TableBody>
             {stableSort(data, getComparator(order, orderBy)).map((row, index) => {
               const isItemSelected = isSelected(row.wallet_address);
@@ -183,7 +171,7 @@ export default function WalletTable() {
                     id={labelId}
                     scope="row"
                     align="left"
-                    onClick={() => handleCellClick(row.wallet_address)} // Handle click for navigation
+                    onClick={() => handleCellClick(row.wallet_address)}
                     sx={{ cursor: 'pointer', color: 'green' }}
                   >
                     {row.wallet_address}
@@ -192,7 +180,7 @@ export default function WalletTable() {
                   <TableCell align="left">{row.total_pnl}</TableCell>
                   <TableCell align="left">{row.unrealized_pnl}</TableCell>
                   <TableCell align="left">{row.avg_token_day}</TableCell>
-                  <TableCell  align="left">{row.total_txs}</TableCell>
+                  <TableCell align="left">{row.total_txs}</TableCell>
                 </TableRow>
               );
             })}
