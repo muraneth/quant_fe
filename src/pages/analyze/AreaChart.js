@@ -24,7 +24,7 @@ const areaChartOptions = {
   }
 };
 function isNotSeperatePrice(chart) {
-  const items = ['avgCost'];
+  const items = ['avgCost','dexAvgCost','cexAvgCost'];
   return items.includes(chart);
 }
 

@@ -38,7 +38,8 @@ const headCells = [
   { id: 'balance', align: 'left', label: 'Token Balance' },
   { id: 'total_pnl', align: 'left', label: 'Total PNL' },
   { id: 'unrealized_pnl', align: 'left', label: 'Unrealized PNL' },
-  { id: 'avg_token_day', align: 'left', label: 'Avg Token Day' }
+  { id: 'avg_token_day', align: 'left', label: 'Avg Token Day' },
+  {id:'total_txs', align: 'left', label: 'Total Txs' }
 ];
 
 // Sticky Table Header
@@ -191,6 +192,7 @@ export default function WalletTable() {
                   <TableCell align="left">{row.total_pnl}</TableCell>
                   <TableCell align="left">{row.unrealized_pnl}</TableCell>
                   <TableCell align="left">{row.avg_token_day}</TableCell>
+                  <TableCell  align="left">{row.total_txs}</TableCell>
                 </TableRow>
               );
             })}
