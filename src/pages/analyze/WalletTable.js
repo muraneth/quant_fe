@@ -18,8 +18,7 @@ function descendingComparator(a, b, orderBy) {
 
 function getComparator(order, orderBy) {
   // return order === 'desc' ? (a, b) => descendingComparator(a, b, orderBy) : (a, b) => -descendingComparator(a, b, orderBy);
-  return  (a, b) => descendingComparator(a, b, orderBy)
-
+  return (a, b) => descendingComparator(a, b, orderBy);
 }
 
 function stableSort(array, comparator) {
@@ -38,9 +37,12 @@ function stableSort(array, comparator) {
 const headCells = [
   { id: 'wallet_address', align: 'left', label: 'Wallet' },
   { id: 'balance', align: 'left', label: 'Token Balance' },
+  { id: 'percentage', align: 'left', label: 'Percent' },
   { id: 'total_pnl', align: 'left', label: 'Total PNL' },
   { id: 'unrealized_pnl', align: 'left', label: 'Unrealized PNL' },
   { id: 'avg_token_day', align: 'left', label: 'Avg Token Day' },
+  { id: 'txs_out', align: 'left', label: 'Txs Out' },
+  { id: 'txs_in', align: 'left', label: 'Txs In' },
   { id: 'total_txs', align: 'left', label: 'Total Txs' }
 ];
 
@@ -80,7 +82,7 @@ function OrderTableHead({ order, orderBy, onRequestSort }) {
 OrderTableHead.propTypes = {
   order: PropTypes.string,
   orderBy: PropTypes.string,
-  onRequestSort: PropTypes.func.isRequired,
+  onRequestSort: PropTypes.func.isRequired
 };
 
 // Main Table component
@@ -177,9 +179,14 @@ export default function WalletTable() {
                     {row.wallet_address}
                   </TableCell>
                   <TableCell align="left">{row.balance}</TableCell>
-                  <TableCell align="left">{row.total_pnl}</TableCell>
-                  <TableCell align="left">{row.unrealized_pnl}</TableCell>
-                  <TableCell align="left">{row.avg_token_day}</TableCell>
+                  <TableCell align="left">{(row.percentage * 100).toFixed(3)}%</TableCell>
+
+                  <TableCell align="left">{row.total_pnl.toFixed(2)}</TableCell>
+                  <TableCell align="left">{row.unrealized_pnl.toFixed(2)}</TableCell>
+                  <TableCell align="left">{row.avg_token_day.toFixed(0)}</TableCell>
+
+                  <TableCell align="left">{row.tx_out_count}</TableCell>
+                  <TableCell align="left">{row.tx_in_count}</TableCell>
                   <TableCell align="left">{row.total_txs}</TableCell>
                 </TableRow>
               );
