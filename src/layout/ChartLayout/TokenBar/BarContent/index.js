@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 
 // material-ui
-import { Box, useMediaQuery, ButtonBase, List, ListItem, ListItemText, Divider } from '@mui/material';
+import { Box, useMediaQuery, ButtonBase, List, ListItemText, Divider } from '@mui/material';
 import { useState, useEffect } from 'react';
 import Search from './Search';
 import axios from 'axios';
@@ -35,7 +35,7 @@ const TokenContent = () => {
 
   return (
     <>
-      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+      <Box sx={{ display: 'flex', alignItems: 'center', overflow: 'auto', maxWidth: '100%' }}>
         <List sx={{ display: 'flex', flexDirection: 'row', gap: 1 }}>
           {tokens.map((symbol, index) => (
             <Box key={index} sx={{ display: 'flex', alignItems: 'center' }}>

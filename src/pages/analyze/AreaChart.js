@@ -24,7 +24,7 @@ const areaChartOptions = {
   }
 };
 function isNotSeperatePrice(chart) {
-  const items = ['avgCost','dexAvgCost','cexAvgCost'];
+  const items = ['avgCost', 'dexAvgCost', 'cexAvgCost'];
   return items.includes(chart);
 }
 
@@ -129,6 +129,25 @@ const WalletChart = ({ symbol, chart }) => {
           formatter: function (val) {
             return val;
           }
+        }
+      },
+      // scrollbar: {
+      //   enabled: true,
+      //   offsetY: 0,
+      //   offsetX: -3
+      // }
+      zoom: {
+        enabled: true,
+        type: 'x',
+        resetIcon: {
+          offsetX: -10,
+          offsetY: 0,
+          fillColor: '#fff',
+          strokeColor: '#37474F'
+        },
+        selection: {
+          background: '#90CAF9',
+          border: '#0D47A1'
         }
       }
     }));
