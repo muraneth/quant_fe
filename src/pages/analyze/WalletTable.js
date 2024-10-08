@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import { Box, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
-import Dot from 'components/@extended/Dot';
 
 // Comparator and sorting helpers
 function descendingComparator(a, b, orderBy) {

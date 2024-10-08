@@ -1,5 +1,6 @@
 import { useParams } from 'react-router-dom';
 import BaseChart from './BaseChart';
+import BaseChart2 from './BaseChar2';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Box from '@mui/material/Box';
@@ -86,7 +87,7 @@ export default function WalletDetail() {
             <Typography variant="h6" sx={{ mb: 2, ml: 4 }}>
               {key.charAt(0).toUpperCase() + key.slice(1).replace('_', ' ')} Chart
             </Typography>
-            <BaseChart chartData={walletInfo} dataKey={key} />
+            <BaseChart2 chartData={walletInfo} dataKey={key} />
           </Box>
         </MainCard>
       ))}
