@@ -5,6 +5,7 @@ import WalletTable from './WalletTable';
 import AraeChart2 from './AreaChart2';
 import PriceVolumeChart from './PriceVolumeChart';
 import VolumeChart from './VolumeChart';
+import MultiChart from './MultiChart'
 
 import { useParams } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
@@ -51,6 +52,14 @@ export default function AnalyzePage() {
       <div>
         <h1>VolumeChart</h1>
         <VolumeChart symbol={symbol} usd={''} />
+      </div>
+    );
+  }
+  if (location.pathname.includes('/MultiChart')){
+    return (
+      <div>
+        <h1>MultiChart</h1>
+        <MultiChart chart={'TradeVolumeVsPoolSize'} symbols={["NPC","ANDY","JESUS"]}/>
       </div>
     );
   }
