@@ -87,7 +87,7 @@ export default function WalletDetail() {
             <Typography variant="h6" sx={{ mb: 2, ml: 4 }}>
               {key.charAt(0).toUpperCase() + key.slice(1).replace('_', ' ')} Chart
             </Typography>
-            <BaseChart2 chartData={walletInfo} dataKey={key} />
+            <BaseChart chartData={walletInfo} dataKey={key} />
           </Box>
         </MainCard>
       ))}

@@ -3,19 +3,30 @@ import ReactECharts from 'echarts-for-react';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import TextField from '@mui/material/TextField';
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import dayjs from 'dayjs';
 const PriceByVolumeChart = ({ symbol, path }) => {
   const [priceVolumeData, setPriceVolumeData] = useState([]);
   const [priceTimeSeriesData, setPriceTimeSeriesData] = useState([]);
   const [options, setOptions] = useState({});
-  const [endTime, setEndTime] = useState('2024-10-06 00:00:00');
+  // const [startTime, setStartTime] = useState('2021-01-01 00:00:00');
+  // const [endTime, setEndTime] = useState('2024-10-06 00:00:00');
+  const [startTime, setStartTime] = useState(dayjs('2021-01-01T00:00:00'));
+  const [endTime, setEndTime] = useState(dayjs('2024-10-06T00:00:00'));
 
+  const formatToDateTimeString = (date) => {
+    return date ? date.format('YYYY-MM-DD HH:mm:ss') : '';
+  };
   useEffect(() => {
     const fetchPrice = async () => {
       try {
         const postData = {
           token_symbol: symbol,
           chart_label: 'priceVolume',
-          end_time: endTime
+          start_time: formatToDateTimeString(startTime),
+          end_time: formatToDateTimeString(endTime)
         };
         const token = localStorage.getItem('token');
         const uid = localStorage.getItem('uid');
@@ -36,7 +47,8 @@ const PriceByVolumeChart = ({ symbol, path }) => {
         const postData = {
           token_symbol: symbol,
           chart_label: 'priceVolume',
-          end_time: endTime
+          start_time: formatToDateTimeString(startTime),
+          end_time: formatToDateTimeString(endTime)
         };
         const token = localStorage.getItem('token');
         const uid = localStorage.getItem('uid');
@@ -54,12 +66,14 @@ const PriceByVolumeChart = ({ symbol, path }) => {
 
     fetchPrice();
     fetchVolume();
-  }, [symbol, path, endTime]);
+  }, [symbol, path, startTime, endTime]);
 
   useEffect(() => {
     if (!priceVolumeData.length || !priceTimeSeriesData.length) {
       return;
     }
+    // get min price
+    const minPrice = priceTimeSeriesData.reduce((min, p) => (p.price < min ? p.price : min), priceTimeSeriesData[0].price);
     const option = {
       title: {
         text: 'Price by Volume (PBV) Chart',
@@ -130,7 +144,7 @@ const PriceByVolumeChart = ({ symbol, path }) => {
           type: 'value',
           name: 'Price',
           position: 'right',
-          // min: 100,
+          min: minPrice,
           axisLine: {
             lineStyle: {
               color: '#f39c12'
@@ -171,22 +185,29 @@ const PriceByVolumeChart = ({ symbol, path }) => {
   }, [priceVolumeData, priceTimeSeriesData]);
 
   return (
-    <div>
-      <TextField label="End Time" variant="outlined" value={endTime} onChange={(e) => setEndTime(e.target.value)} fullWidth />
-      {/* <TextField
-        label="End Time"
-        variant="outlined"
-        value={endTime}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter') {
-            setEndTime(e.target.value);
-            // You can also call other functions here
-          }
-        }}
-        fullWidth
-      /> */}
-      <ReactECharts option={options} style={{ height: '400px', width: '100%' }} />
-    </div>
+    // <div>
+    //   <TextField label="Start Time" variant="outlined" value={startTime} onChange={(e) => setStartTime(e.target.value)} />
+    //   <TextField label="End Time" variant="outlined" value={endTime} onChange={(e) => setEndTime(e.target.value)} />
+
+    //   <ReactECharts option={options} style={{ height: '400px', width: '100%' }} />
+    // </div>
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <div>
+        <DateTimePicker
+          label="Start Time"
+          value={startTime}
+          onChange={(newValue) => setStartTime(newValue)}
+          renderInput={(params) => <TextField {...params} />}
+        />
+        <DateTimePicker
+          label="End Time"
+          value={endTime}
+          onChange={(newValue) => setEndTime(newValue)}
+          renderInput={(params) => <TextField {...params} />}
+        />
+        <ReactECharts option={options} style={{ height: '400px', width: '100%' }} />
+      </div>
+    </LocalizationProvider>
   );
 };
 
