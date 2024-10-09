@@ -17,6 +17,30 @@ function isNotSeperatePrice(chart) {
   return items.includes(chart);
 }
 
+/**
+ * Calculates the moving average of a dataset
+ * @param {Array} data - Array of numbers or objects with a numeric property
+ * @param {number} windowSize - The size of the moving window
+ * @param {function} [accessor] - Optional function to access the numeric value from each data point
+ * @returns {Array} - Array of moving averages
+ */
+function movingAverage(data, windowSize, accessor = (d) => d) {
+  if (windowSize <= 0 || !Number.isInteger(windowSize)) {
+    throw new Error('Window size must be a positive integer');
+  }
+
+  return data.map((_, index, array) => {
+    if (index < windowSize - 1) {
+      return null; // Not enough data points for the full window
+    }
+    
+    const window = array.slice(index - windowSize + 1, index + 1);
+    const sum = window.reduce((acc, curr) => acc + accessor(curr), 0);
+    return sum / windowSize;
+  });
+}
+
+
 const MultiChart = ({ chart, symbols }) => {
   const [chartData, setChartData] = useState({});
   const [options, setOptions] = useState({});
@@ -73,8 +97,6 @@ const MultiChart = ({ chart, symbols }) => {
         mxSymbol = keys.reduce((a, b) => (chartData[a].length > chartData[b].length ? a : b));
 
         const maxLength = chartData[mxSymbol].length; // Maximum length of data
-        console.log('mxSymbol', mxSymbol);
-        console.log('maxLength', maxLength);
         // Pad all symbol arrays to match the maximum length
         keys.forEach((symbol) => {
           chartData[symbol] = padArray(chartData[symbol], maxLength);
@@ -151,7 +173,6 @@ const MultiChart = ({ chart, symbols }) => {
         }))
       };
 
-      // chartInstance.setOption(option);
       setOptions(option);
     }
   }, [chartData, chart, symbols]);

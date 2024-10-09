@@ -5,7 +5,6 @@ const Adminpage = Loadable(lazy(() => import('pages/admin')));
 
 const AdminRoutes = {
   path: '/abacadabra',
-  //   element: <Adminpage />,
   children: [
     {
       path: 'position',
