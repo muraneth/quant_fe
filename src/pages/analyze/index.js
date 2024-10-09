@@ -59,7 +59,7 @@ export default function AnalyzePage() {
     return (
       <div>
         <h1>MultiChart</h1>
-        <MultiChart chart={'TradeVolumeVsPoolSize'} symbols={['NPC', 'ANDY', 'JESUS', 'ELON']} />
+        <MultiChart chart={'TradeVolumeVsPoolSize'} symbols={['NPC', 'ANDY', 'JESUS', 'ELON', 'WOJAK']} />
       </div>
     );
   }
