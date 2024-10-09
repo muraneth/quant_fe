@@ -33,6 +33,12 @@ const Navigation = () => {
                 title: 'TopWallet',
                 type: 'item',
                 url: `/analyze/${symbol}/topwallet`
+              },
+              {
+                id: 'newwallet',
+                title: 'NewWallet',
+                type: 'item',
+                url: `/analyze/${symbol}/newwallet`
               }
             ]
           };
