@@ -15,13 +15,12 @@ import { useLocation } from 'react-router-dom';
 import Checkbox from '@mui/material/Checkbox';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
-import {Typography,ListItemText} from '@mui/material';
-
+import { Typography, ListItemText } from '@mui/material';
 
 export default function AnalyzePage() {
-  const [tokens, setTokens] = useState([]);
-  const [chart,setChart] = useState('TradeVolumeVsPoolSize');
-  const [symbols,setSymbols] = useState(['NPC']);
+  const [tokens, setTokens] = useState(['NPC', 'ANDY', 'JESUS', 'ELON']);
+  const [chart, setChart] = useState('TradeVolumeVsPoolSize');
+  const [symbols, setSymbols] = useState(['NPC']);
   const location = useLocation();
 
   const { symbol, chartId } = useParams();
@@ -29,7 +28,7 @@ export default function AnalyzePage() {
     const fetchData = async () => {
       try {
         const response = await axios.get('http://127.0.0.1:5005/api/data/tokens');
-        setTokens(response.data.data? response.data.data : ["NPC"]);
+        setTokens(response.data.data ? response.data.data : ['NPC']);
       } catch (error) {
         console.error(error);
       }
@@ -77,38 +76,36 @@ export default function AnalyzePage() {
       </div>
     );
   }
- 
 
- 
   if (location.pathname.includes('/MultiChart')) {
     return (
-      <MainCard key={"id"} content={false} sx={{ mt: 1.5, bgcolor: 'background.paper' }}>
-          <Box sx={{ pt: 1, pr: 2 }}>
-            <Typography variant="h6" sx={{ mb: 2, ml: 4 }}>
+      <MainCard key={'id'} content={false} sx={{ mt: 1.5, bgcolor: 'background.paper' }}>
+        <Box sx={{ pt: 1, pr: 2 }}>
+          <Typography variant="h6" sx={{ mb: 2, ml: 4 }}>
             MultiChart
-            </Typography>
-            <TextField label="Chart" variant="outlined" value={chart} onChange={(e) => setChart(e.target.value)} fullWidth />
-            {tokens.map((symbol, index) => (
-              <Box key={index} sx={{ display: 'flex', alignItems: 'center' }}>
-                <Checkbox
-                  checked={symbols.includes(symbol)}
-                  onChange={(e) => {
-                    if (e.target.checked) {
-                      setSymbols([...symbols, symbol]);
-                    } else {
-                      setSymbols(symbols.filter((item) => item !== symbol));
-                    }
-                  }}
-                />
-                <ListItemText primary={symbol} />
-              </Box>
-            ))
-          }
+          </Typography>
+          <TextField label="Chart" variant="outlined" value={chart} onChange={(e) => setChart(e.target.value)} fullWidth />
+          <Typography>tokens: {tokens}</Typography>
 
-            <MultiChart chart={chart} symbols={symbols} />
-          </Box>
-        </MainCard>
-      
+          {tokens.map((symbol, index) => (
+            <Box key={index} sx={{ display: 'flex', alignItems: 'center' }}>
+              <Checkbox
+                checked={symbols.includes(symbol)}
+                onChange={(e) => {
+                  if (e.target.checked) {
+                    setSymbols([...symbols, symbol]);
+                  } else {
+                    setSymbols(symbols.filter((item) => item !== symbol));
+                  }
+                }}
+              />
+              <ListItemText primary={symbol} />
+            </Box>
+          ))}
+
+          <MultiChart chart={chart} symbols={symbols} />
+        </Box>
+      </MainCard>
     );
   }
 

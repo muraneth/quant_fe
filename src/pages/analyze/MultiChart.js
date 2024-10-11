@@ -33,17 +33,18 @@ function movingAverage(data, windowSize, accessor = (d) => d) {
     if (index < windowSize - 1) {
       return null; // Not enough data points for the full window
     }
-    
+
     const window = array.slice(index - windowSize + 1, index + 1);
     const sum = window.reduce((acc, curr) => acc + accessor(curr), 0);
     return sum / windowSize;
   });
 }
 
-
 const MultiChart = ({ chart, symbols }) => {
   const [chartData, setChartData] = useState({});
   const [options, setOptions] = useState({});
+  const [previousChart, setPreviousChart] = useState(chart);
+
   useEffect(() => {
     const fetchData = async (symbol) => {
       try {
@@ -70,12 +71,21 @@ const MultiChart = ({ chart, symbols }) => {
       }
     };
 
-    symbols.forEach((symbol) => {
-      // Check if the symbol exists in chartData
-      if (!(symbol in chartData)) {
+    // symbols.forEach((symbol) => {
+    //   // Check if the symbol exists in chartData
+    //   if (!(symbol in chartData)) {
+    //     fetchData(symbol);
+    //   }
+    // });
+    // Fetch data only when chart or symbols have changed
+    if (chart !== previousChart || symbols.length !== Object.keys(chartData).length) {
+      symbols.forEach((symbol) => {
         fetchData(symbol);
-      }
-    });
+      });
+
+      // Update the previousChart state to the new chart value
+      setPreviousChart(chart);
+    }
   }, [symbols, chart]);
 
   const padArray = (arr, length) => {
@@ -170,6 +180,7 @@ const MultiChart = ({ chart, symbols }) => {
           type: 'line', // Adjust type as needed (e.g., 'bar', 'scatter')
           yAxisIndex: isNotSeperatePrice(chart) ? 0 : 1,
           data: chartData[symbol] ? chartData[symbol].map((item) => (item ? item.value : 0)) : []
+          // smooth: true
         }))
       };
 
