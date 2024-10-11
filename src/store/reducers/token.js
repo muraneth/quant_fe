@@ -2,20 +2,19 @@ import { createSlice } from '@reduxjs/toolkit';
 
 // initial state
 const initialState = {
-   tokenItem: 'NPC',
+  tokenItem: 'NPC'
 };
 
-const newSlice = createSlice({
+const tokenSlice = createSlice({
   name: 'token', // Give your slice a unique name
   initialState,
   reducers: {
-   
     selectToken(state, action) {
       state.tokenItem = action.payload.tokenItem;
     }
   }
 });
 
-export default newSlice.reducer;
+export default tokenSlice.reducer;
 
-export const { selectToken } = newSlice.actions;
+export const { selectToken } = tokenSlice.actions;

@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 
 // project import
 import NavGroup from './NavGroup';
-import menuItem from 'menu-items';
+
 import { useLocation } from 'react-router-dom';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
@@ -12,7 +12,7 @@ import { useParams } from 'react-router-dom';
 // ==============================|| DRAWER CONTENT - NAVIGATION ||============================== //
 
 const Navigation = () => {
-  const [menuItems, setMenuItems] = useState(menuItem.items);
+  const [menuItems, setMenuItems] = useState([]);
   const location = useLocation();
   const { symbol } = useParams();
 
@@ -51,6 +51,7 @@ const Navigation = () => {
       fetchMenuItems();
     }
   }, [location.pathname, symbol]);
+  console.log('menuItems:', menuItems);
 
   const navGroups = menuItems.map((item) => {
     switch (item.type) {
