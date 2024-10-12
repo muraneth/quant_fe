@@ -43,6 +43,13 @@ const TokenContent = () => {
     navigate(`/analyze/${symbol}/chart`); // Navigate to the selected token's page
   };
 
+  const handleSearchSelect = (value) => {
+    if (value) {
+      setSelectedToken(value); // Update selected token based on search selection
+      navigate(`/analyze/${value}/chart`);
+    }
+  };
+
   return (
     <>
       <Box sx={{ display: 'flex', alignItems: 'center', overflow: 'auto', maxWidth: '100%' }}>
@@ -70,7 +77,7 @@ const TokenContent = () => {
           ))}
         </List>
       </Box>
-      {!matchesXs && <Search />}
+      {!matchesXs && <Search onSearchSelect={handleSearchSelect} />}
     </>
   );
 };

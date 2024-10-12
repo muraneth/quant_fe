@@ -29,10 +29,7 @@ export default function AnalyzePage() {
   const { tokenItem } = useSelector((state) => state.token);
   const { drawerOpen, openItem } = useSelector((state) => state.menu);
   const chartId = openItem ? openItem[0] : null;
-  console.log('tokenItem:', tokenItem);
-  console.log('chartId:', chartId);
-  console.log('openItem:', openItem);
-
+ 
   useEffect(() => {
     const fetchData = async () => {
       try {

@@ -51,7 +51,7 @@ const Navigation = () => {
       fetchMenuItems();
     }
   }, [location.pathname, symbol]);
-  console.log('menuItems:', menuItems);
+
 
   const navGroups = menuItems.map((item) => {
     switch (item.type) {
