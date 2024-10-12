@@ -47,10 +47,8 @@ const MainLayout = () => {
       <TokenBar />
       {/* <Drawer open={open} handleDrawerToggle={handleDrawerToggle} /> */}
       <Drawer open={true} />
-
-      <Box component="main" sx={{ width: '100%', flexGrow: 1, p: { xs: 2, sm: 3 }, bgcolor: 'background.deep' }}>
+      <Box component="main" sx={{ width: '100%', flexGrow: 1, p: { xs: 2, sm: 3 }, mt: 10, bgcolor: 'background.deep' }}>
         <Toolbar />
-        {/* <Breadcrumbs navigation={navigation} title /> */}
         <Outlet />
       </Box>
     </Box>
