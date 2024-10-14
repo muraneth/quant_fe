@@ -7,10 +7,10 @@ import { useTheme } from '@mui/material/styles';
 import { Box, Toolbar, useMediaQuery } from '@mui/material';
 
 // project import
-import Drawer from './Drawer';
 
-import TokenBar from './TokenBar';
+import Header from './Header';
 
+// types
 import { openDrawer } from 'store/reducers/menu';
 
 // ==============================|| MAIN LAYOUT ||============================== //
@@ -42,13 +42,9 @@ const MainLayout = () => {
 
   return (
     <Box sx={{ display: 'flex', width: '100%', bgcolor: 'background.deep' }}>
-      <TokenBar />
-      {/* <Drawer open={open} handleDrawerToggle={handleDrawerToggle} /> */}
-      <Drawer open={true} />
-      <Box component="main" sx={{ width: '100%', flexGrow: 1, p: { xs: 2, sm: 3 }, mt: 10, bgcolor: 'background.deep' }}>
-        <Toolbar />
-        <Outlet />
-      </Box>
+      <Header open={open} handleDrawerToggle={handleDrawerToggle} />
+
+      <Outlet />
     </Box>
   );
 };

@@ -8,7 +8,7 @@ const LandingPageRoutes = {
   element: <LandingPage />,
   children: [
     {
-      path: 'home',
+      path: '',
       element: <LandingPage />
     }
   ]

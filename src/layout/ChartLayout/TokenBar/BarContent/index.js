@@ -15,10 +15,11 @@ const TokenContent = () => {
   const [tokens, setTokens] = useState([]);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  
+
   // Initialize selectedToken from localStorage if available, otherwise default to 'NPC'
-  const [selectedToken, setSelectedToken] = useState(localStorage.getItem('selectedToken') || 'NPC'); 
+  const [selectedToken, setSelectedToken] = useState(localStorage.getItem('selectedToken') || 'NPC');
   const { tokenItem } = useSelector((state) => state.token);
+  const { openItem } = useSelector((state) => state.menu);
 
   useEffect(() => {
     dispatch(selectToken({ tokenItem: selectedToken }));
@@ -40,13 +41,13 @@ const TokenContent = () => {
 
   const handleClick = (symbol) => {
     setSelectedToken(symbol); // Update the selected token state
-    navigate(`/analyze/${symbol}/chart`); // Navigate to the selected token's page
+    navigate(`/chart/${symbol}/${openItem}`); // Navigate to the selected token's page
   };
 
   const handleSearchSelect = (value) => {
     if (value) {
       setSelectedToken(value); // Update selected token based on search selection
-      navigate(`/analyze/${value}/chart`);
+      navigate(`/chart/${value}/${openItem}`); // Navigate to the selected token's page
     }
   };
 
@@ -66,8 +67,8 @@ const TokenContent = () => {
                   color: tokenItem === symbol ? 'gray' : 'text.primary',
                   '&:hover': {
                     backgroundColor: 'primary.light',
-                    color: 'gray',
-                  },
+                    color: 'gray'
+                  }
                 }}
               >
                 <ListItemText primary={symbol} />

@@ -16,16 +16,13 @@ export default function Hero() {
   const [uid, setUid] = React.useState();
   const [token, setToken] = React.useState();
   React.useEffect(() => {
-    // const urlParams = new URLSearchParams(window.location.search);
-    // const uid = urlParams.get('uid');
-    // const token = urlParams.get('token');
     const uid = localStorage.getItem('uid');
     const token = localStorage.getItem('token');
     if (uid && token) {
       setUid(uid);
       setToken(token);
     }
-  },[])
+  }, []);
   return (
     <Box
       id="hero"
@@ -73,37 +70,39 @@ export default function Hero() {
             Explore the best strategies to grow your wealth.
           </Typography>
           <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1} useFlexGap sx={{ pt: 2, width: { xs: '100%', sm: 'auto' } }}>
-            {uid && token ? (<Button
-              variant="contained"
-              href="/user/dashboard"
-              size="large"
-              sx={{
-                bgcolor: 'secondary.main',
-                color: 'white',
+            {uid && token ? (
+              <Button
+                variant="contained"
+                href="/user/dashboard"
+                size="large"
+                sx={{
+                  bgcolor: 'secondary.main',
+                  color: 'white',
 
-                '&:hover': {
-                  bgcolor: 'secondary.light'
-                }
-              }}
-            >
-              My Dashboard
-              
-            </Button>):(<Button
-              variant="contained"
-              href="/strategies"
-              size="large"
-              sx={{
-                bgcolor: 'secondary.main',
-                color: 'white',
+                  '&:hover': {
+                    bgcolor: 'secondary.light'
+                  }
+                }}
+              >
+                My Dashboard
+              </Button>
+            ) : (
+              <Button
+                variant="contained"
+                href="/strategies"
+                size="large"
+                sx={{
+                  bgcolor: 'secondary.main',
+                  color: 'white',
 
-                '&:hover': {
-                  bgcolor: 'secondary.light'
-                }
-              }}
-            >
-             Explore Strategy 
-            </Button>)}
-            
+                  '&:hover': {
+                    bgcolor: 'secondary.light'
+                  }
+                }}
+              >
+                Explore Strategy
+              </Button>
+            )}
           </Stack>
         </Stack>
         <Box

@@ -132,6 +132,20 @@ const WalletChart2 = ({ symbol, chart }) => {
             filterMode: 'filter'
           }
         ],
+        graphic: [
+          {
+            type: 'text',
+            left: 'center',
+            top: 'center',
+            style: {
+              text: 'Matricipher.com',
+              fontSize: 60,
+              fontWeight: 'bold',
+              fill: 'rgba(100, 1000, 0, 0.2)', // Semi-transparent watermark
+              textAlign: 'center'
+            }
+          }
+        ],
         series: [
           {
             name: chart,

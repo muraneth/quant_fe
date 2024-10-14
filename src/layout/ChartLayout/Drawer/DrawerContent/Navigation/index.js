@@ -8,50 +8,49 @@ import NavGroup from './NavGroup';
 import { useLocation } from 'react-router-dom';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 // ==============================|| DRAWER CONTENT - NAVIGATION ||============================== //
 
 const Navigation = () => {
   const [menuItems, setMenuItems] = useState([]);
   const location = useLocation();
-  const { symbol } = useParams();
+
+  const { tokenItem } = useSelector((state) => state.token);
 
   useEffect(() => {
-    if (location.pathname.includes('/analyze/')) {
-      console.log('fetching menu items');
-      const fetchMenuItems = async () => {
-        try {
-          const response = await axios.get('http://127.0.0.1:5005/api/data/menu?token_symbol=' + symbol);
-          const chartMenu = response.data.data;
-          const walletItem = {
-            id: 'topwallet',
-            title: 'TopWallet',
-            type: 'group',
-            children: [
-              {
-                id: 'topwallet',
-                title: 'TopWallet',
-                type: 'item',
-                url: `/analyze/${symbol}/topwallet`
-              },
-              {
-                id: 'newwallet',
-                title: 'NewWallet',
-                type: 'item',
-                url: `/analyze/${symbol}/newwallet`
-              }
-            ]
-          };
-          chartMenu.push(walletItem);
-          setMenuItems(chartMenu);
-        } catch (error) {
-          console.error('Error fetching menu items:', error);
-        }
-      };
-      fetchMenuItems();
-    }
-  }, [location.pathname, symbol]);
-
+    console.log('fetching menu items');
+    const fetchMenuItems = async () => {
+      try {
+        const response = await axios.get('http://127.0.0.1:5005/api/data/menu?token_symbol=' + tokenItem);
+        const chartMenu = response.data.data;
+        const walletItem = {
+          id: 'topwallet',
+          title: 'TopWallet',
+          type: 'group',
+          children: [
+            {
+              id: 'topwallet',
+              title: 'TopWallet',
+              type: 'item',
+              url: `/chart/${tokenItem}/topwallet`
+            },
+            {
+              id: 'newwallet',
+              title: 'NewWallet',
+              type: 'item',
+              url: `/chart/${tokenItem}/newwallet`
+            }
+          ]
+        };
+        chartMenu.push(walletItem);
+        setMenuItems(chartMenu);
+      } catch (error) {
+        console.error('Error fetching menu items:', error);
+      }
+    };
+    fetchMenuItems();
+  }, [tokenItem]);
 
   const navGroups = menuItems.map((item) => {
     switch (item.type) {

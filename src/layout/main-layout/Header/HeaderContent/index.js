@@ -2,15 +2,10 @@
 
 // material-ui
 import { Box, useMediaQuery, Button } from '@mui/material';
-// import { GithubOutlined } from '@ant-design/icons';
 
-// project import
-import Search from './Search';
 import Profile from './Profile';
-import Notification from './Notification';
-import MobileSection from './MobileSection';
-import Deposit from './Deposit-balance';
 import Logo from 'components/Logo';
+import { width } from '../../../../../node_modules/@mui/system/index';
 
 // ==============================|| HEADER - CONTENT ||============================== //
 
@@ -20,28 +15,35 @@ const HeaderContent = () => {
 
   return (
     <>
-      {/* {!matchesXs && <Search />} */}
-      <Box sx={{ width: '100%', ml: { xs: 0, md: 1 } }}>
+      <Box sx={{ width: 'auto', ml: { xs: 2, md: 3 } }}>
         <Logo />
       </Box>
 
-      {matchesXs && <Box sx={{ width: '100%', ml: 1 }} />}
-
-      {/* <IconButton
-        component={Link}
-        href="https://github.com/codedthemes/mantis-free-react-admin-template"
-        target="_blank"
-        disableRipple
-        color="secondary"
-        title="Download Free Version"
-        sx={{ color: 'text.primary', bgcolor: 'grey.100' }}
+      <Box
+        sx={{
+          flexGrow: 1,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          px: 0,
+          width: 'auto'
+        }}
       >
-        <GithubOutlined />
-      </IconButton> */}
-      {/* <Logo /> */}
+        <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+          <Button variant="text" color="primary" size="large" href="/home">
+            Home
+          </Button>
 
-      {/* <Notification /> */}
-      {username && <Deposit />}
+          <Button variant="text" color="primary" size="large" href="/chart/">
+            Chart
+          </Button>
+
+          <Button variant="text" color="primary" size="large" href="/dashboard/">
+            Dashboard
+          </Button>
+        </Box>
+      </Box>
+
       {!username && (
         <Box sx={{ flexShrink: 0, ml: 0.75, gap: 0.5, alignItems: 'center' }}>
           <Button color="primary" variant="outlined" size="midium" component="a" href="/sign-in/">
@@ -68,7 +70,6 @@ const HeaderContent = () => {
       )}
 
       {username && <Profile />}
-      {matchesXs && <MobileSection />}
     </>
   );
 };

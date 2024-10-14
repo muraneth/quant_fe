@@ -32,6 +32,7 @@ const closedMixin = (theme) => ({
 // ==============================|| DRAWER - MINI STYLED ||============================== //
 
 const MiniDrawerStyled = styled(Drawer, { shouldForwardProp: (prop) => prop !== 'open' })(({ theme, open }) => ({
+  zIndex: theme.zIndex.drawer,
   width: drawerWidth,
   flexShrink: 0,
   whiteSpace: 'nowrap',
