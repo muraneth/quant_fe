@@ -14,7 +14,7 @@ echarts.use([LineChart, GridComponent, TooltipComponent, TitleComponent, LegendC
 const SMALL_VALUE = 1e-10; // Small value to replace 0s
 
 function isNotSeperatePrice(chart) {
-  const items = ['avgCost', 'dexAvgCost', 'cexAvgCost', 'avgCostExcept'];
+  const items = ['AvgCost', 'DexAvgCost', 'CexAvgCost', 'AvgCostExcept'];
   return items.includes(chart);
 }
 

@@ -25,10 +25,12 @@ import { useNavigate } from 'react-router-dom';
 import ToggleColorMode from './ToggleColorMode';
 import Logo from 'components/Logo';
 import { GoogleIcon, FacebookIcon, SitemarkIcon } from './CustomIcons';
+import { jwtDecode } from 'jwt-decode';
+
 import axios from 'axios';
 import CustomTextField from 'components/overrides/CustomTextField';
 import { GoogleLogin } from '@react-oauth/google';
-import {httpClient,post} from 'server/httpClient'
+import { httpClient, post } from 'server/httpClient';
 function ToggleCustomTheme({ showCustomTheme, toggleCustomTheme }) {
   return (
     <Box
@@ -156,10 +158,21 @@ export default function SignUp() {
     }
   };
   const handleGoogleSignupSuccess = async (credentialResponse) => {
-    const Idtoken = credentialResponse.credential
-    const response = await post('/api/user/googleLogin', {
-      Idtoken
-    },{});
+    const Idtoken = credentialResponse.credential;
+    const userObject = jwtDecode(Idtoken);
+    console.log(userObject);
+
+    const response = await post(
+      '/api/user/googleLogin',
+      {
+        Idtoken: Idtoken
+      },
+      {
+        email: userObject.email,
+        username: userObject.name,
+        pic_url: userObject.picture
+      }
+    );
     if (response.code === 0) {
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('uid', response.data.uid);
@@ -169,13 +182,11 @@ export default function SignUp() {
     } else {
       console.log('Login Failed');
       console.log(response);
-      
     }
-  }
+  };
   const handleGoogleLoginError = (error) => {
     console.log('Login Failed');
-  }
-
+  };
 
   return (
     <>
@@ -314,7 +325,7 @@ export default function SignUp() {
                 Already have an account? Sign in
               </Link>
             </Box>
-           
+
             {/* <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
               <Button
                 type="submit"

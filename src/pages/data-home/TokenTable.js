@@ -100,7 +100,7 @@ export default function TokenTable() {
     const fetchTrades = async () => {
       const token = localStorage.getItem('token');
       const uid = localStorage.getItem('uid');
-      const url = `http://127.0.0.1:5005/api/data/getTokenTable`;
+      const url = `http://127.0.0.1:5005/api/token/getTokenTable`;
       try {
         const postData = {
           order_by: orderBy
@@ -108,7 +108,7 @@ export default function TokenTable() {
         const response = await axios.post(url, postData, {
           headers: {
             Authorization: `${token}`,
-            Uid: `${uid}`,
+            Uid: `${uid}`
           }
         });
         setData(response.data.data || []);
