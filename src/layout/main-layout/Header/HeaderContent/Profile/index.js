@@ -57,6 +57,8 @@ function a11yProps(index) {
 const Profile = () => {
   const theme = useTheme();
   const [username, setUsername] = useState('Myquant');
+
+  const [picUrl, setPicUrl] = useState('');
   const navigate = useNavigate();
   const handleLogout = async () => {
     localStorage.removeItem('username');
@@ -65,7 +67,9 @@ const Profile = () => {
     navigate('/home');
   };
   useEffect(() => {
-    setUsername(localStorage.getItem('username'));
+    const userInfo  = JSON.parse(localStorage.getItem('userInfo'));
+    setUsername( userInfo ? userInfo.username : 'Myquant');
+    setPicUrl(userInfo ? userInfo.pic_url : '');
   }, []);
 
   const anchorRef = useRef(null);
@@ -105,7 +109,7 @@ const Profile = () => {
         onClick={handleToggle}
       >
         <Stack direction="row" spacing={2} alignItems="center" sx={{ p: 0.5 }}>
-          <Avatar alt="profile user" src={avatar1} sx={{ width: 32, height: 32 }} />
+          <Avatar alt="profile user" src={picUrl?picUrl:avatar1} sx={{ width: 32, height: 32 }} />
           <Typography variant="subtitle1">{username}</Typography>
         </Stack>
       </ButtonBase>
@@ -147,7 +151,7 @@ const Profile = () => {
                       <Grid container justifyContent="space-between" alignItems="center">
                         <Grid item>
                           <Stack direction="row" spacing={1.25} alignItems="center">
-                            <Avatar alt="profile user" src={avatar1} sx={{ width: 32, height: 32 }} />
+                            <Avatar alt="profile user" src={picUrl} sx={{ width: 32, height: 32 }} />
                             <Stack>
                               <Typography variant="h6">{username}</Typography>
                               {/* <Typography variant="body2" color="textSecondary">

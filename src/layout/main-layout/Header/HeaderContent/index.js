@@ -5,13 +5,15 @@ import { Box, useMediaQuery, Button } from '@mui/material';
 
 import Profile from './Profile';
 import Logo from 'components/Logo';
-import { width } from '../../../../../node_modules/@mui/system/index';
+
 
 // ==============================|| HEADER - CONTENT ||============================== //
 
 const HeaderContent = () => {
   const matchesXs = useMediaQuery((theme) => theme.breakpoints.down('md'));
-  const username = localStorage.getItem('username');
+  const userInfoStr = localStorage.getItem('userInfo');
+  const userInfo = userInfoStr ? JSON.parse(userInfoStr) : null;
+
 
   return (
     <>
@@ -44,7 +46,7 @@ const HeaderContent = () => {
         </Box>
       </Box>
 
-      {!username && (
+      {!userInfo && (
         <Box sx={{ flexShrink: 0, ml: 0.75, gap: 0.5, alignItems: 'center' }}>
           <Button color="primary" variant="outlined" size="midium" component="a" href="/sign-in/">
             Sign in
@@ -69,7 +71,7 @@ const HeaderContent = () => {
         </Box>
       )}
 
-      {username && <Profile />}
+      {userInfo && <Profile />}
     </>
   );
 };

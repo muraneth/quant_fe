@@ -81,21 +81,20 @@ export default function SignIn() {
 
   const handleGoogleLoginSuccess = (credentialResponse) => {
     const token = credentialResponse.credential;
+    console.log('idToken:', token);
     const userObject = jwtDecode(token);
-    console.log('User Object:', userObject);
+    console.log('userObject:', userObject);
     // userObject.email will contain the user's email address
+    // handleLogin(userObject.email, 'google');
+    localStorage.setItem('idToken', token);
+    navigate('/home');
   };
 
   const handleGoogleLoginError = () => {
     console.log('Login Failed');
   };
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    const email = data.get('email');
-    const password = data.get('password');
-    console.log(email, password);
+  const handleLogin= async (email, password) =>{
     try {
       const response = await axios.post('https://matrixcipher.com/api/user/login', {
         email,
@@ -117,7 +116,19 @@ export default function SignIn() {
       setEmailErrorMessage('Invalid username or password');
       setPasswordError(true);
     }
+  }
+
+  
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    const email = data.get('email');
+    const password = data.get('password');
+    handleLogin(email, password);
+   
   };
+
+  
 
   useEffect(() => {
     if (uid !== '') {
@@ -289,7 +300,7 @@ export default function SignIn() {
                 mt: 2
               }}
             >
-              {/* <GoogleLogin onSuccess={handleGoogleLoginSuccess} onError={handleGoogleLoginError} useOneTap /> */}
+              <GoogleLogin onSuccess={handleGoogleLoginSuccess} onError={handleGoogleLoginError} useOneTap />
             </Box>
           </Card>
         </Stack>

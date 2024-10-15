@@ -24,10 +24,11 @@ import { useNavigate } from 'react-router-dom';
 // import getSignUpTheme from './getSignUpTheme';
 import ToggleColorMode from './ToggleColorMode';
 import Logo from 'components/Logo';
-// import { GoogleIcon, FacebookIcon, SitemarkIcon } from './CustomIcons';
+import { GoogleIcon, FacebookIcon, SitemarkIcon } from './CustomIcons';
 import axios from 'axios';
 import CustomTextField from 'components/overrides/CustomTextField';
-
+import { GoogleLogin } from '@react-oauth/google';
+import {httpClient,post} from 'server/httpClient'
 function ToggleCustomTheme({ showCustomTheme, toggleCustomTheme }) {
   return (
     <Box
@@ -154,6 +155,27 @@ export default function SignUp() {
       }
     }
   };
+  const handleGoogleSignupSuccess = async (credentialResponse) => {
+    const Idtoken = credentialResponse.credential
+    const response = await post('/api/user/googleLogin', {
+      Idtoken
+    },{});
+    if (response.code === 0) {
+      localStorage.setItem('token', response.data.token);
+      localStorage.setItem('uid', response.data.uid);
+      localStorage.setItem('userInfo', JSON.stringify(response.data));
+
+      navigate('/home', { replace: true });
+    } else {
+      console.log('Login Failed');
+      console.log(response);
+      
+    }
+  }
+  const handleGoogleLoginError = (error) => {
+    console.log('Login Failed');
+  }
+
 
   return (
     <>
@@ -206,9 +228,23 @@ export default function SignUp() {
           >
             {/* <SitemarkIcon /> */}
             <Logo />
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                mt: 2
+              }}
+            >
+              <GoogleLogin onSuccess={handleGoogleSignupSuccess} onError={handleGoogleLoginError} useOneTap />
+            </Box>
             <Typography component="h1" variant="h4" sx={{ width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)' }}>
               Sign up
             </Typography>
+
+            <Divider>
+              <Typography color="text.secondary">or</Typography>
+            </Divider>
             <Box component="form" onSubmit={handleSubmit} sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
               <FormControl>
                 <FormLabel htmlFor="name">Full name</FormLabel>
@@ -278,9 +314,7 @@ export default function SignUp() {
                 Already have an account? Sign in
               </Link>
             </Box>
-            {/* <Divider>
-              <Typography color="text.secondary">or</Typography>
-            </Divider> */}
+           
             {/* <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
               <Button
                 type="submit"

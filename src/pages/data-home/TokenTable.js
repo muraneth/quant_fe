@@ -108,7 +108,7 @@ export default function TokenTable() {
         const response = await axios.post(url, postData, {
           headers: {
             Authorization: `${token}`,
-            Uid: `${uid}`
+            Uid: `${uid}`,
           }
         });
         setData(response.data.data || []);
@@ -121,7 +121,7 @@ export default function TokenTable() {
 
   const isSelected = (walletAddress) => selected.indexOf(walletAddress) !== -1;
   const handleCellClick = (token) => {
-    navigate(`/dashboard/${token}`);
+    navigate(`/chart/${token}`);
   };
 
   const handleRequestSort = (event, property) => {

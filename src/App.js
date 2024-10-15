@@ -10,11 +10,11 @@ import { GoogleOAuthProvider } from '@react-oauth/google';
 const CLIENT_ID = '586510859498-n781b8iru79em2he06oevvo65alr719r.apps.googleusercontent.com';
 const App = () => (
   <GoogleOAuthProvider clientId={CLIENT_ID}>
-  <ThemeCustomization>
-    <ScrollTop>
-      <Routes />
-    </ScrollTop>
-  </ThemeCustomization>
+    <ThemeCustomization>
+      <ScrollTop>
+        <Routes />
+      </ScrollTop>
+    </ThemeCustomization>
   </GoogleOAuthProvider>
 );
 
