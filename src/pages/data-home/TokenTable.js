@@ -121,7 +121,7 @@ export default function TokenTable() {
 
   const isSelected = (walletAddress) => selected.indexOf(walletAddress) !== -1;
   const handleCellClick = (token) => {
-    navigate(`/chart/${token}`);
+    navigate(`/chart/${token}/avgCost`);
   };
 
   const handleRequestSort = (event, property) => {
@@ -129,6 +129,23 @@ export default function TokenTable() {
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
   };
+  function formatBigNumber(value) {
+    if (value >= 1000000) {
+      return (
+        (value / 1000000).toLocaleString(undefined, {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2
+        }) + 'M'
+      );
+    } else {
+      return (
+        (value / 1000).toLocaleString(undefined, {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2
+        }) + 'K'
+      );
+    }
+  }
 
   return (
     <Box>
@@ -179,23 +196,16 @@ export default function TokenTable() {
                   >
                     {row.token}
                   </TableCell>
-                  <TableCell align="left">
-                    {(row.mcp / 1000000).toLocaleString(undefined, {
-                      minimumFractionDigits: 2,
-                      maximumFractionDigits: 2
-                    })}
-                    M
-                  </TableCell>{' '}
-                  <TableCell align="left">{row.holder}</TableCell>
-                  <TableCell align="left">{row.mcp_to_holder}</TableCell>
+                  <TableCell align="left">{formatBigNumber(row.mcp)}</TableCell> <TableCell align="left">{row.holder}</TableCell>
+                  <TableCell align="left">{row.mcp_to_holder.toFixed(2)}</TableCell>
                   <TableCell align="left">{row.price}</TableCell>
                   <TableCell align="left">{row.avg_cost}</TableCell>
-                  <TableCell align="left">{row.price_to_avg_cost}</TableCell>
-                  <TableCell align="left">{row.poolsize}</TableCell>
-                  <TableCell align="left">{row.poolsize_to_mcp}</TableCell>
-                  <TableCell align="left">{row.volumn}</TableCell>
-                  <TableCell align="left">{row.volumn_to_mcp}</TableCell>
-                  <TableCell align="left">{row.volumn_to_poolsize}</TableCell>
+                  <TableCell align="left">{row.price_to_avg_cost.toFixed(3)}</TableCell>
+                  <TableCell align="left">{formatBigNumber(row.poolsize)}</TableCell>
+                  <TableCell align="left">{row.poolsize_to_mcp.toFixed(3)}</TableCell>
+                  <TableCell align="left">{formatBigNumber(row.volumn)}</TableCell>
+                  <TableCell align="left">{row.volumn_to_mcp.toFixed(3)}</TableCell>
+                  <TableCell align="left">{row.volumn_to_poolsize.toFixed(3)}</TableCell>
                 </TableRow>
               );
             })}
