@@ -19,28 +19,14 @@ import { Typography, ListItemText } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 
 export default function AnalyzePage() {
-  const [tokens, setTokens] = useState(['NPC', 'ANDY', 'JESUS', 'ELON']);
-  const [chart, setChart] = useState('TradeVolumeVsPoolSize');
-  const [symbols, setSymbols] = useState(['NPC']);
+
   const location = useLocation();
 
-  // const { symbol, chartId } = useParams();
-  const dispatch = useDispatch();
+
   const { tokenItem } = useSelector((state) => state.token);
   const { drawerOpen, openItem } = useSelector((state) => state.menu);
   const chartId = openItem ? openItem[0] : null;
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get('http://127.0.0.1:5005/api/token/tokens');
-        setTokens(response.data.data ? response.data.data : ['NPC']);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchData();
-  }, []);
 
   if (location.pathname.includes('/topwallet')) {
     return (

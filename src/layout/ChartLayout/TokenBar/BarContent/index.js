@@ -3,10 +3,11 @@
 import { Box, useMediaQuery, ButtonBase, List, ListItemText, Divider } from '@mui/material';
 import { useState, useEffect } from 'react';
 import Search from './Search';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectToken } from 'store/reducers/token';
+import { getTokens,getToken } from 'server/tokenlist';
+
 
 // ==============================|| HEADER - CONTENT ||============================== //
 
@@ -17,37 +18,41 @@ const TokenContent = () => {
   const navigate = useNavigate();
 
   // Initialize selectedToken from localStorage if available, otherwise default to 'NPC'
-  const [selectedToken, setSelectedToken] = useState(localStorage.getItem('selectedToken') || 'NPC');
+  const [selectedToken, setSelectedToken] = useState();
+
+
   const { tokenItem } = useSelector((state) => state.token);
   const { openItem } = useSelector((state) => state.menu);
 
+  
   useEffect(() => {
-    dispatch(selectToken({ tokenItem: selectedToken }));
-    // Save the selected token to localStorage whenever it changes
-    localStorage.setItem('selectedToken', selectedToken);
-  }, [selectedToken, dispatch]);
+    console.log('tokenItem', tokenItem);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get('http://127.0.0.1:5005/api/token/tokens');
-        setTokens(response.data.data ? response.data.data : ['NPC', 'ANDY']);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchData();
-  }, []);
+    getTokens().then((data) => {
+  
+       setTokens(data);
+       setSelectedToken(data[0]);  
+     });
+    
+     
+   }, []);
 
-  const handleClick = (symbol) => {
-    setSelectedToken(symbol); // Update the selected token state
-    navigate(`/chart/${symbol}/${openItem}`); // Navigate to the selected token's page
+
+  const handleClick = (item) => {
+      
+    setSelectedToken(item); // Update the selected token state
+    dispatch(selectToken({ tokenItem: item }));
+    localStorage.setItem('selectedToken', item);
+    navigate(`/chart/${item.symbol}/${openItem}`); // Navigate to the selected token's page
+    
   };
 
   const handleSearchSelect = (value) => {
     if (value) {
+   
       setSelectedToken(value); // Update selected token based on search selection
-      navigate(`/chart/${value}/${openItem}`); // Navigate to the selected token's page
+      navigate(`/chart/${value.symbol}/${openItem}`); // Navigate to the selected token's page
+      
     }
   };
 
@@ -55,23 +60,23 @@ const TokenContent = () => {
     <>
       <Box sx={{ display: 'flex', alignItems: 'center', overflow: 'auto', maxWidth: '100%' }}>
         <List sx={{ display: 'flex', flexDirection: 'row', gap: 1 }}>
-          {tokens.map((symbol, index) => (
+          {tokens.map((item, index) => (
             <Box key={index} sx={{ display: 'flex', alignItems: 'center' }}>
               <ButtonBase
-                onClick={() => handleClick(symbol)}
+                onClick={() => handleClick(item)}
                 sx={{
                   px: 2,
                   py: 1,
                   borderRadius: 1,
-                  backgroundColor: tokenItem === symbol ? 'primary.main' : 'transparent',
-                  color: tokenItem === symbol ? 'gray' : 'text.primary',
+                  backgroundColor: selectedToken?.symbol === item?.symbol ? 'primary.main' : 'transparent',
+                  color: selectedToken?.symbol === item?.symbol ? 'gray' : 'text.primary',
                   '&:hover': {
                     backgroundColor: 'primary.light',
                     color: 'gray'
                   }
                 }}
               >
-                <ListItemText primary={symbol} />
+                <ListItemText primary={item.symbol} />
               </ButtonBase>
               {index < tokens.length - 1 && <Divider orientation="vertical" flexItem />}
             </Box>
