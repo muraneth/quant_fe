@@ -1,44 +1,45 @@
 import React, { useState } from 'react';
-import { Box, Checkbox, ListItemText, TextField, Typography } from '@mui/material';
+import { Box, Typography, Button } from '@mui/material';
 import MainCard from 'components/MainCard';
 import MultiChart from './MultiChart';
 import SelectToken from './SelectToken';
 import SelectChart from './SelectChart';
+
 export default function ComparePage() {
-  const [chart, setChart] = useState('TradeVolumeVsPoolSize');
-  const [symbols, setSymbols] = useState(['NPC']);
-  const [tokens, setTokens] = useState(['NPC', 'ANDY', 'JESUS', 'ELON']);
+  const [boxes, setBoxes] = useState([{ id: Date.now(), chart: 'TradeVolumeVsPoolSize', symbols: ['NPC'] }]);
+
+  const addBox = () => {
+    setBoxes([...boxes, { id: Date.now(), chart: 'TradeVolumeVsPoolSize', symbols: ['NPC'] }]);
+  };
+
+  const updateChart = (id, newChart) => {
+    setBoxes(boxes.map((box) => (box.id === id ? { ...box, chart: newChart } : box)));
+  };
+
+  const updateSymbols = (id, newSymbols) => {
+    setBoxes(boxes.map((box) => (box.id === id ? { ...box, symbols: newSymbols } : box)));
+  };
 
   return (
     <Box sx={{ width: '100%', ml: { xs: 1, md: 1 }, mt: '60px' }}>
-      <MainCard key={'id'} content={false} sx={{ mt: 1.5, bgcolor: 'background.paper' }}>
-        <Box sx={{ pt: 1, pr: 2 }}>
-          <Typography variant="h6" sx={{ mb: 2, ml: 4 }}>
-            MultiChart
-          </Typography>
+      <SelectToken />
+      {boxes.map((box) => (
+        <MainCard key={box.id} content={false} sx={{ mt: 1.5, bgcolor: 'background.paper' }}>
+          <Box sx={{ pt: 1, pr: 2 }}>
+            <Typography variant="h6" sx={{ mb: 2, ml: 4 }}>
+              MultiChart
+            </Typography>
 
-          <TextField label="Chart" variant="outlined" value={chart} onChange={(e) => setChart(e.target.value)} fullWidth />
-          <SelectChart />
-          <SelectToken />
-          {tokens.map((symbol, index) => (
-            <Box key={index} sx={{ display: 'flex', alignItems: 'center' }}>
-              <Checkbox
-                checked={symbols.includes(symbol)}
-                onChange={(e) => {
-                  if (e.target.checked) {
-                    setSymbols([...symbols, symbol]);
-                  } else {
-                    setSymbols(symbols.filter((item) => item !== symbol));
-                  }
-                }}
-              />
-              <ListItemText primary={symbol} />
-            </Box>
-          ))}
+            <SelectChart default={box.chart} chose={(newChart) => updateChart(box.id, newChart)} />
 
-          <MultiChart chart={chart} symbols={symbols} />
-        </Box>
-      </MainCard>
+            <MultiChart chart={box.chart} symbols={box.symbols} />
+          </Box>
+        </MainCard>
+      ))}
+
+      <Button variant="contained" onClick={addBox} sx={{ mt: 2 }}>
+        Add Box
+      </Button>
     </Box>
   );
 }
