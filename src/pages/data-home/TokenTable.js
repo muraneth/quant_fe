@@ -3,6 +3,8 @@ import { useEffect, useState } from 'react';
 import { Box, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectToken } from 'store/reducers/token';
 
 // Comparator and sorting helpers
 function descendingComparator(a, b, orderBy) {
@@ -95,6 +97,7 @@ export default function TokenTable() {
   const [data, setData] = useState([]);
   const { symbol } = useParams();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchTrades = async () => {
@@ -121,6 +124,8 @@ export default function TokenTable() {
 
   const isSelected = (walletAddress) => selected.indexOf(walletAddress) !== -1;
   const handleCellClick = (token) => {
+    dispatch(selectToken({ tokenItem: { symbol: token } }));
+    localStorage.setItem('selectedToken', { symbol: token });
     navigate(`/chart/${token}/avgCost`);
   };
 

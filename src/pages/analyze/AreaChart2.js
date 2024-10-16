@@ -138,7 +138,7 @@ const WalletChart2 = ({ symbol, chart }) => {
             left: 'center',
             top: 'center',
             style: {
-              text: 'Matricipher.com',
+              text: 'MatrixCipher.com',
               fontSize: 60,
               fontWeight: 'bold',
               fill: 'rgba(100, 1000, 0, 0.2)', // Semi-transparent watermark

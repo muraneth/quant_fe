@@ -19,28 +19,11 @@ import { Typography, ListItemText } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 
 export default function AnalyzePage() {
-  const [tokens, setTokens] = useState(['NPC', 'ANDY', 'JESUS', 'ELON']);
-  const [chart, setChart] = useState('TradeVolumeVsPoolSize');
-  const [symbols, setSymbols] = useState(['NPC']);
   const location = useLocation();
 
-  // const { symbol, chartId } = useParams();
-  const dispatch = useDispatch();
   const { tokenItem } = useSelector((state) => state.token);
   const { drawerOpen, openItem } = useSelector((state) => state.menu);
   const chartId = openItem ? openItem[0] : null;
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get('http://127.0.0.1:5005/api/token/tokens');
-        setTokens(response.data.data ? response.data.data : ['NPC']);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchData();
-  }, []);
 
   if (location.pathname.includes('/topwallet')) {
     return (
@@ -54,7 +37,7 @@ export default function AnalyzePage() {
     return (
       <div>
         <h1>AreaChart</h1>
-        <PriceVolumeChart symbol={tokenItem} path={'pbv'} />
+        <PriceVolumeChart symbol={tokenItem.symbol} path={'pbv'} />
       </div>
     );
   }
@@ -62,7 +45,7 @@ export default function AnalyzePage() {
     return (
       <div>
         <h1>AreaChart</h1>
-        <PriceVolumeChart symbol={tokenItem} path={'walletPbv'} />
+        <PriceVolumeChart symbol={tokenItem.symbol} path={'walletPbv'} />
       </div>
     );
   }
@@ -70,7 +53,7 @@ export default function AnalyzePage() {
     return (
       <div>
         <h1>VolumeChart</h1>
-        <VolumeChart symbol={tokenItem} usd={'Usd'} />
+        <VolumeChart symbol={tokenItem.symbol} usd={'Usd'} />
       </div>
     );
   }
@@ -78,7 +61,7 @@ export default function AnalyzePage() {
     return (
       <div>
         <h1>VolumeChart</h1>
-        <VolumeChart symbol={tokenItem} usd={''} />
+        <VolumeChart symbol={tokenItem.symbol} usd={''} />
       </div>
     );
   }
@@ -86,7 +69,7 @@ export default function AnalyzePage() {
   return (
     <div>
       <h1>AnalyzePage</h1>
-      <AraeChart2 symbol={tokenItem} chart={chartId ? chartId : 'avgCost'} />
+      <AraeChart2 symbol={tokenItem.symbol} chart={chartId ? chartId : 'avgCost'} />
     </div>
   );
 }
