@@ -150,7 +150,7 @@ const Listbox = styled('ul')(
 `
 );
 
-export default function CustomizedHook() {
+export default function CustomizedHook({ defaultValue, onChooseToken }) {
   const {
     getRootProps,
     getInputLabelProps,
@@ -173,7 +173,7 @@ export default function CustomizedHook() {
   return (
     <Root>
       <div {...getRootProps()}>
-        <Label {...getInputLabelProps()}>Customized hook</Label>
+        <Label {...getInputLabelProps()}>Choose Token</Label>
         <InputWrapper ref={setAnchorEl} className={focused ? 'focused' : ''}>
           {value.map((option, index) => {
             const { key, ...tagProps } = getTagProps({ index });
@@ -199,7 +199,6 @@ export default function CustomizedHook() {
   );
 }
 
-// Top 100 films as rated by IMDb users. http://www.imdb.com/chart/top
 const top100Films = [
   { title: 'The Shawshank Redemption', year: 1994 },
   { title: 'The Godfather', year: 1972 },
