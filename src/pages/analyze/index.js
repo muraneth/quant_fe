@@ -29,7 +29,7 @@ export default function AnalyzePage() {
   const { tokenItem } = useSelector((state) => state.token);
   const { drawerOpen, openItem } = useSelector((state) => state.menu);
   const chartId = openItem ? openItem[0] : null;
- 
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -80,38 +80,6 @@ export default function AnalyzePage() {
         <h1>VolumeChart</h1>
         <VolumeChart symbol={tokenItem} usd={''} />
       </div>
-    );
-  }
-
-  if (location.pathname.includes('/MultiChart')) {
-    return (
-      <MainCard key={'id'} content={false} sx={{ mt: 1.5, bgcolor: 'background.paper' }}>
-        <Box sx={{ pt: 1, pr: 2 }}>
-          <Typography variant="h6" sx={{ mb: 2, ml: 4 }}>
-            MultiChart
-          </Typography>
-          <TextField label="Chart" variant="outlined" value={chart} onChange={(e) => setChart(e.target.value)} fullWidth />
-          <Typography>tokens: {tokens}</Typography>
-
-          {tokens.map((symbol, index) => (
-            <Box key={index} sx={{ display: 'flex', alignItems: 'center' }}>
-              <Checkbox
-                checked={symbols.includes(symbol)}
-                onChange={(e) => {
-                  if (e.target.checked) {
-                    setSymbols([...symbols, symbol]);
-                  } else {
-                    setSymbols(symbols.filter((item) => item !== symbol));
-                  }
-                }}
-              />
-              <ListItemText primary={symbol} />
-            </Box>
-          ))}
-
-          <MultiChart chart={chart} symbols={symbols} />
-        </Box>
-      </MainCard>
     );
   }
 

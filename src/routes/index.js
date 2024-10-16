@@ -8,10 +8,19 @@ import UserRoutes from './User';
 import StrategyPageRoutes from './StrategyRoutes';
 import InvestRoutes from './InvestRoutes';
 import AdminRoutes from './AdminRoutes';
-import DataPageRoutes from './chart';
-
-// import ProductRoutes from './Products';
+import DataPageRoutes from './TokenChart';
+import CompareRoutes from './CompareToken';
 
 export default function ThemeRoutes() {
-  return useRoutes([AdminRoutes, LandingPageRoutes, MainRoutes, LoginRoutes, UserRoutes, StrategyPageRoutes, InvestRoutes, DataPageRoutes]);
+  return useRoutes([
+    AdminRoutes,
+    LandingPageRoutes,
+    MainRoutes,
+    LoginRoutes,
+    UserRoutes,
+    StrategyPageRoutes,
+    InvestRoutes,
+    DataPageRoutes,
+    CompareRoutes
+  ]);
 }

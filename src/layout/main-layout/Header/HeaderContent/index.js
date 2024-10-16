@@ -6,14 +6,12 @@ import { Box, useMediaQuery, Button } from '@mui/material';
 import Profile from './Profile';
 import Logo from 'components/Logo';
 
-
 // ==============================|| HEADER - CONTENT ||============================== //
 
 const HeaderContent = () => {
   const matchesXs = useMediaQuery((theme) => theme.breakpoints.down('md'));
   const userInfoStr = localStorage.getItem('userInfo');
   const userInfo = userInfoStr ? JSON.parse(userInfoStr) : null;
-
 
   return (
     <>
@@ -42,6 +40,9 @@ const HeaderContent = () => {
 
           <Button variant="text" color="primary" size="large" href="/dashboard/">
             Dashboard
+          </Button>
+          <Button variant="text" color="primary" size="large" href="/compare/">
+            Compare
           </Button>
         </Box>
       </Box>

@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 // initial state
 const initialState = {
-  tokenItem: 'NPC'
+  tokenItem: 'ANDY'
 };
 
 const tokenSlice = createSlice({
