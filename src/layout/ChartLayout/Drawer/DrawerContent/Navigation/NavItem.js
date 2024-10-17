@@ -28,7 +28,7 @@ const NavItem = ({ item, level }) => {
   if (item?.external) {
     listItemProps = { component: 'a', href: item.url, target: itemTarget };
   }
-  
+
   const itemHandler = (id) => {
     dispatch(activeItem({ openItem: [id] }));
   };

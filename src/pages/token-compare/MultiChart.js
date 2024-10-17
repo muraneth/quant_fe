@@ -71,12 +71,6 @@ const MultiChart = ({ chart, symbols }) => {
       }
     };
 
-    // symbols.forEach((symbol) => {
-    //   // Check if the symbol exists in chartData
-    //   if (!(symbol in chartData)) {
-    //     fetchData(symbol);
-    //   }
-    // });
     // Fetch data only when chart or symbols have changed
     if (chart !== previousChart || symbols.length !== Object.keys(chartData).length) {
       symbols.forEach((symbol) => {
