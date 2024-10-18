@@ -118,7 +118,8 @@ const MultiChart = ({ chart, symbols, zoom, onZoomChange }) => {
           {
             type: 'inside',
             xAxisIndex: 0,
-            filterMode: 'filter'
+            filterMode: 'filter',
+            disabled: true
           }
         ],
         series: keys.map((symbol) => ({

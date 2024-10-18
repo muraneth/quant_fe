@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { Box, Typography, Button } from '@mui/material';
+import { Box, Typography, Button,IconButton } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
+
 import MainCard from 'components/MainCard';
 import MultiChart from './MultiChart';
 import SelectToken from './SelectToken';
@@ -11,7 +13,10 @@ export default function ComparePage() {
   const [boxes, setBoxes] = useState([{ id: Date.now(), chart: 'TradeVolumeVsPoolSize', symbols: [] }]);
 
   const addBox = () => {
-    setBoxes([...boxes, { id: Date.now(), chart: '', symbols: [] }]);
+    setBoxes([...boxes, { id: Date.now(), chart: '', symbols: boxes[0].symbols}])
+  };
+  const deleteBox = (id) => {
+    setBoxes(boxes.filter(box => box.id !== id));
   };
 
   const updateSymbols = (newSymbols) => {
@@ -20,7 +25,11 @@ export default function ComparePage() {
   };
 
   const updateChart = (id, newChart) => {
-    setBoxes(boxes.map((box) => (box.id === id ? { ...box, chart: newChart } : box)));
+    const newBoxes = boxes.map((box) => (box.id === id ? { ...box, chart: newChart } : box));
+    console.log('boxes on updatechart after', newBoxes);
+    setBoxes(newBoxes);
+  
+    
   };
   const handleZoomChange = (newZoom) => {
     console.log('newZoom index', newZoom);
@@ -32,19 +41,27 @@ export default function ComparePage() {
       <SelectToken onSelect={updateSymbols} />
       {boxes.map((box) => (
         <MainCard key={box.id} content={false} sx={{ mt: 1.5, bgcolor: 'background.paper' }}>
-          <Box sx={{ pt: 1, pr: 2 }}>
-            <Typography variant="h6" sx={{ mb: 2, ml: 4 }}>
-              MultiChart
-            </Typography>
+          <Box sx={{ pt: 1, pr: 2, position: 'relative' }}>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2, mr: 2 }}>
+              <Typography variant="h6" sx={{ ml: 4 }}>
+                {box.chart}
+              </Typography>
+              <IconButton 
+                onClick={() => deleteBox(box.id)} 
+                disabled={boxes.length === 1}
+                sx={{ color: 'error.main' }}
+              >
+                <DeleteIcon />
+              </IconButton>
+            </Box>
 
             <SelectChart onSelect={(newChart) => updateChart(box.id, newChart)} />
 
-            {/* <MultiChart chart={box.chart} symbols={box.symbols} /> */}
             <MultiChart
               chart={box.chart}
               symbols={box.symbols}
-              zoom={sharedZoom} // Pass shared zoom state
-              onZoomChange={handleZoomChange} // Pass zoom change handler
+              zoom={sharedZoom}
+              onZoomChange={handleZoomChange}
             />
           </Box>
         </MainCard>
