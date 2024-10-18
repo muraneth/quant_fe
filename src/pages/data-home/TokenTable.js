@@ -47,7 +47,8 @@ const headCells = [
   { id: 'poolsize_to_mcp', align: 'left', label: 'PoolSize/Mcp' },
   { id: 'volumn', align: 'left', label: 'Volume' },
   { id: 'volumn_to_mcp', align: 'left', label: 'Volume/Mcp' },
-  { id: 'volumn_to_poolsize', align: 'left', label: 'Volume/PoolSize' }
+  { id: 'volumn_to_poolsize', align: 'left', label: 'Volume/PoolSize' },
+  { id: 'time', align: 'left', label: 'Time' }
 ];
 
 // Sticky Table Header
@@ -211,6 +212,7 @@ export default function TokenTable() {
                   <TableCell align="left">{formatBigNumber(row.volumn)}</TableCell>
                   <TableCell align="left">{row.volumn_to_mcp.toFixed(3)}</TableCell>
                   <TableCell align="left">{row.volumn_to_poolsize.toFixed(3)}</TableCell>
+                  <TableCell align="left">{row.time}</TableCell>
                 </TableRow>
               );
             })}

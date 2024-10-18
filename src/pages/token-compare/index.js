@@ -6,6 +6,8 @@ import SelectToken from './SelectToken';
 import SelectChart from './SelectChart';
 
 export default function ComparePage() {
+  const [sharedZoom, setSharedZoom] = useState({ min: 20, max: 100 }); // Adjust the initial values as needed
+
   const [boxes, setBoxes] = useState([{ id: Date.now(), chart: 'TradeVolumeVsPoolSize', symbols: [] }]);
 
   const addBox = () => {
@@ -20,6 +22,11 @@ export default function ComparePage() {
   const updateChart = (id, newChart) => {
     setBoxes(boxes.map((box) => (box.id === id ? { ...box, chart: newChart } : box)));
   };
+  const handleZoomChange = (newZoom) => {
+    console.log('newZoom index', newZoom);
+
+    setSharedZoom(newZoom);
+  };
   return (
     <Box sx={{ width: '100%', ml: { xs: 1, md: 1 }, mt: 10 }}>
       <SelectToken onSelect={updateSymbols} />
@@ -32,7 +39,13 @@ export default function ComparePage() {
 
             <SelectChart onSelect={(newChart) => updateChart(box.id, newChart)} />
 
-            <MultiChart chart={box.chart} symbols={box.symbols} />
+            {/* <MultiChart chart={box.chart} symbols={box.symbols} /> */}
+            <MultiChart
+              chart={box.chart}
+              symbols={box.symbols}
+              zoom={sharedZoom} // Pass shared zoom state
+              onZoomChange={handleZoomChange} // Pass zoom change handler
+            />
           </Box>
         </MainCard>
       ))}
