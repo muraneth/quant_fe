@@ -5,6 +5,7 @@ import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectToken } from 'store/reducers/token';
+import { formatBigNumber } from 'utils/common';
 
 // Comparator and sorting helpers
 function descendingComparator(a, b, orderBy) {
@@ -135,23 +136,6 @@ export default function TokenTable() {
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
   };
-  function formatBigNumber(value) {
-    if (value >= 1000000) {
-      return (
-        (value / 1000000).toLocaleString(undefined, {
-          minimumFractionDigits: 2,
-          maximumFractionDigits: 2
-        }) + 'M'
-      );
-    } else {
-      return (
-        (value / 1000).toLocaleString(undefined, {
-          minimumFractionDigits: 2,
-          maximumFractionDigits: 2
-        }) + 'K'
-      );
-    }
-  }
 
   return (
     <Box>

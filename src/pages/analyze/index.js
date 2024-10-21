@@ -41,7 +41,7 @@ export default function AnalyzePage() {
       </div>
     );
   }
-  if (location.pathname.includes('/walletPriceByVolume')) {
+  if (location.pathname.includes('/WalletPriceByVolume')) {
     return (
       <div>
         <h1>AreaChart</h1>
@@ -68,7 +68,7 @@ export default function AnalyzePage() {
 
   return (
     <div>
-      <h1>AnalyzePage</h1>
+      <h2>{tokenItem.symbol}</h2>
       <AraeChart2 symbol={tokenItem.symbol} chart={chartId ? chartId : 'avgCost'} />
     </div>
   );

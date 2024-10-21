@@ -50,6 +50,21 @@ const MultiChart = ({ chart, symbols, zoom, onZoomChange }) => {
     });
   }, [symbols, chart]);
 
+  const calculateMovingAverage = (data, windowSize) => {
+    if (!data || data.length === 0) return [];
+    const movingAvg = [];
+    for (let i = 0; i < data.length; i++) {
+      if (i < windowSize - 1) {
+        movingAvg.push(null); // Not enough data points
+      } else {
+        const window = data.slice(i - windowSize + 1, i + 1);
+        const sum = window.reduce((acc, curr) => acc + (curr.value || 0), 0);
+        movingAvg.push(sum / windowSize);
+      }
+    }
+    return movingAvg;
+  };
+
   const padArray = (arr, length) => {
     const newArr = [...arr];
     while (newArr.length < length) {
@@ -75,8 +90,13 @@ const MultiChart = ({ chart, symbols, zoom, onZoomChange }) => {
             type: 'cross'
           }
         },
+
         legend: {
-          data: [chart, 'price']
+          left: 'mid',
+          textStyle: {
+            color: 'white', // Set your desired color here
+            fontSize: 12 // Optional: customize font size
+          }
         },
         grid: {
           left: '3%',

@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { Box, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 
 // Comparator and sorting helpers
 function descendingComparator(a, b, orderBy) {
@@ -90,7 +91,8 @@ export default function WalletTable() {
   const [orderBy, setOrderBy] = useState('balance');
   const [selected] = useState([]);
   const [data, setData] = useState([]);
-  const { symbol } = useParams();
+  // const { symbol } = useParams();
+  const { tokenItem } = useSelector((state) => state.token);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -100,7 +102,7 @@ export default function WalletTable() {
       const url = `http://127.0.0.1:5005/api/data/topWallet`;
       try {
         const postData = {
-          token_symbol: symbol,
+          token_symbol: tokenItem.symbol,
           order_by: orderBy
         };
         const response = await axios.post(url, postData, {
@@ -115,11 +117,11 @@ export default function WalletTable() {
       }
     };
     fetchTrades();
-  }, [symbol, orderBy]);
+  }, [tokenItem, orderBy]);
 
   const isSelected = (walletAddress) => selected.indexOf(walletAddress) !== -1;
   const handleCellClick = (walletAddress) => {
-    navigate(`/analyze/${symbol}/wallet/${walletAddress}`);
+    navigate(`/analyze/${tokenItem.symbol}/wallet/${walletAddress}`);
   };
 
   const handleRequestSort = (event, property) => {
