@@ -5,7 +5,7 @@ import Switch from '@mui/material/Switch';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import FormControlLabel from '@mui/material/FormControlLabel';
-
+import BaseLineChart from './BaseLineChart';
 import BasicVolumeChart from './BasicVolumeChart';
 import AvgCostChart from './AvgCostChart';
 import { useState,useEffect } from 'react';
@@ -16,6 +16,9 @@ const parsePriceToKlineSeries = (data) => {
     });
 }
 
+function isBaseLineChart(chart) {
+    return  !isAvgCostChart(chart) && !isBasicVolumeChart(chart) && !isPriceByVolumeChart(chart);
+}
 function isAvgCostChart(chart) {
     const items = ['AvgCost', 'DexAvgCost', 'CexAvgCost', 'AvgCostExcept'];
     return items.includes(chart);
@@ -23,7 +26,11 @@ function isAvgCostChart(chart) {
 function isBasicVolumeChart(chart) {
     const items = ['DailyTradeVolume', 'DailyTradeVolumeUSD', 'DailyTxVolume', 'USDPnNVolume','PnNVolume','RobotVolume','TradingVolumeWithoutBot'];
     return items.includes(chart);
-  }
+}
+function isPriceByVolumeChart(chart) {
+    const items = ['PriceByVolumeTimeRange','WalletPriceByVolume'];
+    return items.includes(chart);
+}
 
 const ChartBox = ({ chartName,priceData,chartData }) =>{
    const [priceLineType, setPriceLineType] = useState('line');
@@ -39,6 +46,7 @@ const ChartBox = ({ chartName,priceData,chartData }) =>{
                 name: 'Price',
                 type: 'candlestick',
                 data: parsePriceToKlineSeries(priceData),
+                yAxisIndex: 0,
                 itemStyle: {
                   color: '#ef232a',
                   color0: '#14b143',
@@ -54,6 +62,7 @@ const ChartBox = ({ chartName,priceData,chartData }) =>{
               {
                 name: 'Price',
                 type: 'line',
+                yAxisIndex: 0,
                 data: priceData.map((item) => item.price),
                 smooth: true
               }
@@ -72,13 +81,16 @@ const ChartBox = ({ chartName,priceData,chartData }) =>{
                 <FormControlLabel control={<Switch onChange={switchKlineType}/>} label="Kline" />
 
             </Box>
-
+            {isBaseLineChart(chartName) &&(
+                <BaseLineChart chartName={chartName}  chartData={chartData} priceSeries={priceSeries} />
+            )}
             {isAvgCostChart(chartName) &&(
                 <AvgCostChart chartName={chartName}  chartData={chartData} priceSeries={priceSeries} />
             )}
             {isBasicVolumeChart(chartName) &&(
                 <BasicVolumeChart chartName={chartName}  chartData={chartData} priceSeries={priceSeries} />
             )}
+
         </MainCard>
     )
 

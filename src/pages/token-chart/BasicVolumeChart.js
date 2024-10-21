@@ -64,8 +64,8 @@ const PriceVolumeChart = ({ chartName,chartData,priceSeries }) => {
           type: 'slider', // Create a resize bar along the x-axis
           xAxisIndex: 0, // Apply to the x-axis
           start: 0, // Percentage to start at (0%)
-          end: 100 // Percentage to end at (100%)
-          
+          end: 100, // Percentage to end at (100%)
+          disable:true
         },
        
       ]
