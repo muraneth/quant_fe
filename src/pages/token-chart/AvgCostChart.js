@@ -1,4 +1,4 @@
-import PropTypes from 'prop-types';
+
 import { useState, useEffect, useRef } from 'react';
 import { useTheme } from '@mui/material/styles';
 
@@ -81,7 +81,8 @@ const AvgCostChart = ({ chartName,chartData ,priceSeries}) => {
           {
             type: 'inside',
             xAxisIndex: 0,
-            filterMode: 'filter'
+            filterMode: 'filter',
+            disabled: true
           }
         ],
         graphic: [

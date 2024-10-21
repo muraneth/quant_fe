@@ -1,11 +1,13 @@
 
 
 import MainCard from 'components/MainCard';
-
-import AvgCostChart from './AvgCostChart';
+import Switch from '@mui/material/Switch';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import FormControlLabel from '@mui/material/FormControlLabel';
 
 import BasicVolumeChart from './BasicVolumeChart';
-
+import AvgCostChart from './AvgCostChart';
 import { useState,useEffect } from 'react';
 
 const parsePriceToKlineSeries = (data) => {
@@ -62,10 +64,14 @@ const ChartBox = ({ chartName,priceData,chartData }) =>{
     },[priceLineType,priceData])
 
     return (
-        <MainCard title={chartName}>
-            <div>
-                <button onClick={switchKlineType}>Switch Kline Type</button>
-            </div>
+        <MainCard>
+            <Box display="flex" justifyContent="space-between" alignItems="center">
+                <Typography variant="h6" gutterBottom>
+                    {chartName}
+                </Typography>
+                <FormControlLabel control={<Switch onChange={switchKlineType}/>} label="Kline" />
+
+            </Box>
 
             {isAvgCostChart(chartName) &&(
                 <AvgCostChart chartName={chartName}  chartData={chartData} priceSeries={priceSeries} />

@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useState, useEffect } from 'react';
 import ReactECharts from 'echarts-for-react';
 
-const PriceVolumeChart = ({ chartName, priceData,chartData,priceType }) => {
+const PriceVolumeChart = ({ chartName,chartData,priceSeries }) => {
 
   const [options, setOptions] = useState({});
 
@@ -14,7 +14,7 @@ const PriceVolumeChart = ({ chartName, priceData,chartData,priceType }) => {
       },
       xAxis: {
         type: 'category',
-        data: priceData.map((item) => item.day),
+        data: chartData?.map((item) => item.day),
         axisTick: {
           alignWithLabel: true
         }
@@ -37,16 +37,11 @@ const PriceVolumeChart = ({ chartName, priceData,chartData,priceType }) => {
         }
       ],
       series: [
-        {
-          name: 'Price',
-          type: priceType,
-          data: priceData.map((item) => item.price),
-          yAxisIndex: 0
-        },
+        
         {
           name: 'Positive Volume',
           type: 'bar',
-          data: chartData.map((item) => item.positive_volume),
+          data: chartData?.map((item) => item.positive_volume),
           yAxisIndex: 1,
           itemStyle: {
             color: '#73C0DE'
@@ -55,12 +50,13 @@ const PriceVolumeChart = ({ chartName, priceData,chartData,priceType }) => {
         {
           name: 'Negative Volume',
           type: 'bar',
-          data: chartData.map((item) => item.negative_volume),
+          data: chartData?.map((item) => item.negative_volume),
           yAxisIndex: 1,
           itemStyle: {
             color: '#FF6F61'
           }
-        }
+        },
+        ...priceSeries
       ],
       // Add the dataZoom feature
       dataZoom: [
@@ -69,11 +65,13 @@ const PriceVolumeChart = ({ chartName, priceData,chartData,priceType }) => {
           xAxisIndex: 0, // Apply to the x-axis
           start: 0, // Percentage to start at (0%)
           end: 100 // Percentage to end at (100%)
-        }
+          
+        },
+       
       ]
     };
     setOptions(option);
-  }, [chartData, priceData,priceType]);
+  }, [chartData, priceSeries]);
 
   return <ReactECharts option={options} style={{ height: 400, width: '100%' }} />;
 };

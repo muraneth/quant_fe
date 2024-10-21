@@ -48,8 +48,7 @@ export default function ChartPage() {
 
 
   return (
-    <Box mt='30px'>
-      <Typography variant="h4" gutterBottom>Chart</Typography>
+    <Box sx={{mt:20}}>
       <ChartBox chartName={chartId} priceData={priceData} chartData={chartData} />
     </Box>
   );
