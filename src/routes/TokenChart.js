@@ -3,7 +3,7 @@ import Loadable from 'components/Loadable';
 import MainLayout from 'layout/main-layout';
 import ChartLayout from 'layout/ChartLayout';
 
-const ChartPage = Loadable(lazy(() => import('pages/analyze')));
+const ChartPage = Loadable(lazy(() => import('pages/token-chart')));
 const DataHomePage = Loadable(lazy(() => import('pages/data-home')));
 
 const DataPageRoutes = {

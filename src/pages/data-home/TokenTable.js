@@ -18,8 +18,8 @@ function descendingComparator(a, b, orderBy) {
 }
 
 function getComparator(order, orderBy) {
-  // return order === 'desc' ? (a, b) => descendingComparator(a, b, orderBy) : (a, b) => -descendingComparator(a, b, orderBy);
-  return (a, b) => descendingComparator(a, b, orderBy);
+  return order === 'desc' ? (a, b) => descendingComparator(a, b, orderBy) : (a, b) => -descendingComparator(a, b, orderBy);
+  // return (a, b) => descendingComparator(a, b, orderBy);
 }
 
 function stableSort(array, comparator) {
@@ -39,13 +39,15 @@ const headCells = [
   { id: 'token', align: 'left', label: 'Token' },
   { id: 'mcp', align: 'left', label: 'MarketCap' },
   { id: 'holder', align: 'left', label: 'Holder' },
+  {id:'holder_chg', align: 'left', label: 'HolderChg'},
   { id: 'mcp_to_holder', align: 'left', label: 'Mcp/Holder' },
   { id: 'price', align: 'left', label: 'Price' },
-  { id: 'avg_cost', align: 'left', label: 'AvgCost' },
-  { id: 'price_to_avg_cost', align: 'left', label: 'PVA' },
+  { id: 'price_chg', align: 'left', label: 'PriceChg' },
+  // { id: 'price_to_avg_cost', align: 'left', label: 'PVA' },
   { id: 'poolsize', align: 'left', label: 'PoolSize' },
   { id: 'poolsize_to_mcp', align: 'left', label: 'PoolSize/Mcp' },
   { id: 'volumn', align: 'left', label: 'Volume' },
+  {id:'volumn_chg', align: 'left', label: 'VolumeChg'},
   { id: 'volumn_to_mcp', align: 'left', label: 'Volume/Mcp' },
   { id: 'volumn_to_poolsize', align: 'left', label: 'Volume/PoolSize' },
   { id: 'time', align: 'left', label: 'Time' }

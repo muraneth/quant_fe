@@ -18,7 +18,6 @@ export const get = async (url, headers) => {
     return response.data;
   } catch (error) {
     console.error('Request error:', error);
-    throw error;
   }
 }
 
@@ -28,7 +27,6 @@ export const post = async (url, headers, params) => {
     return response.data;
   } catch (error) {
     console.error('Request error:', error);
-    throw error;
   }
 }
 // export const request = async (
