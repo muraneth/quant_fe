@@ -1,9 +1,6 @@
-import PropTypes from 'prop-types';
 import { useState, useEffect, useRef } from 'react';
 import { useTheme } from '@mui/material/styles';
-import { green } from '@mui/material/colors';
-import axios from 'axios';
-import { Switch, FormControlLabel } from '@mui/material';
+
 import * as echarts from 'echarts/core';
 import { LineChart } from 'echarts/charts';
 import { GridComponent, TooltipComponent, TitleComponent, LegendComponent, DataZoomComponent } from 'echarts/components';
@@ -11,47 +8,10 @@ import { CanvasRenderer } from 'echarts/renderers';
 
 echarts.use([LineChart, GridComponent, TooltipComponent, TitleComponent, LegendComponent, DataZoomComponent, CanvasRenderer]);
 
-const SMALL_VALUE = 1e-10; // Small value to replace 0s
-
-function isNotSeperatePrice(chart) {
-  const items = ['AvgCost', 'DexAvgCost', 'CexAvgCost', 'AvgCostExcept'];
-  return items.includes(chart);
-}
-
-const WalletChart2 = ({ symbol, chart }) => {
+const AvgCostChart = ({ chartName, chartData, priceSeries }) => {
   const theme = useTheme();
   const chartRef = useRef(null);
   const [chartInstance, setChartInstance] = useState(null);
-
-  const [chartData, setChartData] = useState([]);
-  const [logScale, setLogScale] = useState(false);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const startDate = new Date();
-        const postData = {
-          token_symbol: symbol,
-          chart_label: chart
-        };
-        const token = localStorage.getItem('token');
-        const uid = localStorage.getItem('uid');
-
-        const response = await axios.post(`http://127.0.0.1:5005/api/data/chart`, postData, {
-          headers: {
-            Authorization: `${token}`,
-            Uid: `${uid}`
-          }
-        });
-        setChartData(response.data.data ? response.data.data : []);
-      } catch (error) {
-        setChartData([]);
-        console.error('Error fetching data:', error);
-      }
-    };
-
-    fetchData();
-  }, [symbol, chart]);
 
   useEffect(() => {
     if (chartRef.current) {
@@ -73,12 +33,6 @@ const WalletChart2 = ({ symbol, chart }) => {
 
   useEffect(() => {
     if (chartInstance) {
-      const adjustedData = chartData.map((item) => ({
-        ...item,
-        value: logScale && item.value === 0 ? SMALL_VALUE : item.value
-        // value: logScale && item.value > 0 ? Math.log10(item.value) : item.value
-      }));
-
       const option = {
         tooltip: {
           trigger: 'axis',
@@ -87,7 +41,7 @@ const WalletChart2 = ({ symbol, chart }) => {
           }
         },
         legend: {
-          data: [chart, 'price']
+          data: [chartName, ...priceSeries.map((series) => series.name)]
         },
         grid: {
           left: '3%',
@@ -97,7 +51,7 @@ const WalletChart2 = ({ symbol, chart }) => {
         },
         xAxis: {
           type: 'category',
-          data: adjustedData.map((item) => item.time),
+          data: chartData.map((item) => item.time),
           axisLabel: {
             color: 'gray'
           }
@@ -108,16 +62,7 @@ const WalletChart2 = ({ symbol, chart }) => {
             name: 'Value & Price',
             axisLabel: {
               formatter: '{value}'
-            },
-            scale: logScale
-          },
-          isNotSeperatePrice(chart) === false && {
-            type: 'value',
-            name: 'Price',
-            axisLabel: {
-              formatter: '{value}'
-            },
-            scale: logScale
+            }
           }
         ].filter(Boolean),
         dataZoom: [
@@ -129,7 +74,8 @@ const WalletChart2 = ({ symbol, chart }) => {
           {
             type: 'inside',
             xAxisIndex: 0,
-            filterMode: 'filter'
+            filterMode: 'filter',
+            disabled: true
           }
         ],
         graphic: [
@@ -148,25 +94,19 @@ const WalletChart2 = ({ symbol, chart }) => {
         ],
         series: [
           {
-            name: chart,
+            name: chartName,
             type: 'line',
             areaStyle: {},
-            data: adjustedData.map((item) => item.value),
+            data: chartData.map((item) => item.value),
             smooth: true
           },
-          {
-            name: 'price',
-            type: 'line',
-            yAxisIndex: isNotSeperatePrice(chart) ? 0 : 1,
-            data: adjustedData.map((item) => item.price),
-            smooth: true
-          }
+          ...priceSeries
         ]
       };
 
       chartInstance.setOption(option);
     }
-  }, [chartData, logScale, chartInstance, chart]);
+  }, [chartData, priceSeries, chartInstance, chartName]);
 
   return (
     <div>
@@ -175,10 +115,4 @@ const WalletChart2 = ({ symbol, chart }) => {
     </div>
   );
 };
-
-WalletChart2.propTypes = {
-  symbol: PropTypes.string.isRequired,
-  chart: PropTypes.string.isRequired
-};
-
-export default WalletChart2;
+export default AvgCostChart;

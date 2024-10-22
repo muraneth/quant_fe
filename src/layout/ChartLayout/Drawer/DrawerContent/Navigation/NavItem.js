@@ -46,7 +46,7 @@ const NavItem = ({ item, level }) => {
   }, [pathname]);
 
   const textColor = 'text.primary';
-  const iconSelectedColor = 'text.primary';
+  const iconSelectedColor = 'text.seondary';
 
   return (
     <ListItemButton
@@ -115,7 +115,7 @@ const NavItem = ({ item, level }) => {
       {(drawerOpen || (!drawerOpen && level !== 1)) && (
         <ListItemText
           primary={
-            <Typography variant="h6" sx={{ color: isSelected ? iconSelectedColor : textColor }}>
+            <Typography variant="h7" sx={{ color: isSelected ? iconSelectedColor : textColor }}>
               {item.title}
             </Typography>
           }
