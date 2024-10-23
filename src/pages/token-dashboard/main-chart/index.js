@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 
 import Switch from '@mui/material/Switch';
@@ -12,17 +11,14 @@ import Checkbox from '@mui/material/Checkbox';
 import MainChart from './MainChart';
 import MainCard from 'components/MainCard';
 
-
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
-import {  useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { getTokenPrice } from 'server/common';
 import { getChartData } from 'server/chart';
-
-
-
+import { Divider } from '@mui/material';
 
 const parsePriceToKlineSeries = (data) => {
   return data.map((item) => {
@@ -36,30 +32,29 @@ const formatToDateTimeString = (date) => {
 
 // kline , ma5, ma10, ma20, ma30, ma60, ma120, ma250
 // avgcost, longTermAvgCost, shortTermAvgCost
-// volume 
+// volume
 // pbv
 //wallet balance by cost
 
-const ChartBox = ({symbol}) => {
+const ChartBox = ({ symbol }) => {
   const [priceLineType, setPriceLineType] = useState('line');
   const [priceSeries, setPriceSeries] = useState([]);
   const [startTime, setStartTime] = useState(dayjs('2021-01-01T00:00:00'));
   const [endTime, setEndTime] = useState(dayjs()); // current time
 
-  const[showAvgCost, setShowAvgCost] = useState(false);
-  const[showVolume, setShowVolume] = useState(false);
-  const[showPbv, setShowPbv] = useState(false);
-  const[showWalletPbv, setShowWalletPbv] = useState(false);
+  const [showAvgCost, setShowAvgCost] = useState(false);
+  const [showVolume, setShowVolume] = useState(false);
+  const [showPbv, setShowPbv] = useState(false);
+  const [showWalletPbv, setShowWalletPbv] = useState(false);
 
   const [priceData, setPriceData] = useState([]);
   const [avgCostData, setAvgCostData] = useState([]);
   const [volumeData, setVolumeData] = useState([]);
   const [pbvData, setPbvData] = useState([]);
   const [walletPbvData, setWalletPbvData] = useState([]);
-  
+
   useEffect(() => {
     try {
-      
       getTokenPrice({
         token_symbol: tokenItem.symbol,
         start_time: formatToDateTimeString(startTime),
@@ -69,7 +64,7 @@ const ChartBox = ({symbol}) => {
       });
       getChartData({
         token_symbol: symbol,
-        chart_label: "AvgCost",
+        chart_label: 'AvgCost',
         start_time: formatToDateTimeString(startTime),
         end_time: formatToDateTimeString(endTime)
       }).then((response) => {
@@ -77,36 +72,32 @@ const ChartBox = ({symbol}) => {
       });
       getChartData({
         token_symbol: symbol,
-        chart_label: "TradeVolume",
+        chart_label: 'TradeVolume',
         start_time: formatToDateTimeString(startTime),
         end_time: formatToDateTimeString(endTime)
-        }).then((response) => {
-            setVolumeData(response ? response : []);
-        });
-     getChartData({
+      }).then((response) => {
+        setVolumeData(response ? response : []);
+      });
+      getChartData({
         token_symbol: symbol,
-        chart_label: "PriceByVolumeTimeRange",
+        chart_label: 'PriceByVolumeTimeRange',
         start_time: formatToDateTimeString(startTime),
         end_time: formatToDateTimeString(endTime)
-        }).then((response) => {
-            setPbvData(response ? response : []);
-        });
-     getChartData({
+      }).then((response) => {
+        setPbvData(response ? response : []);
+      });
+      getChartData({
         token_symbol: symbol,
-        chart_label: "WalletPriceByVolume",
+        chart_label: 'WalletPriceByVolume',
         start_time: formatToDateTimeString(startTime),
         end_time: formatToDateTimeString(endTime)
-        }).then((response) => {
-            setWalletPbvData(response ? response : []);
-        });
+      }).then((response) => {
+        setWalletPbvData(response ? response : []);
+      });
     } catch (error) {
       console.error('Error fetching data:', error);
-      
     }
-  }, [ chartId]);
-
-
-
+  }, [symbol]);
 
   const switchKlineType = () => {
     setPriceLineType((prev) => (prev === 'line' ? 'candlestick' : 'line'));
@@ -150,37 +141,37 @@ const ChartBox = ({symbol}) => {
   }, [priceLineType, priceData]);
 
   return (
-    <MainCard>
+    <MainCard sx={{ mt: 2 }}>
       <Box display="flex" justifyContent="space-between" alignItems="center">
-        <Typography variant="h6" gutterBottom>
-          {chartId}
-        </Typography>
-        <FormGroup>
-            <FormControlLabel control={<Checkbox defaultChecked />} label="Label" />
-            <FormControlLabel required control={<Checkbox />} label="Required" />
-            <FormControlLabel disabled control={<Checkbox />} label="Disabled" />
+        {/* <Typography variant="h6" gutterBottom>
+          {symbol}
+        </Typography> */}
+        <FormGroup row>
+          <FormControlLabel control={<Checkbox defaultChecked />} label="Volume" />
+          <FormControlLabel control={<Checkbox defaultChecked />} label="Required" />
+          <FormControlLabel control={<Checkbox defaultChecked />} label="Disabled" />
         </FormGroup>
         <FormControlLabel control={<Switch onChange={switchKlineType} />} label="Kline" />
       </Box>
+      <Divider />
 
-    <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <div>
-            <DateTimePicker
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <Box sx={{ mt: 1 }}>
+          <DateTimePicker
             label="Start Time"
             value={startTime}
             onChange={(newValue) => setStartTime(newValue)}
             renderInput={(params) => <TextField {...params} />}
-            />
-            <DateTimePicker
+          />
+          <DateTimePicker
             label="End Time"
             value={endTime}
             onChange={(newValue) => setEndTime(newValue)}
             renderInput={(params) => <TextField {...params} />}
-            />
-            <MainChart chartName={chartId}  chartData={pbvData} priceSeries={priceSeries} priceData={priceData}/>
-        </div>
-    </LocalizationProvider>
-        
+          />
+          <MainChart chartName={symbol} chartData={pbvData} priceSeries={priceSeries} priceData={priceData} />
+        </Box>
+      </LocalizationProvider>
     </MainCard>
   );
 };

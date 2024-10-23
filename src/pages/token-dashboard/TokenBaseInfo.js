@@ -1,5 +1,6 @@
 import { getTokenInfo } from 'server/tokenlist';
 import { useState, useEffect } from 'react';
+import MainCard from 'components/MainCard';
 
 import { Box, Grid, Typography, Card, CardContent } from '@mui/material';
 
@@ -28,7 +29,7 @@ export default function TokenBaseInfo({ symbol }) {
   }, [symbol]);
 
   return (
-    <Box sx={{ width: '100%',mt:2 }}>
+    <MainCard sx={{ width: '100%', mt: 2 }}>
       {/* <Typography >{symbol} Base Info</Typography> */}
 
       <Grid
@@ -64,6 +65,6 @@ export default function TokenBaseInfo({ symbol }) {
           <BaseCard title={'VolumeToPool'} value={numberToPercentage(baseInfo.volumn_to_poolsize)} />
         </Grid>
       </Grid>
-    </Box>
+    </MainCard>
   );
 }
