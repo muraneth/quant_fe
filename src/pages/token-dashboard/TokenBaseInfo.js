@@ -28,8 +28,9 @@ export default function TokenBaseInfo({ symbol }) {
   }, [symbol]);
 
   return (
-    <Box sx={{ width: '100%', ml: { xs: 1, md: 1 }, mt: 6 }}>
-      <h1>{symbol} Base Info</h1>
+    <Box sx={{ width: '100%',mt:2 }}>
+      {/* <Typography >{symbol} Base Info</Typography> */}
+
       <Grid
         container
         rowSpacing={4.5}

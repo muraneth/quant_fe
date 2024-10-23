@@ -13,7 +13,7 @@ const AppBarStyled = styled(AppBar, { shouldForwardProp: (prop) => prop !== 'ope
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen
   }),
-  marginTop: '64px',
+  marginTop: '49px',
   ...(open && {
     marginLeft: drawerWidth,
     width: `calc(100% - ${drawerWidth}px)`,

@@ -34,20 +34,19 @@ const TokenBar = ({ open, handleDrawerToggle }) => {
     elevation: 0,
     sx: {
       borderBottom: `1px solid ${theme.palette.divider}`,
-      boxShadow: theme.customShadows.z1
+      boxShadow: theme.customShadows.z1,
+      '& .MuiToolbar-root': {
+        minHeight: '48px',
+        padding: '0 16px'
+      }
     }
   };
 
   return (
-    <>
-      {!matchDownMD ? (
+    
         <AppBarStyled open={open} {...appBar}>
           {mainHeader}
         </AppBarStyled>
-      ) : (
-        <AppBar {...appBar}>{mainHeader}</AppBar>
-      )}
-    </>
   );
 };
 

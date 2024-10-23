@@ -1,59 +1,104 @@
-import PropTypes from 'prop-types';
-
+/* eslint-disable no-unused-vars */
 // material-ui
-import { useTheme } from '@mui/material/styles';
-import { AppBar, IconButton, Toolbar, useMediaQuery } from '@mui/material';
+import { Box, useMediaQuery, ButtonBase, List, ListItemText, Divider } from '@mui/material';
+import { useState, useEffect } from 'react';
+import Search from './Search2';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectToken } from 'store/reducers/token';
+import { getTokens } from 'server/tokenlist';
+import { over } from 'lodash';
+import { margin } from '../../../../node_modules/@mui/system/spacing';
 
-// project import
-import AppBarStyled from './AppBarStyled';
-import BarContent from './BarContent';
+// ==============================|| HEADER - CONTENT ||============================== //
 
-// assets
-import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
+const TokenContent = ({ chooseToken }) => {
+  const matchesXs = useMediaQuery((theme) => theme.breakpoints.down('md'));
+  const [tokens, setTokens] = useState([]);
+  const dispatch = useDispatch();
 
-// ==============================|| MAIN LAYOUT - HEADER ||============================== //
+  // Initialize selectedToken from localStorage if available, otherwise default to 'NPC'
+  const [selectedToken, setSelectedToken] = useState();
 
-const TokenBar = ({ chooseToken }) => {
-  const theme = useTheme();
-  const matchDownMD = useMediaQuery(theme.breakpoints.down('lg'));
+  const { tokenItem } = useSelector((state) => state.token);
 
-  const iconBackColor = 'grey.100';
-  const iconBackColorOpen = 'grey.200';
+  const getBarTokens = (data) => {
+    const barTokens = data.slice(0, 10);
 
-  // common header
-  const mainHeader = (
-    <Toolbar sx={{ bgcolor: 'background.deep', boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.3)' }}>
-      <BarContent chooseToken={chooseToken} />
-    </Toolbar>
-  );
+    if (tokenItem) {
+      const token = barTokens.find((item) => item.symbol === tokenItem.symbol);
+      if (!token) {
+        barTokens.push(tokenItem);
+      }
+    }
 
-  // app-bar params
-  const appBar = {
-    position: 'fixed',
-    color: 'inherit',
-    elevation: 0,
-    sx: {
-      borderBottom: `1px solid ${theme.palette.divider}`,
-      boxShadow: theme.customShadows.z1
+    return barTokens;
+  };
+  useEffect(() => {
+    getTokens().then((data) => {
+      setTokens(getBarTokens(data));
+      setSelectedToken(tokenItem ? tokenItem : data[0]);
+    });
+  }, []);
+
+  const handleClick = (item) => {
+    setSelectedToken(item); // Update the selected token state
+    chooseToken(item);
+    // dispatch(selectToken({ tokenItem: item }));
+    // localStorage.setItem('selectedToken', item);
+    // navigate(`/chart/${item.symbol}/${openItem}`); // Navigate to the selected token's page
+  };
+
+  const handleSearchSelect = (value) => {
+    if (value) {
+      setTokens((prevTokens) => {
+        const newTokens = [...prevTokens];
+        newTokens[newTokens.length - 1] = value;
+        return newTokens;
+      });
+      handleClick(value);
     }
   };
 
   return (
     <>
-      {!matchDownMD ? (
-        <AppBarStyled open={open} {...appBar}>
-          {mainHeader}
-        </AppBarStyled>
-      ) : (
-        <AppBar {...appBar}>{mainHeader}</AppBar>
-      )}
+      <Box
+      
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          maxWidth: '100%',
+        }}
+      >
+        <List sx={{ display: 'flex', flexDirection: 'row', gap: 1 }}>
+          {tokens.map((item, index) => (
+            <Box key={index} sx={{ display: 'flex', alignItems: 'center' }}>
+              <ButtonBase
+                onClick={() => handleClick(item)}
+                sx={{
+                  px: 2,
+                  py: 1,
+                  borderRadius: 1,
+                  backgroundColor: selectedToken?.symbol === item?.symbol ? 'primary.main' : 'transparent',
+                  color: selectedToken?.symbol === item?.symbol ? 'gray' : 'text.primary',
+                  '&:hover': {
+                    backgroundColor: 'primary.light',
+                    color: 'gray'
+                  }
+                }}
+              >
+                <ListItemText primary={item.symbol} />
+              </ButtonBase>
+              {index < tokens.length && <Divider orientation="vertical" flexItem />}
+            </Box>
+          ))}
+        </List>
+        <Search maxWidth="60px" onSearchSelect={handleSearchSelect} />
+      </Box>
+      <Divider  />
+
     </>
   );
 };
 
-TokenBar.propTypes = {
-  open: PropTypes.bool,
-  handleDrawerToggle: PropTypes.func
-};
-
-export default TokenBar;
+export default TokenContent;

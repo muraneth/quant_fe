@@ -8,6 +8,7 @@ import { AppBar, IconButton, Toolbar, useMediaQuery } from '@mui/material';
 import AppBarStyled from './AppBarStyled';
 import HeaderContent from './HeaderContent';
 
+
 // ==============================|| MAIN LAYOUT - HEADER ||============================== //
 
 const Header = () => {
@@ -16,7 +17,10 @@ const Header = () => {
 
   // common header
   const mainHeader = (
-    <Toolbar sx={{ bgcolor: 'background.deep', boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.3)' }}>
+    <Toolbar sx={{
+       bgcolor: 'background.deep',
+        boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.3)',
+         }}>
       <HeaderContent />
     </Toolbar>
   );
@@ -27,20 +31,24 @@ const Header = () => {
     color: 'inherit',
     elevation: 0,
     sx: {
-      borderBottom: `1px solid ${theme.palette.divider}`
-      // boxShadow: theme.customShadows.z1
+      borderBottom: `1px solid ${theme.palette.divider}`,
+      boxShadow: theme.customShadows.z1,
+     '& .MuiToolbar-root': {
+      minHeight: '48px',
+      padding: '0 16px'
+    }
     }
   };
 
   return (
     <>
-      {!matchDownMD ? (
+      {/* {!matchDownMD ? (
         <AppBarStyled open={true} {...appBar}>
           {mainHeader}
         </AppBarStyled>
-      ) : (
+      ) : ( */}
         <AppBar {...appBar}>{mainHeader}</AppBar>
-      )}
+      {/* )} */}
     </>
   );
 };

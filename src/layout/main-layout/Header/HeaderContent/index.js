@@ -1,8 +1,6 @@
-/* eslint-disable no-unused-vars */
-
-// material-ui
+// eslint-disable no-unused-vars
 import { Box, useMediaQuery, Button } from '@mui/material';
-
+import { useLocation } from 'react-router-dom'; // Import useLocation
 import Profile from './Profile';
 import Logo from 'components/Logo';
 
@@ -12,6 +10,10 @@ const HeaderContent = () => {
   const matchesXs = useMediaQuery((theme) => theme.breakpoints.down('md'));
   const userInfoStr = localStorage.getItem('userInfo');
   const userInfo = userInfoStr ? JSON.parse(userInfoStr) : null;
+
+  const location = useLocation(); // Get current URL path
+
+  const isSelected = (path) => location.pathname.includes(path);
 
   return (
     <>
@@ -30,18 +32,39 @@ const HeaderContent = () => {
         }}
       >
         <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-          <Button variant="text" color="primary" size="large" href="/home">
+          <Button
+            variant={isSelected('/home') ? 'contained' : 'text'} // Highlight if selected
+            color={isSelected('/home') ? 'secondary' : 'primary'}
+            size="midium"
+            href="/home"
+          >
             Home
           </Button>
 
-          <Button variant="text" color="primary" size="large" href="/chart/">
+          <Button
+            variant={isSelected('/chart/') ? 'contained' : 'text'}
+            color={isSelected('/chart/') ? 'secondary' : 'primary'}
+            size="midium"
+            href="/chart/"
+          >
             Chart
           </Button>
 
-          <Button variant="text" color="primary" size="large" href="/dashboard/">
+          <Button
+            variant={isSelected('/dashboard/') ? 'contained' : 'text'}
+            color={isSelected('/dashboard/') ? 'secondary' : 'primary'}
+            size="midium"
+            href="/dashboard/"
+          >
             Dashboard
           </Button>
-          <Button variant="text" color="primary" size="large" href="/compare/">
+
+          <Button
+            variant={isSelected('/compare/') ? 'contained' : 'text'}
+            color={isSelected('/compare/') ? 'secondary' : 'primary'}
+            size="midium"
+            href="/compare/"
+          >
             Compare
           </Button>
         </Box>

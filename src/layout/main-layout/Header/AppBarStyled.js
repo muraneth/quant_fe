@@ -3,8 +3,7 @@ import { styled } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
 
 // project import
-import { drawerWidth } from 'config';
-import { margin } from '../../../../node_modules/@mui/system/spacing';
+
 
 // ==============================|| HEADER - APP BAR STYLED ||============================== //
 
@@ -14,7 +13,8 @@ const AppBarStyled = styled(AppBar, { shouldForwardProp: (prop) => prop !== 'ope
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen
   }),
-  width: '100%'
+  width: '100%',
+  height: '30px',
 }));
 
 export default AppBarStyled;
