@@ -79,14 +79,14 @@ const ChartBox = ({ symbol }) => {
         if (response?.length > 0) {
           setPriceSeries((prev) => {
             return [
-              ...prev,
-              {
-                name: 'AvgCost',
-                type: 'line',
-                data: response.map((item) => item.avgCost),
-                smooth: true,
-                yAxisIndex: 0
-              }
+              ...prev
+              // {
+              //   name: 'AvgCost',
+              //   type: 'line',
+              //   data: response.map((item) => item.avgCost),
+              //   smooth: true,
+              //   yAxisIndex: 0
+              // }
             ];
           });
         }
@@ -108,11 +108,24 @@ const ChartBox = ({ symbol }) => {
             return [
               ...prev,
               {
-                name: 'Volume',
+                name: 'Buy Volume',
                 type: 'bar',
-                data: response.map((item) => item.volume),
-                smooth: true,
-                yAxisIndex: 1
+                data: response?.map((item) => item.buy_volume),
+                yAxisIndex: 1,
+                xAxisIndex: 1,
+                itemStyle: {
+                  color: '#73C0DE'
+                }
+              },
+              {
+                name: 'Sell Volume',
+                type: 'bar',
+                data: response?.map((item) => item.sell_volume),
+                yAxisIndex: 1,
+                xAxisIndex: 1,
+                itemStyle: {
+                  color: '#FF6F61'
+                }
               }
             ];
           });
@@ -189,7 +202,7 @@ const ChartBox = ({ symbol }) => {
           name: 'Price',
           type: 'candlestick',
           data: parsePriceToKlineSeries(priceData),
-          yAxisIndex: 0,
+          // yAxisIndex: 0,
           itemStyle: {
             color0: '#ef232a',
             color: '#14b143',
