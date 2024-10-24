@@ -32,7 +32,7 @@ export const searchToken = async (symbol) => {
 
 export const getTokenInfo = async (symbol) => {
   try {
-    const response = await get(`/api/token/tokenInfo?symbol=${symbol}`);
+    const response = await get(`/api/token/getTokenInfo?symbol=${symbol}`);
     return response?.data;
   } catch (error) {
     console.error('Request error:', error);

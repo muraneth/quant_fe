@@ -19,6 +19,7 @@ import { useSelector } from 'react-redux';
 import { getTokenPrice } from 'server/common';
 import { getChartData } from 'server/chart';
 import { Divider } from '@mui/material';
+import { set } from 'lodash';
 
 const parsePriceToKlineSeries = (data) => {
   return data.map((item) => {
@@ -42,9 +43,9 @@ const ChartBox = ({ symbol }) => {
   const [startTime, setStartTime] = useState(dayjs('2021-01-01T00:00:00'));
   const [endTime, setEndTime] = useState(dayjs()); // current time
 
-  const [showAvgCost, setShowAvgCost] = useState(false);
-  const [showVolume, setShowVolume] = useState(false);
-  const [showPbv, setShowPbv] = useState(false);
+  const [showAvgCost, setShowAvgCost] = useState(true);
+  const [showVolume, setShowVolume] = useState(true);
+  const [showPbv, setShowPbv] = useState(true);
   const [showWalletPbv, setShowWalletPbv] = useState(false);
 
   const [priceData, setPriceData] = useState([]);
@@ -53,15 +54,21 @@ const ChartBox = ({ symbol }) => {
   const [pbvData, setPbvData] = useState([]);
   const [walletPbvData, setWalletPbvData] = useState([]);
 
+  const onAvgCostChange = (event) => {
+    setShowAvgCost(event.target.checked);
+  };
+  const onVolumeChange = (event) => {
+    setShowVolume(event.target.checked);
+  };
+  const onPbvChange = (event) => {
+    setShowPbv(event.target.checked);
+  };
+  const onWalletPbvChange = (event) => {
+    setShowWalletPbv(event.target.checked);
+  };
+
   useEffect(() => {
-    try {
-      getTokenPrice({
-        token_symbol: tokenItem.symbol,
-        start_time: formatToDateTimeString(startTime),
-        end_time: formatToDateTimeString(endTime)
-      }).then((response) => {
-        setPriceData(response ? response : []);
-      });
+    if (showAvgCost) {
       getChartData({
         token_symbol: symbol,
         chart_label: 'AvgCost',
@@ -69,7 +76,26 @@ const ChartBox = ({ symbol }) => {
         end_time: formatToDateTimeString(endTime)
       }).then((response) => {
         setAvgCostData(response ? response : []);
+        if (response?.length > 0) {
+          setPriceSeries((prev) => {
+            return [
+              ...prev,
+              {
+                name: 'AvgCost',
+                type: 'line',
+                data: response.map((item) => item.avgCost),
+                smooth: true,
+                yAxisIndex: 0
+              }
+            ];
+          });
+        }
       });
+    }
+  }, [symbol, showAvgCost, startTime, endTime]);
+
+  useEffect(() => {
+    if (showVolume) {
       getChartData({
         token_symbol: symbol,
         chart_label: 'TradeVolume',
@@ -77,7 +103,25 @@ const ChartBox = ({ symbol }) => {
         end_time: formatToDateTimeString(endTime)
       }).then((response) => {
         setVolumeData(response ? response : []);
+        if (response?.length > 0) {
+          setPriceSeries((prev) => {
+            return [
+              ...prev,
+              {
+                name: 'Volume',
+                type: 'bar',
+                data: response.map((item) => item.volume),
+                smooth: true,
+                yAxisIndex: 1
+              }
+            ];
+          });
+        }
       });
+    }
+  }, [symbol, showVolume, startTime, endTime]);
+  useEffect(() => {
+    if (showPbv) {
       getChartData({
         token_symbol: symbol,
         chart_label: 'PriceByVolumeTimeRange',
@@ -86,18 +130,54 @@ const ChartBox = ({ symbol }) => {
       }).then((response) => {
         setPbvData(response ? response : []);
       });
-      getChartData({
+    }
+  }, [symbol, showPbv, startTime, endTime]);
+
+  useEffect(() => {
+    try {
+      getTokenPrice({
         token_symbol: symbol,
-        chart_label: 'WalletPriceByVolume',
         start_time: formatToDateTimeString(startTime),
         end_time: formatToDateTimeString(endTime)
       }).then((response) => {
-        setWalletPbvData(response ? response : []);
+        setPriceData(response ? response : []);
       });
+
+      if (showVolume) {
+        getChartData({
+          token_symbol: symbol,
+          chart_label: 'TradeVolume',
+          start_time: formatToDateTimeString(startTime),
+          end_time: formatToDateTimeString(endTime)
+        }).then((response) => {
+          setVolumeData(response ? response : []);
+        });
+      }
+
+      if (showPbv) {
+        getChartData({
+          token_symbol: symbol,
+          chart_label: 'PriceByVolumeTimeRange',
+          start_time: formatToDateTimeString(startTime),
+          end_time: formatToDateTimeString(endTime)
+        }).then((response) => {
+          setPbvData(response ? response : []);
+        });
+      }
+      if (showWalletPbv) {
+        getChartData({
+          token_symbol: symbol,
+          chart_label: 'WalletPriceByVolume',
+          start_time: formatToDateTimeString(startTime),
+          end_time: formatToDateTimeString(endTime)
+        }).then((response) => {
+          setWalletPbvData(response ? response : []);
+        });
+      }
     } catch (error) {
       console.error('Error fetching data:', error);
     }
-  }, [symbol]);
+  }, [symbol, startTime, endTime]);
 
   const switchKlineType = () => {
     setPriceLineType((prev) => (prev === 'line' ? 'candlestick' : 'line'));
@@ -147,9 +227,10 @@ const ChartBox = ({ symbol }) => {
           {symbol}
         </Typography> */}
         <FormGroup row>
-          <FormControlLabel control={<Checkbox defaultChecked />} label="Volume" />
-          <FormControlLabel control={<Checkbox defaultChecked />} label="Required" />
-          <FormControlLabel control={<Checkbox defaultChecked />} label="Disabled" />
+          <FormControlLabel control={<Checkbox defaultChecked onChange={onAvgCostChange} />} label="AvgCost" />
+          <FormControlLabel control={<Checkbox defaultChecked onChange={onVolumeChange} />} label="Volume" />
+          <FormControlLabel control={<Checkbox defaultChecked onChange={onPbvChange} />} label="PBV" />
+          <FormControlLabel control={<Checkbox defaultChecked={false} onChange={onWalletPbvChange} />} label="Wallet PBV" />
         </FormGroup>
         <FormControlLabel control={<Switch onChange={switchKlineType} />} label="Kline" />
       </Box>
