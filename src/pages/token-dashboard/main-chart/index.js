@@ -147,7 +147,23 @@ const ChartBox = ({ symbol }) => {
         end_time: formatToDateTimeString(endTime)
       }).then((response) => {
         setPbvData(response ? response : []);
+        if (response?.length > 0) {
+          setPbvSeries([
+            {
+                name: 'Volume',
+                type: 'bar',
+                data: response.map((item) => item.total_trade_usd_volume),
+                barWidth: '40%',
+                yAxisIndex: 2,
+                itemStyle: {
+                  color: '#73c0de'
+                }
+              },
+          ]);
+        }
       });
+    }else{
+      setPbvSeries([]);
     }
   }, [symbol, showPbv, startTime, endTime]);
 
@@ -229,8 +245,8 @@ const ChartBox = ({ symbol }) => {
   }, [priceLineType, priceData]);
 
   useEffect(() => {
-    setCombinedSeries([...priceSeries, ...avgCostSeries, ...volumeSeries]);
-  }, [priceSeries, avgCostSeries, volumeSeries]);
+    setCombinedSeries([...priceSeries, ...avgCostSeries, ...volumeSeries, ...pbvSeries]);
+  }, [priceSeries, avgCostSeries, volumeSeries,pbvSeries]);
 
   return (
     <MainCard sx={{ mt: 2 }}>
