@@ -3,7 +3,7 @@ import ReactECharts from 'echarts-for-react';
 
 import { useState, useEffect } from 'react';
 
-const MainChart = ({ chartName, chartData, priceSeries, priceData }) => {
+const MainChart = ({ chartName, chartData, pbvData, dataSeries, priceData }) => {
   const [options, setOptions] = useState({});
 
   useEffect(() => {
@@ -20,34 +20,41 @@ const MainChart = ({ chartName, chartData, priceSeries, priceData }) => {
       tooltip: {
         trigger: 'axis',
         formatter: function (params) {
-          // let result = `Price Range: ${params[1].name}<br/>`;
-          // result += `Volume: ${params[0].value}<br/>`;
-          // result += `Price: $${params[0].name}`;
-          // console.log('params 0', params[0]);
-
           let result = `${params[0].seriesName} : ${params[0].value}<br/>`;
           return result;
         }
       },
-      // grid: {
-      //   left: '10%',
-      //   right: '10%',
-      //   bottom: '10%',
-      //   containLabel: true
-      // },
+
       grid: [
         {
           // Grid for price (main chart)
           left: '10%',
           right: '8%',
-          height: '60%'
+          // height: '65%'
+          bottom: 200
         },
         {
           // Grid for volume (sub-chart)
           left: '10%',
           right: '8%',
-          top: '75%',
-          height: '40%'
+          height: 80,
+          bottom: 60
+        }
+      ],
+      dataZoom: [
+        {
+          type: 'inside',
+          xAxisIndex: [0, 1],
+          start: 10,
+          end: 100
+        },
+        {
+          show: true,
+          xAxisIndex: [0, 1],
+          type: 'slider',
+          bottom: 10,
+          start: 0,
+          end: 100
         }
       ],
       xAxis: [
@@ -72,33 +79,19 @@ const MainChart = ({ chartName, chartData, priceSeries, priceData }) => {
           axisLabel: { show: false },
           axisTick: { show: false },
           axisLine: { lineStyle: { color: '#777' } },
-          // min: 'dataMin',
-          // max: 'dataMax',
-          axisPointer: {
-            type: 'shadow',
-            label: { show: false },
-            triggerTooltip: true,
-            handle: {
-              show: true,
-              margin: 30,
-              color: '#B80C00'
-            }
-          }
+          min: 'dataMin',
+          max: 'dataMax'
+          // axisPointer: {
+          //   type: 'shadow',
+          //   label: { show: false },
+          //   triggerTooltip: true,
+          //   handle: {
+          //     show: true,
+          //     margin: 30,
+          //     color: '#B80C00'
+          //   }
+          // }
         }
-        // {
-        //   type: 'value',
-        //   name: 'Volume',
-        //   nameLocation: 'middle',
-        //   // nameGap: 30,
-        //   axisLine: {
-        //     lineStyle: {
-        //       color: '#999'
-        //     }
-        //   },
-        //   axisLabel: {
-        //     formatter: '{value}'
-        //   }
-        // }
       ],
       yAxis: [
         {
@@ -113,12 +106,20 @@ const MainChart = ({ chartName, chartData, priceSeries, priceData }) => {
           },
           axisLabel: {
             formatter: '${value}'
+          },
+          splitLine: {
+            show: true,
+            lineStyle: {
+              color: 'rgba(150, 150, 150, 0.5)', // Light gray color with transparency
+              width: 1 // Optional: you can adjust the width to make the lines thinner
+            }
           }
         },
         {
           offset: 10,
           type: 'value',
           name: 'Volume',
+          // min: -,
           gridIndex: 1, // Grid for volume
           position: 'right', // This is the new yAxis for volume on the left
           axisLine: {
@@ -128,46 +129,41 @@ const MainChart = ({ chartName, chartData, priceSeries, priceData }) => {
           },
           axisLabel: {
             formatter: '{value} units'
+          },
+          splitLine: {
+            show: true,
+            lineStyle: {
+              color: 'rgba(150, 150, 150, 0.2)', // Light gray with transparency
+              width: 1 // Adjust the width if needed
+            }
+          }
+        },
+        {
+          type: 'category',
+          data: pbvData?.map((item) => item.price_range),
+          name: 'Price Levels',
+          nameLocation: 'middle',
+          // nameGap: 50,
+          axisLine: {
+            lineStyle: {
+              color: '#999'
+            }
+          },
+          axisLabel: {
+            formatter: function (value) {
+              return `$${value}`;
+            }
           }
         }
-        // {
-        //   type: 'category',
-        //   data: chartData.map((item) => item.price_range),
-        //   name: 'Price Levels',
-        //   nameLocation: 'middle',
-        //   // nameGap: 50,
-        //   axisLine: {
-        //     lineStyle: {
-        //       color: '#999'
-        //     }
-        //   },
-        //   axisLabel: {
-        //     formatter: function (value) {
-        //       return `$${value}`;
-        //     }
-        //   }
-        // }
       ],
-      series: [
-        ...priceSeries
-        // {
-        //   name: 'Volume',
-        //   type: 'bar',
-        //   data: chartData.map((item) => item.volume),
-        //   barWidth: '40%',
-        //   yAxisIndex: 1,
-        //   itemStyle: {
-        //     color: '#73c0de'
-        //   }
-        // }
-      ]
+      series: [...dataSeries]
     };
     console.log('option', option);
 
     setOptions(option);
-  }, [chartName, chartData, priceSeries, priceData]);
+  }, [chartName, chartData, dataSeries, priceData, pbvData]);
 
-  return <ReactECharts option={options} style={{ height: '400px', width: '100%' }} />;
+  return <ReactECharts option={options} style={{ height: '500px', width: '100%' }} />;
 };
 
 export default MainChart;

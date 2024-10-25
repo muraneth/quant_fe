@@ -40,6 +40,12 @@ const formatToDateTimeString = (date) => {
 const ChartBox = ({ symbol }) => {
   const [priceLineType, setPriceLineType] = useState('line');
   const [priceSeries, setPriceSeries] = useState([]);
+  const [avgCostSeries, setAvgCostSeries] = useState([]);
+  const [volumeSeries, setVolumeSeries] = useState([]);
+  const [pbvSeries, setPbvSeries] = useState([]);
+
+  const [combinedSeries, setCombinedSeries] = useState([]);
+
   const [startTime, setStartTime] = useState(dayjs('2021-01-01T00:00:00'));
   const [endTime, setEndTime] = useState(dayjs()); // current time
 
@@ -49,6 +55,7 @@ const ChartBox = ({ symbol }) => {
   const [showWalletPbv, setShowWalletPbv] = useState(false);
 
   const [priceData, setPriceData] = useState([]);
+
   const [avgCostData, setAvgCostData] = useState([]);
   const [volumeData, setVolumeData] = useState([]);
   const [pbvData, setPbvData] = useState([]);
@@ -77,20 +84,19 @@ const ChartBox = ({ symbol }) => {
       }).then((response) => {
         setAvgCostData(response ? response : []);
         if (response?.length > 0) {
-          setPriceSeries((prev) => {
-            return [
-              ...prev
-              // {
-              //   name: 'AvgCost',
-              //   type: 'line',
-              //   data: response.map((item) => item.avgCost),
-              //   smooth: true,
-              //   yAxisIndex: 0
-              // }
-            ];
-          });
+          setAvgCostSeries([
+            {
+              name: 'AvgCost',
+              type: 'line',
+              data: response.map((item) => item.value),
+              smooth: true,
+              yAxisIndex: 0
+            }
+          ]);
         }
       });
+    } else {
+      setAvgCostSeries([]);
     }
   }, [symbol, showAvgCost, startTime, endTime]);
 
@@ -104,33 +110,32 @@ const ChartBox = ({ symbol }) => {
       }).then((response) => {
         setVolumeData(response ? response : []);
         if (response?.length > 0) {
-          setPriceSeries((prev) => {
-            return [
-              ...prev,
-              {
-                name: 'Buy Volume',
-                type: 'bar',
-                data: response?.map((item) => item.buy_volume),
-                yAxisIndex: 1,
-                xAxisIndex: 1,
-                itemStyle: {
-                  color: '#73C0DE'
-                }
-              },
-              {
-                name: 'Sell Volume',
-                type: 'bar',
-                data: response?.map((item) => item.sell_volume),
-                yAxisIndex: 1,
-                xAxisIndex: 1,
-                itemStyle: {
-                  color: '#FF6F61'
-                }
+          setVolumeSeries([
+            {
+              name: 'Buy Volume',
+              type: 'bar',
+              data: response?.map((item) => item.buy_volume),
+              yAxisIndex: 1,
+              xAxisIndex: 1,
+              itemStyle: {
+                color: '#73C0DE'
               }
-            ];
-          });
+            },
+            {
+              name: 'Sell Volume',
+              type: 'bar',
+              data: response?.map((item) => item.sell_volume),
+              yAxisIndex: 1,
+              xAxisIndex: 1,
+              itemStyle: {
+                color: '#FF6F61'
+              }
+            }
+          ]);
         }
       });
+    } else {
+      setVolumeSeries([]);
     }
   }, [symbol, showVolume, startTime, endTime]);
   useEffect(() => {
@@ -196,49 +201,40 @@ const ChartBox = ({ symbol }) => {
     setPriceLineType((prev) => (prev === 'line' ? 'candlestick' : 'line'));
   };
   useEffect(() => {
+    let priceSeries = [
+      {
+        name: 'AvgPrice',
+        type: 'line',
+        yAxisIndex: 0,
+        data: priceData.map((item) => item.price),
+        smooth: true
+      }
+    ];
     if (priceLineType === 'candlestick') {
-      const series = [
-        {
-          name: 'Price',
-          type: 'candlestick',
-          data: parsePriceToKlineSeries(priceData),
-          // yAxisIndex: 0,
-          itemStyle: {
-            color0: '#ef232a',
-            color: '#14b143',
-            borderColor0: '#ef232a',
-            borderColor: '#14b143'
-          }
-        },
-        {
-          name: 'Price',
-          type: 'line',
-          yAxisIndex: 0,
-          data: priceData.map((item) => item.price),
-          smooth: true
+      priceSeries.push({
+        name: 'Price',
+        type: 'candlestick',
+        data: parsePriceToKlineSeries(priceData),
+        yAxisIndex: 0,
+        itemStyle: {
+          color0: '#ef232a',
+          color: '#14b143',
+          borderColor0: '#ef232a',
+          borderColor: '#14b143'
         }
-      ];
-      setPriceSeries(series);
-    } else {
-      const series = [
-        {
-          name: 'Price',
-          type: 'line',
-          yAxisIndex: 0,
-          data: priceData.map((item) => item.price),
-          smooth: true
-        }
-      ];
-      setPriceSeries(series);
+      });
     }
+
+    setPriceSeries(priceSeries);
   }, [priceLineType, priceData]);
+
+  useEffect(() => {
+    setCombinedSeries([...priceSeries, ...avgCostSeries, ...volumeSeries]);
+  }, [priceSeries, avgCostSeries, volumeSeries]);
 
   return (
     <MainCard sx={{ mt: 2 }}>
       <Box display="flex" justifyContent="space-between" alignItems="center">
-        {/* <Typography variant="h6" gutterBottom>
-          {symbol}
-        </Typography> */}
         <FormGroup row>
           <FormControlLabel control={<Checkbox defaultChecked onChange={onAvgCostChange} />} label="AvgCost" />
           <FormControlLabel control={<Checkbox defaultChecked onChange={onVolumeChange} />} label="Volume" />
@@ -263,7 +259,7 @@ const ChartBox = ({ symbol }) => {
             onChange={(newValue) => setEndTime(newValue)}
             renderInput={(params) => <TextField {...params} />}
           />
-          <MainChart chartName={symbol} chartData={pbvData} priceSeries={priceSeries} priceData={priceData} />
+          <MainChart chartName={symbol} chartData={volumeData} pbvData={pbvData} dataSeries={combinedSeries} priceData={priceData} />
         </Box>
       </LocalizationProvider>
     </MainCard>
