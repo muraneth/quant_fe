@@ -96,7 +96,12 @@ const AvgCostChart = ({ chartName, chartData, priceSeries }) => {
           {
             name: chartName,
             type: 'line',
-            areaStyle: {},
+            areaStyle: {
+              color: 'rgba(0, 123, 255, 0.2)' // Adjust the RGB and opacity as needed
+            },
+            lineStyle: {
+              color: 'rgb(0, 123, 255)' // Optionally, set the line color
+            },
             data: chartData.map((item) => item.value),
             smooth: true
           },

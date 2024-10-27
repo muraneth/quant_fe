@@ -40,7 +40,7 @@ const headCells = [
   { id: 'token', align: 'left', label: 'Token' },
   { id: 'mcp', align: 'left', label: 'MarketCap' },
   { id: 'holder', align: 'left', label: 'Holder' },
-  {id:'holder_chg', align: 'left', label: 'HolderChg'},
+  { id: 'holder_chg', align: 'left', label: 'HolderChg' },
   { id: 'mcp_to_holder', align: 'left', label: 'Mcp/Holder' },
   { id: 'price', align: 'left', label: 'Price' },
   { id: 'price_chg', align: 'left', label: 'PriceChg' },
@@ -48,7 +48,7 @@ const headCells = [
   { id: 'poolsize', align: 'left', label: 'PoolSize' },
   { id: 'poolsize_to_mcp', align: 'left', label: 'PoolSize/Mcp' },
   { id: 'volumn', align: 'left', label: 'Volume' },
-  {id:'volumn_chg', align: 'left', label: 'VolumeChg'},
+  { id: 'volumn_chg', align: 'left', label: 'VolumeChg' },
   { id: 'volumn_to_mcp', align: 'left', label: 'Volume/Mcp' },
   { id: 'volumn_to_poolsize', align: 'left', label: 'Volume/PoolSize' },
   { id: 'time', align: 'left', label: 'Time' }

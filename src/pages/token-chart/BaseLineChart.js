@@ -104,7 +104,7 @@ const BaseLineChart = ({ chartName, chartData, priceSeries }) => {
           {
             name: chartName,
             type: 'line',
-            areaStyle: {},
+            // areaStyle: {},
             data: chartData.map((item) => item.value),
             smooth: true,
             yAxisIndex: 1

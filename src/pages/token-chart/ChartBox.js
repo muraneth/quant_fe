@@ -15,7 +15,7 @@ import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
-import {  useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { getTokenPrice } from 'server/common';
 import { getChartData } from 'server/chart';
 
@@ -90,9 +90,6 @@ const ChartBox = () => {
     }
   }, [tokenItem, chartId]);
 
-
-
-
   const switchKlineType = () => {
     setPriceLineType((prev) => (prev === 'line' ? 'candlestick' : 'line'));
   };
@@ -115,7 +112,7 @@ const ChartBox = () => {
           name: 'Price',
           type: 'line',
           yAxisIndex: 0,
-          data: priceData.map((item) => item.price),
+          data: priceData.map((item) => item.avg_price),
           smooth: true
         }
       ];
@@ -126,7 +123,7 @@ const ChartBox = () => {
           name: 'Price',
           type: 'line',
           yAxisIndex: 0,
-          data: priceData.map((item) => item.price),
+          data: priceData.map((item) => item.avg_price),
           smooth: true
         }
       ];
@@ -146,24 +143,24 @@ const ChartBox = () => {
       {isAvgCostChart(chartId) && <AvgCostChart chartName={chartId} chartData={chartData} priceSeries={priceSeries} />}
       {isBasicVolumeChart(chartId) && <BasicVolumeChart chartName={chartId} chartData={chartData} priceSeries={priceSeries} />}
       {isPriceByVolumeChart(chartId) && (
-         <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <div>
-              <DateTimePicker
-                label="Start Time"
-                value={startTime}
-                onChange={(newValue) => setStartTime(newValue)}
-                renderInput={(params) => <TextField {...params} />}
-              />
-              <DateTimePicker
-                label="End Time"
-                value={endTime}
-                onChange={(newValue) => setEndTime(newValue)}
-                renderInput={(params) => <TextField {...params} />}
-              />
-              <PBVChart chartName={chartId}  chartData={chartData} priceSeries={priceSeries} priceData={priceData}/>
-            </div>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <div>
+            <DateTimePicker
+              label="Start Time"
+              value={startTime}
+              onChange={(newValue) => setStartTime(newValue)}
+              renderInput={(params) => <TextField {...params} />}
+            />
+            <DateTimePicker
+              label="End Time"
+              value={endTime}
+              onChange={(newValue) => setEndTime(newValue)}
+              renderInput={(params) => <TextField {...params} />}
+            />
+            <PBVChart chartName={chartId} chartData={chartData} priceSeries={priceSeries} priceData={priceData} />
+          </div>
         </LocalizationProvider>
-        )}
+      )}
     </MainCard>
   );
 };

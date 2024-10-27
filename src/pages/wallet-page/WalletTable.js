@@ -121,7 +121,7 @@ export default function WalletTable() {
 
   const isSelected = (walletAddress) => selected.indexOf(walletAddress) !== -1;
   const handleCellClick = (walletAddress) => {
-    navigate(`/analyze/${tokenItem.symbol}/wallet/${walletAddress}`);
+    navigate(`/wallet-detail/${tokenItem.symbol}/${walletAddress}`);
   };
 
   const handleRequestSort = (event, property) => {

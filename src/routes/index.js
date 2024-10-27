@@ -10,6 +10,8 @@ import InvestRoutes from './InvestRoutes';
 import AdminRoutes from './AdminRoutes';
 import DataPageRoutes from './TokenChart';
 import CompareRoutes from './CompareToken';
+import WalletRoutes from './WalletRoutes';
+import StudioRoutes from './StudioRoutes';
 
 export default function ThemeRoutes() {
   return useRoutes([
@@ -21,6 +23,8 @@ export default function ThemeRoutes() {
     StrategyPageRoutes,
     InvestRoutes,
     DataPageRoutes,
-    CompareRoutes
+    CompareRoutes,
+    WalletRoutes,
+    StudioRoutes
   ]);
 }

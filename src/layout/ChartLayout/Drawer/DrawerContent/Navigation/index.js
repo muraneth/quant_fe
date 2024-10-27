@@ -23,27 +23,8 @@ const Navigation = () => {
     const fetchMenuItems = async () => {
       try {
         const response = await axios.get('http://127.0.0.1:5005/api/token/menu?token_symbol=' + tokenItem.symbol);
-        const chartMenu = response.data.data;
-        const walletItem = {
-          id: 'topwallet',
-          title: 'TopWallet',
-          type: 'group',
-          children: [
-            {
-              id: 'topwallet',
-              title: 'TopWallet',
-              type: 'item',
-              url: `/chart/${tokenItem}/topwallet`
-            },
-            {
-              id: 'newwallet',
-              title: 'NewWallet',
-              type: 'item',
-              url: `/chart/${tokenItem}/newwallet`
-            }
-          ]
-        };
-        chartMenu.push(walletItem);
+        const chartMenu = response?.data?.data;
+
         setMenuItems(chartMenu);
       } catch (error) {
         console.error('Error fetching menu items:', error);

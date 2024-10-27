@@ -67,6 +67,15 @@ const HeaderContent = () => {
           >
             Compare
           </Button>
+          {/* 考虑是否要钱包详细 */}
+          <Button
+            variant={isSelected('/wallet/') ? 'contained' : 'text'}
+            color={isSelected('/wallet/') ? 'secondary' : 'primary'}
+            size="midium"
+            href="/wallet/"
+          >
+            Wallet
+          </Button>
         </Box>
       </Box>
 

@@ -3,11 +3,8 @@ import ReactECharts from 'echarts-for-react';
 
 import { useState, useEffect } from 'react';
 
-
-const PriceByVolumeChart = ({ chartName, chartData, priceSeries,priceData }) => {
-
+const PriceByVolumeChart = ({ chartName, chartData, priceSeries, priceData }) => {
   const [options, setOptions] = useState({});
-
 
   useEffect(() => {
     if (!chartData.length || !priceData.length) {
@@ -30,12 +27,24 @@ const PriceByVolumeChart = ({ chartName, chartData, priceSeries,priceData }) => 
         }
       },
       grid: {
-        left: '10%',
-        right: '10%',
+        left: '1%',
+        right: '1%',
         bottom: '10%',
         containLabel: true
       },
       xAxis: [
+        {
+          type: 'category',
+          data: priceData.map((item) => item.day),
+          name: 'Time',
+          nameLocation: 'middle',
+          // nameGap: 30,
+          axisLine: {
+            lineStyle: {
+              color: '#999'
+            }
+          }
+        },
         {
           type: 'value',
           name: 'Volume',
@@ -49,21 +58,23 @@ const PriceByVolumeChart = ({ chartName, chartData, priceSeries,priceData }) => 
           axisLabel: {
             formatter: '{value}'
           }
-        },
-        {
-          type: 'category',
-          data: priceData.map((item) => item.day),
-          name: 'Time',
-          nameLocation: 'middle',
-          // nameGap: 30,
-          axisLine: {
-            lineStyle: {
-              color: '#999'
-            }
-          }
         }
       ],
       yAxis: [
+        {
+          type: 'value',
+          name: 'Price',
+          position: 'right',
+          min: minPrice,
+          axisLine: {
+            lineStyle: {
+              color: '#f39c12'
+            }
+          },
+          axisLabel: {
+            formatter: '${value}'
+          }
+        },
         {
           type: 'category',
           data: chartData.map((item) => item.price_range),
@@ -80,42 +91,27 @@ const PriceByVolumeChart = ({ chartName, chartData, priceSeries,priceData }) => 
               return `$${value}`;
             }
           }
-        },
-        {
-          type: 'value',
-          name: 'Price',
-          position: 'right',
-          min: minPrice,
-          axisLine: {
-            lineStyle: {
-              color: '#f39c12'
-            }
-          },
-          axisLabel: {
-            formatter: '${value}'
-          }
         }
       ],
       series: [
+        ...priceSeries,
         {
           name: 'Volume',
           type: 'bar',
-          data: chartData.map((item) => item.volume),
+          data: chartData.map((item) => item.total_tx_usd_volume),
           barWidth: '40%',
+          yAxisIndex: 1,
+          xAxisIndex: 1,
           itemStyle: {
             color: '#73c0de'
           }
-        },
-        ...priceSeries
-       
+        }
       ]
     };
     setOptions(option);
-  }, [chartName, chartData, priceSeries,priceData ]);
+  }, [chartName, chartData, priceSeries, priceData]);
 
-  return (
-        <ReactECharts option={options} style={{ height: '400px', width: '100%' }} />
-  );
+  return <ReactECharts option={options} style={{ height: '600px', width: '100%' }} />;
 };
 
 export default PriceByVolumeChart;

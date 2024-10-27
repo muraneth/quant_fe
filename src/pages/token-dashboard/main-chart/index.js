@@ -7,6 +7,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import TextField from '@mui/material/TextField';
 import FormGroup from '@mui/material/FormGroup';
 import Checkbox from '@mui/material/Checkbox';
+import Autocomplete from '@mui/material/Autocomplete';
 
 import MainChart from './MainChart';
 import MainCard from 'components/MainCard';
@@ -19,7 +20,6 @@ import { useSelector } from 'react-redux';
 import { getTokenPrice } from 'server/common';
 import { getChartData } from 'server/chart';
 import { Divider } from '@mui/material';
-import { set } from 'lodash';
 
 const parsePriceToKlineSeries = (data) => {
   return data.map((item) => {
@@ -38,7 +38,7 @@ const formatToDateTimeString = (date) => {
 //wallet balance by cost
 
 const ChartBox = ({ symbol }) => {
-  const [priceLineType, setPriceLineType] = useState('line');
+  const [priceLineType, setPriceLineType] = useState('candlestick');
   const [priceSeries, setPriceSeries] = useState([]);
   const [avgCostSeries, setAvgCostSeries] = useState([]);
   const [volumeSeries, setVolumeSeries] = useState([]);
@@ -59,7 +59,9 @@ const ChartBox = ({ symbol }) => {
   const [avgCostData, setAvgCostData] = useState([]);
   const [volumeData, setVolumeData] = useState([]);
   const [pbvData, setPbvData] = useState([]);
+  const [pbvType, setPbvType] = useState('');
   const [walletPbvData, setWalletPbvData] = useState([]);
+  const [stackPosAndNeg, setStackPosAndNeg] = useState(true);
 
   const onAvgCostChange = (event) => {
     setShowAvgCost(event.target.checked);
@@ -72,6 +74,31 @@ const ChartBox = ({ symbol }) => {
   };
   const onWalletPbvChange = (event) => {
     setShowWalletPbv(event.target.checked);
+  };
+
+  const getPBVData = (response, type) => {
+    return response.map((item) => {
+      if (type === 'total_trade_usd_volume') {
+        return item.total_trade_usd_volume;
+      } else if (type === 'total_tx_usd_volume') {
+        return item.total_tx_usd_volume;
+      } else if (type === 'total_trade_token_volume') {
+        return item.total_trade_token_volume;
+      } else if (type === 'total_tx_token_volume') {
+        return item.total_tx_token_volume;
+      } else if (type === 'positive_trade_token_volume') {
+        return item.positive_trade_token_volume;
+      } else if (type === 'negative_trade_token_volume') {
+        return item.negative_trade_token_volume;
+      } else if (type === 'positive_trade_usd_volume') {
+        return item.positive_trade_usd_volume;
+      } else if (type === 'negative_trade_usd_volume') {
+        return item.negative_trade_usd_volume;
+      }
+      // else if (type === 'wallet_cost_usd_pbv') {
+      //   return item.wallet_cost_usd_pbv;
+      // }
+    });
   };
 
   useEffect(() => {
@@ -90,7 +117,13 @@ const ChartBox = ({ symbol }) => {
               type: 'line',
               data: response.map((item) => item.value),
               smooth: true,
-              yAxisIndex: 0
+              yAxisIndex: 0,
+              areaStyle: {
+                color: 'rgba(0, 123, 255, 0.2)' // Adjust the RGB and opacity as needed
+              },
+              lineStyle: {
+                color: 'rgb(0, 123, 255)' // Optionally, set the line color
+              }
             }
           ]);
         }
@@ -114,6 +147,7 @@ const ChartBox = ({ symbol }) => {
             {
               name: 'Buy Volume',
               type: 'bar',
+              stack: 'Volume',
               data: response?.map((item) => item.buy_volume),
               yAxisIndex: 1,
               xAxisIndex: 1,
@@ -124,6 +158,7 @@ const ChartBox = ({ symbol }) => {
             {
               name: 'Sell Volume',
               type: 'bar',
+              stack: 'Volume',
               data: response?.map((item) => item.sell_volume),
               yAxisIndex: 1,
               xAxisIndex: 1,
@@ -139,7 +174,7 @@ const ChartBox = ({ symbol }) => {
     }
   }, [symbol, showVolume, startTime, endTime]);
   useEffect(() => {
-    if (showPbv) {
+    if (pbvType) {
       getChartData({
         token_symbol: symbol,
         chart_label: 'PriceByVolumeTimeRange',
@@ -148,24 +183,52 @@ const ChartBox = ({ symbol }) => {
       }).then((response) => {
         setPbvData(response ? response : []);
         if (response?.length > 0) {
-          setPbvSeries([
-            {
-                name: 'Volume',
+          if (stackPosAndNeg) {
+            setPbvSeries([
+              {
+                name: 'Positive PBV',
                 type: 'bar',
-                data: response.map((item) => item.total_trade_usd_volume),
-                barWidth: '40%',
+                stack: 'pbvVolume',
+                data: getPBVData(response, 'positive_trade_usd_volume'),
                 yAxisIndex: 2,
+                xAxisIndex: 2,
                 itemStyle: {
-                  color: '#73c0de'
+                  color: 'rgba(144, 238, 144, 0.5)' // Light blue with 50% transparency
                 }
               },
-          ]);
+              {
+                name: 'Negative PBV',
+                type: 'bar',
+                stack: 'pbvVolume',
+                data: getPBVData(response, 'negative_trade_usd_volume'),
+                yAxisIndex: 2,
+                xAxisIndex: 2,
+                itemStyle: {
+                  color: ' rgba(255, 111, 97, 0.5)' // Light red with 50% transparency
+                }
+              }
+            ]);
+          } else {
+            setPbvSeries([
+              {
+                name: 'PriceByVolume',
+                type: 'bar',
+                data: getPBVData(response, pbvType),
+                barWidth: '40%',
+                yAxisIndex: 2,
+                xAxisIndex: 2,
+                itemStyle: {
+                  color: 'rgba(115, 192, 222, 0.5)' // Light blue with 50% transparency
+                }
+              }
+            ]);
+          }
         }
       });
-    }else{
+    } else {
       setPbvSeries([]);
     }
-  }, [symbol, showPbv, startTime, endTime]);
+  }, [symbol, pbvType, startTime, endTime, stackPosAndNeg]);
 
   useEffect(() => {
     try {
@@ -176,38 +239,6 @@ const ChartBox = ({ symbol }) => {
       }).then((response) => {
         setPriceData(response ? response : []);
       });
-
-      if (showVolume) {
-        getChartData({
-          token_symbol: symbol,
-          chart_label: 'TradeVolume',
-          start_time: formatToDateTimeString(startTime),
-          end_time: formatToDateTimeString(endTime)
-        }).then((response) => {
-          setVolumeData(response ? response : []);
-        });
-      }
-
-      if (showPbv) {
-        getChartData({
-          token_symbol: symbol,
-          chart_label: 'PriceByVolumeTimeRange',
-          start_time: formatToDateTimeString(startTime),
-          end_time: formatToDateTimeString(endTime)
-        }).then((response) => {
-          setPbvData(response ? response : []);
-        });
-      }
-      if (showWalletPbv) {
-        getChartData({
-          token_symbol: symbol,
-          chart_label: 'WalletPriceByVolume',
-          start_time: formatToDateTimeString(startTime),
-          end_time: formatToDateTimeString(endTime)
-        }).then((response) => {
-          setWalletPbvData(response ? response : []);
-        });
-      }
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -222,7 +253,7 @@ const ChartBox = ({ symbol }) => {
         name: 'AvgPrice',
         type: 'line',
         yAxisIndex: 0,
-        data: priceData.map((item) => item.price),
+        data: priceData.map((item) => item.avg_price),
         smooth: true
       }
     ];
@@ -246,7 +277,7 @@ const ChartBox = ({ symbol }) => {
 
   useEffect(() => {
     setCombinedSeries([...priceSeries, ...avgCostSeries, ...volumeSeries, ...pbvSeries]);
-  }, [priceSeries, avgCostSeries, volumeSeries,pbvSeries]);
+  }, [priceSeries, avgCostSeries, volumeSeries, pbvSeries]);
 
   return (
     <MainCard sx={{ mt: 2 }}>
@@ -254,8 +285,24 @@ const ChartBox = ({ symbol }) => {
         <FormGroup row>
           <FormControlLabel control={<Checkbox defaultChecked onChange={onAvgCostChange} />} label="AvgCost" />
           <FormControlLabel control={<Checkbox defaultChecked onChange={onVolumeChange} />} label="Volume" />
-          <FormControlLabel control={<Checkbox defaultChecked onChange={onPbvChange} />} label="PBV" />
-          <FormControlLabel control={<Checkbox defaultChecked={false} onChange={onWalletPbvChange} />} label="Wallet PBV" />
+          {/* <FormControlLabel control={<Checkbox defaultChecked onChange={onPbvChange} />} label="PBV(usd)" />
+          <FormControlLabel control={<Checkbox defaultChecked onChange={onPbvChange} />} label="PBV(token)" /> */}
+          <Autocomplete
+            disablePortal
+            options={[
+              'total_trade_usd_volume',
+              'total_tx_usd_volume',
+              'total_trade_token_volume',
+              'total_tx_token_volume',
+              'wallet_cost_usd_pbv'
+            ]}
+            sx={{ width: 300 }}
+            onChange={(event, newValue) => {
+              setPbvType(newValue);
+            }}
+            renderInput={(params) => <TextField {...params} label="PBV" />}
+          />
+          {/* <FormControlLabel control={<Checkbox defaultChecked={false} onChange={onWalletPbvChange} />} label="Wallet PBV" /> */}
         </FormGroup>
         <FormControlLabel control={<Switch onChange={switchKlineType} />} label="Kline" />
       </Box>

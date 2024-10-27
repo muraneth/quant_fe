@@ -9,10 +9,18 @@ export default function TokenDashboardPage() {
     setSymbol(item.symbol);
   };
   return (
-    <Box sx={{ width: '100%', m: 2, mt: 6, position: 'relative' }}>
-      <Box sx={{ position: 'sticky', top: 0, zIndex: 1000 }}>
-        <TokenBar chooseToken={chooseToken} />
-      </Box>
+    <Box
+      sx={{
+        width: '100%',
+        maxWidth: '100vw', // Ensures box doesn't exceed viewport width
+        margin: 0, // Remove margin that might cause overflow
+        padding: 2, // Use padding instead of margin for spacing
+        paddingTop: 6, // Replace mt with paddingTop
+        overflowX: 'hidden' // Prevent horizontal scrolling
+      }}
+    >
+      <TokenBar chooseToken={chooseToken} />
+
       <TokenBaseInfo symbol={symbol} />
       <MainChart symbol={symbol} />
       <Box sx={{ height: 100 }}></Box>

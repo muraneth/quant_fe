@@ -7,19 +7,22 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectToken } from 'store/reducers/token';
 import { getTokens } from 'server/tokenlist';
+import { over } from 'lodash';
+
 
 // ==============================|| HEADER - CONTENT ||============================== //
 
-const TokenContent = ({ chooseToken }) => {
+const TokenContent = () => {
   const matchesXs = useMediaQuery((theme) => theme.breakpoints.down('md'));
   const [tokens, setTokens] = useState([]);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   // Initialize selectedToken from localStorage if available, otherwise default to 'NPC'
   const [selectedToken, setSelectedToken] = useState();
 
   const { tokenItem } = useSelector((state) => state.token);
-
+  const { openItem } = useSelector((state) => state.menu);
   const getBarTokens = (data) => {
     const barTokens = data.slice(0, 10);
 
@@ -34,19 +37,16 @@ const TokenContent = ({ chooseToken }) => {
   };
   useEffect(() => {
     getTokens().then((data) => {
-      if (data && data.length > 0) {
-        setTokens(getBarTokens(data));
-        setSelectedToken(tokenItem ? tokenItem : data[0]);
-      }
+      setTokens(getBarTokens(data));
+      setSelectedToken(tokenItem ? tokenItem : data[0]);
     });
   }, []);
 
   const handleClick = (item) => {
     setSelectedToken(item); // Update the selected token state
-    chooseToken(item);
-    // dispatch(selectToken({ tokenItem: item }));
-    // localStorage.setItem('selectedToken', item);
-    // navigate(`/chart/${item.symbol}/${openItem}`); // Navigate to the selected token's page
+    dispatch(selectToken({ tokenItem: item }));
+    localStorage.setItem('selectedToken', item);
+    navigate(`/chart/${item.symbol}/${openItem}`); // Navigate to the selected token's page
   };
 
   const handleSearchSelect = (value) => {
@@ -66,7 +66,9 @@ const TokenContent = ({ chooseToken }) => {
         sx={{
           display: 'flex',
           alignItems: 'center',
-          maxWidth: '100%'
+          maxWidth: '100%',
+          // overflowX: 'auto' 
+          
         }}
       >
         <List sx={{ display: 'flex', flexDirection: 'row', gap: 1 }}>
@@ -92,9 +94,8 @@ const TokenContent = ({ chooseToken }) => {
             </Box>
           ))}
         </List>
-        <Search maxWidth="60px" onSearchSelect={handleSearchSelect} />
       </Box>
-      <Divider />
+      {!matchesXs && <Search onSearchSelect={handleSearchSelect} />}
     </>
   );
 };

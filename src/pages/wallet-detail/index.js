@@ -1,6 +1,5 @@
 import { useParams } from 'react-router-dom';
 import BaseChart from './BaseChart';
-import BaseChart2 from './BaseChar2';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Box from '@mui/material/Box';
@@ -45,10 +44,13 @@ export default function WalletDetail() {
 
     fetchWalletInfo(inputSymbol, inputWallet);
   }, [inputWallet, inputSymbol, symbol, wallet]); // Runs when symbol or wallet changes
+  useEffect(() => {
+    fetchWalletInfo(inputSymbol, inputWallet);
+  }, [inputSymbol, inputWallet]); // Runs when inputSymbol or inputWallet changes
 
   const chartKeys = [
     'balance',
-    'balance_chg',
+    // 'balance_chg',
     // 'balance_usd',
     'avg_cost',
     'total_cost',
@@ -71,8 +73,7 @@ export default function WalletDetail() {
   }, [chartKeys]);
 
   return (
-    <div>
-      <h1>WalletDetail</h1>
+    <Box sx={{ ml: 5, mr: 5, mt: 20 }}>
       <Box sx={{ mb: 2, display: 'flex', gap: 2 }}>
         <TextField label="Token Symbol" variant="outlined" value={symbol} onChange={(e) => setInputSymbol(e.target.value)} fullWidth />
 
@@ -91,6 +92,6 @@ export default function WalletDetail() {
           </Box>
         </MainCard>
       ))}
-    </div>
+    </Box>
   );
 }
