@@ -2,14 +2,11 @@
 import { Box, Typography, List } from '@mui/material';
 import { useState, useEffect } from 'react';
 
-// project import
-import NavGroup from './NavGroup';
-
-import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
 import { getTokens } from 'server/tokenlist';
 
 import NavItem from './NavItem';
+
 
 // ==============================|| DRAWER CONTENT - NAVIGATION ||============================== //
 
@@ -57,7 +54,8 @@ const Navigation = () => {
         id: token.symbol,
         title: token.symbol,
         type: 'item',
-        icon: 'dashboard-default'
+        icon: 'dashboard-default',
+        url: `/dashboard/${token.symbol}`,
       }));
       setMenuItems(menuItems);
     });

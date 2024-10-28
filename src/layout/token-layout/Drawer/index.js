@@ -3,15 +3,12 @@ import { useMemo } from 'react';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
-import { Box, Drawer, useMediaQuery } from '@mui/material';
+import { Box} from '@mui/material';
 
-// project import
-import DrawerHeader from './DrawerHeader';
 
 import DrawerContent from './DrawerContent';
 import MiniDrawerStyled from './MiniDrawerStyled';
-import { drawerWidth } from 'config';
-import DrawerMenu from './DrawerMenu/index';
+
 
 // ==============================|| MAIN LAYOUT - DRAWER ||============================== //
 
@@ -22,7 +19,7 @@ const MainDrawer = ({ open, handleDrawerToggle }) => {
   const drawerContent = useMemo(() => <DrawerContent />, []);
 
   return (
-    <Box component="nav" sx={{ flexShrink: { md: 0 }, bgcolor: 'background.deep' }} aria-label="mailbox folders">
+    <Box component="nav" sx={{ flexShrink: 0, bgcolor: 'background.deep' }} aria-label="mailbox folders">
       {open && (
         <MiniDrawerStyled variant="permanent" open={true} anchor="right" sx={{ bgcolor: 'background.deep', marginTop: '64px' }}>
           {drawerContent}

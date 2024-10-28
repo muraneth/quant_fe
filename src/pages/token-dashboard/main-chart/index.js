@@ -8,7 +8,8 @@ import TextField from '@mui/material/TextField';
 import FormGroup from '@mui/material/FormGroup';
 import Checkbox from '@mui/material/Checkbox';
 import Autocomplete from '@mui/material/Autocomplete';
-
+import Button from '@mui/material/Button'
+import SettingsIcon from '@mui/icons-material/Settings';
 import MainChart from './MainChart';
 import MainCard from 'components/MainCard';
 
@@ -19,7 +20,13 @@ import dayjs from 'dayjs';
 import { useSelector } from 'react-redux';
 import { getTokenPrice } from 'server/common';
 import { getChartData } from 'server/chart';
+
 import { Divider } from '@mui/material';
+import TokenInf from './TokenInfo';
+
+import { getTokenInfo } from 'server/tokenlist';
+import { transform } from 'echarts';
+
 
 const parsePriceToKlineSeries = (data) => {
   return data.map((item) => {
@@ -31,50 +38,7 @@ const formatToDateTimeString = (date) => {
   return date ? date.format('YYYY-MM-DD HH:mm:ss') : '';
 };
 
-// kline , ma5, ma10, ma20, ma30, ma60, ma120, ma250
-// avgcost, longTermAvgCost, shortTermAvgCost
-// volume
-// pbv
-//wallet balance by cost
 
-const ChartBox = ({ symbol }) => {
-  const [priceLineType, setPriceLineType] = useState('candlestick');
-  const [priceSeries, setPriceSeries] = useState([]);
-  const [avgCostSeries, setAvgCostSeries] = useState([]);
-  const [volumeSeries, setVolumeSeries] = useState([]);
-  const [pbvSeries, setPbvSeries] = useState([]);
-
-  const [combinedSeries, setCombinedSeries] = useState([]);
-
-  const [startTime, setStartTime] = useState(dayjs('2021-01-01T00:00:00'));
-  const [endTime, setEndTime] = useState(dayjs()); // current time
-
-  const [showAvgCost, setShowAvgCost] = useState(true);
-  const [showVolume, setShowVolume] = useState(true);
-  const [showPbv, setShowPbv] = useState(true);
-  const [showWalletPbv, setShowWalletPbv] = useState(false);
-
-  const [priceData, setPriceData] = useState([]);
-
-  const [avgCostData, setAvgCostData] = useState([]);
-  const [volumeData, setVolumeData] = useState([]);
-  const [pbvData, setPbvData] = useState([]);
-  const [pbvType, setPbvType] = useState('');
-  const [walletPbvData, setWalletPbvData] = useState([]);
-  const [stackPosAndNeg, setStackPosAndNeg] = useState(true);
-
-  const onAvgCostChange = (event) => {
-    setShowAvgCost(event.target.checked);
-  };
-  const onVolumeChange = (event) => {
-    setShowVolume(event.target.checked);
-  };
-  const onPbvChange = (event) => {
-    setShowPbv(event.target.checked);
-  };
-  const onWalletPbvChange = (event) => {
-    setShowWalletPbv(event.target.checked);
-  };
 
   const getPBVData = (response, type) => {
     return response.map((item) => {
@@ -100,6 +64,77 @@ const ChartBox = ({ symbol }) => {
       // }
     });
   };
+  const calculateMA = (data, dayCount) => {
+    const result = [];
+    for (let i = 0, len = data.length; i < len; i++) {
+      if (i < dayCount - 1) {
+        // Not enough data yet, push null or the current value
+        result.push(null);
+        continue;
+      }
+      let sum = 0;
+      for (let j = 0; j < dayCount; j++) {
+        sum += data[i - j];
+      }
+      result.push(sum / dayCount);
+    }
+    return result;
+  };
+
+const ChartBox = ({ symbol }) => {
+  const [tokenInfo, setTokenInfo] = useState({});
+  const [priceLineType, setPriceLineType] = useState('candlestick');
+  const [priceSeries, setPriceSeries] = useState([]);
+  const [ma7Series, setMa7Series] = useState([]);
+  const [showMa7, setShowMa7] = useState(false);
+
+  const [avgCostSeries, setAvgCostSeries] = useState([]);
+  const [volumeSeries, setVolumeSeries] = useState([]);
+  const [pbvSeries, setPbvSeries] = useState([]);
+
+  const [combinedSeries, setCombinedSeries] = useState([]);
+
+  const [startTime, setStartTime] = useState(dayjs('2021-01-01T00:00:00'));
+  const [endTime, setEndTime] = useState(dayjs()); // current time
+
+  const [showAvgCost, setShowAvgCost] = useState(true);
+  const [showVolume, setShowVolume] = useState(true);
+  const [showPbv, setShowPbv] = useState(true);
+  const [showWalletPbv, setShowWalletPbv] = useState(false);
+
+  const [priceData, setPriceData] = useState([]);
+
+  const [avgCostData, setAvgCostData] = useState([]);
+  const [volumeData, setVolumeData] = useState([]);
+  const [pbvData, setPbvData] = useState([]);
+  const [pbvType, setPbvType] = useState('');
+  const [walletPbvData, setWalletPbvData] = useState([]);
+  const [stackPosAndNeg, setStackPosAndNeg] = useState(true);
+  const onAvgCostChange = (event) => {
+    setShowAvgCost(event.target.checked);
+  };
+  const onVolumeChange = (event) => {
+    setShowVolume(event.target.checked);
+  };
+  const onPbvChange = (event) => {
+    setShowPbv(event.target.checked);
+  };
+  const onWalletPbvChange = (event) => {
+    setShowWalletPbv(event.target.checked);
+  };
+  const onMa7Change =(event) =>{
+    setShowMa7(event.target.checked);
+  }
+
+  useEffect(() => {
+    getTokenInfo(symbol ).then((response) => {
+        setTokenInfo(response);
+        if (response?.create_time){
+          let startTime = response.create_time.split(' ')[0]+" 00:00:00";
+          setStartTime(dayjs(startTime));
+        }
+        });
+  }, [symbol]);
 
   useEffect(() => {
     if (showAvgCost) {
@@ -118,6 +153,7 @@ const ChartBox = ({ symbol }) => {
               data: response.map((item) => item.value),
               smooth: true,
               yAxisIndex: 0,
+              symbol: 'none',
               areaStyle: {
                 color: 'rgba(0, 123, 255, 0.2)' // Adjust the RGB and opacity as needed
               },
@@ -253,6 +289,7 @@ const ChartBox = ({ symbol }) => {
         name: 'AvgPrice',
         type: 'line',
         yAxisIndex: 0,
+        symbol: 'none',
         data: priceData.map((item) => item.avg_price),
         smooth: true
       }
@@ -276,29 +313,69 @@ const ChartBox = ({ symbol }) => {
   }, [priceLineType, priceData]);
 
   useEffect(() => {
-    setCombinedSeries([...priceSeries, ...avgCostSeries, ...volumeSeries, ...pbvSeries]);
-  }, [priceSeries, avgCostSeries, volumeSeries, pbvSeries]);
+    if (showMa7) {
+      
+      setMa7Series([
+        {
+          name: 'MA7',
+          type: 'line',
+          data: calculateMA(priceData.map((item) => item.avg_price), 7) ,
+          smooth: true,
+          yAxisIndex: 0,
+          symbol: 'none',
+          lineStyle: {
+            color: 'rgb(255, 140, 0)' // Optionally, set the line color
+          }
+        }
+      ]);
+    } else {
+      setMa7Series([]);
+    }
+  }, [priceData,showMa7]);
+
+  useEffect(() => {
+    setCombinedSeries([...priceSeries, ...avgCostSeries, ...volumeSeries, ...pbvSeries, ...ma7Series]);
+  }, [priceSeries, avgCostSeries, volumeSeries, pbvSeries,ma7Series]);
 
   return (
-    <MainCard sx={{ mt: 2 }}>
-      <Box display="flex" justifyContent="space-between" alignItems="center">
+    <MainCard sx={{ mt: 0, p:0 }}>
+        <Box display="flex" justifyContent="space-between" alignItems="center">
+            <TokenInf symbol={symbol} />
+        </Box>
+        <Divider />
+      <Box display="flex" justifyContent="space-between" alignItems="center" sx={{mt:1,height: '30px' }}>
         <FormGroup row>
-          <FormControlLabel control={<Checkbox defaultChecked onChange={onAvgCostChange} />} label="AvgCost" />
-          <FormControlLabel control={<Checkbox defaultChecked onChange={onVolumeChange} />} label="Volume" />
-          {/* <FormControlLabel control={<Checkbox defaultChecked onChange={onPbvChange} />} label="PBV(usd)" />
-          <FormControlLabel control={<Checkbox defaultChecked onChange={onPbvChange} />} label="PBV(token)" /> */}
-          <Autocomplete
-            disablePortal
-            options={['trade_usd_volume', 'tx_usd_volume', 'trade_token_volume', 'tx_token_volume', 'wallet_cost_usd_pbv']}
-            sx={{ width: 300 }}
-            onChange={(event, newValue) => {
-              setPbvType(newValue);
-            }}
-            renderInput={(params) => <TextField {...params} label="PBV" />}
-          />
-          {/* <FormControlLabel control={<Checkbox defaultChecked={false} onChange={onWalletPbvChange} />} label="Wallet PBV" /> */}
+          <FormControlLabel control={<Checkbox defaultChecked onChange={onAvgCostChange}  
+           sx={{
+        '& .MuiSvgIcon-root': {
+          fontSize: 16, // Change the size of the checkbox icon (default is 24px)
+        },
+      }} />} label={<span style={{ fontSize: '14px' }}>AvgCost</span>} />
+      <FormControlLabel control={<Checkbox defaultChecked onChange={onMa7Change}  
+           sx={{
+        '& .MuiSvgIcon-root': {
+          fontSize: 16, // Change the size of the checkbox icon (default is 24px)
+        },
+      }} />} label={<span style={{ fontSize: '14px' }}>MA7</span>} />
+          <Box sx={{ height: '48px', width: 300 }}>
+            <Autocomplete
+            sx={{ height: '48px' }} 
+                disablePortal
+                options={['trade_usd_volume', 'tx_usd_volume', 'trade_token_volume', 'tx_token_volume', 'wallet_cost_usd_pbv']}
+                onChange={(event, newValue) => {
+                setPbvType(newValue);
+                }}
+                renderInput={(params) => (
+                <TextField {...params} label="Indicator" size="small"  /> 
+                )}
+            />
+         </Box>
+
         </FormGroup>
-        <FormControlLabel control={<Switch onChange={switchKlineType} />} label="Kline" />
+        <Button>
+            <SettingsIcon />
+        </Button>
+        
       </Box>
       <Divider />
 

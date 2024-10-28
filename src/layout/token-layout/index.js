@@ -31,16 +31,20 @@ const TokenLayout = () => {
 
   return (
     <Box sx={{ display: 'flex', width: '100%', bgcolor: 'background.deep' }}>
-      <Box>
+        <Box sx={{ 
+        flexGrow: 1,
+        width: '100%',
+        overflow: 'auto',
+        p: 0 
+      }}>
         <Outlet />
       </Box>
 
-      <Box component="nav" sx={{ flexShrink: { md: 0 }, zIndex: 1300, bgcolor: 'background.deep' }} aria-label="mailbox folders">
+      <Box  sx={{ flexShrink:0, zIndex: 1300, bgcolor: 'background.deep' }} aria-label="mailbox folders">
         <Drawer open={open} handleDrawerToggle={handleDrawerToggle} />
-      </Box>
-      <Box component="nav" sx={{ flexShrink: { md: 0 }, zIndex: 1300, bgcolor: 'background.deep' }} aria-label="mailbox folders">
         <DrawMenu handleDrawerToggle={handleDrawerToggle} />
       </Box>
+     
     </Box>
   );
 };

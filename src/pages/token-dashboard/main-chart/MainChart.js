@@ -3,30 +3,32 @@ import ReactECharts from 'echarts-for-react';
 
 import { useState, useEffect } from 'react';
 
+const dataFormatter = (data) => {
+  if (data === undefined) {
+    return 'N/A';
+  }
+  if (Math.abs(data) > 1000000000) {
+    return (data / 1000000000).toFixed(2) + 'B';
+  } else if (Math.abs(data) > 1000000) {
+    return (data / 1000000).toFixed(2) + 'M';
+  } else if (Math.abs(data) > 1000) {
+    return (data / 1000).toFixed(2) + 'K';
+  } else if (Math.abs(data) > 1) {
+    return data.toFixed(2);
+  } else if (Math.abs(data) > 0.01) {
+    return data.toFixed(4);
+  } else if (Math.abs(data) > 0.0001) {
+    return data.toFixed(6);
+  } else if (Math.abs(data) > 0.00001) {
+    return data.toFixed(7);
+  }else if (Math.abs(data) > 0.000001) {
+    return data.toFixed(8);
+  }
+  return data.toFixed(10);
+};
 const MainChart = ({ chartName, chartData, pbvData, dataSeries, priceData }) => {
   const [options, setOptions] = useState({});
 
-  const dataFormatter = (data) => {
-    if (data === undefined) {
-      return 'N/A';
-    }
-    if (Math.abs(data) > 1000000000) {
-      return (data / 1000000000).toFixed(2) + 'B';
-    } else if (Math.abs(data) > 1000000) {
-      return (data / 1000000).toFixed(2) + 'M';
-    } else if (Math.abs(data) > 1000) {
-      return (data / 1000).toFixed(2) + 'K';
-    } else if (Math.abs(data) > 1) {
-      return data.toFixed(2);
-    } else if (Math.abs(data) > 0.01) {
-      return data.toFixed(4);
-    } else if (Math.abs(data) > 0.0001) {
-      return data.toFixed(6);
-    } else if (Math.abs(data) > 0.00001) {
-      return data.toFixed(8);
-    }
-    return data.toFixed(10);
-  };
   useEffect(() => {
     if (!priceData.length) {
       return;
@@ -36,11 +38,7 @@ const MainChart = ({ chartName, chartData, pbvData, dataSeries, priceData }) => 
     let maxPrice = priceData.reduce((max, p) => (p.high > max ? p.high : max), priceData[0].high);
 
     const option = {
-      // title: {
-      //   text: 'Price by Volume (PBV) Chart',
-      //   left: 'center'
-      // },
-
+   
       tooltip: {
         trigger: 'axis',
         formatter: function (params) {
@@ -92,17 +90,17 @@ const MainChart = ({ chartName, chartData, pbvData, dataSeries, priceData }) => 
       grid: [
         {
           // Grid for price (main chart)
-          left: '1%',
-          right: '8%',
-          // height: '65%'
+          left: '0%',
+          right: '5%',
+          height: '65%',
           bottom: 200
         },
         {
           // Grid for volume (sub-chart)
-          left: '1%',
-          right: '8%',
-          height: 80,
-          bottom: 60
+          left: '0%',
+          right: '5%',
+          height: '35%',
+          bottom: 0
         }
       ],
       dataZoom: [
@@ -110,7 +108,9 @@ const MainChart = ({ chartName, chartData, pbvData, dataSeries, priceData }) => 
           type: 'inside',
           xAxisIndex: [0, 1],
           start: 0,
-          end: 100
+          end: 100,
+          disabled: true // Disable zoom by default
+
         },
         {
           show: true,
@@ -174,13 +174,15 @@ const MainChart = ({ chartName, chartData, pbvData, dataSeries, priceData }) => 
       ],
       yAxis: [
         {
+          // offset:-40,
           type: 'value',
           position: 'right',
-          // name: 'Price',
-          max: maxPrice,
-          min: minPrice,
+
+          max: dataFormatter(maxPrice),
+          min: dataFormatter(minPrice),
           axisLine: {
             lineStyle: {
+
               color: '#f39c12'
             }
           },
@@ -242,7 +244,7 @@ const MainChart = ({ chartName, chartData, pbvData, dataSeries, priceData }) => 
     setOptions(option);
   }, [chartName, chartData, dataSeries, priceData, pbvData]);
 
-  return <ReactECharts option={options} style={{ height: '800px', width: '100%' }} />;
+  return <ReactECharts option={options} style={{ height: '600px', width: '100%' }} />;
 };
 
 export default MainChart;
