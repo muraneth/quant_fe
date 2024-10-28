@@ -189,7 +189,7 @@ const ChartBox = ({ symbol }) => {
                 name: 'Positive PBV',
                 type: 'bar',
                 stack: 'pbvVolume',
-                data: getPBVData(response, 'positive_trade_usd_volume'),
+                data: getPBVData(response, `positive_${pbvType}`),
                 yAxisIndex: 2,
                 xAxisIndex: 2,
                 itemStyle: {
@@ -200,7 +200,7 @@ const ChartBox = ({ symbol }) => {
                 name: 'Negative PBV',
                 type: 'bar',
                 stack: 'pbvVolume',
-                data: getPBVData(response, 'negative_trade_usd_volume'),
+                data: getPBVData(response, `negative_${pbvType}`),
                 yAxisIndex: 2,
                 xAxisIndex: 2,
                 itemStyle: {
@@ -289,13 +289,7 @@ const ChartBox = ({ symbol }) => {
           <FormControlLabel control={<Checkbox defaultChecked onChange={onPbvChange} />} label="PBV(token)" /> */}
           <Autocomplete
             disablePortal
-            options={[
-              'total_trade_usd_volume',
-              'total_tx_usd_volume',
-              'total_trade_token_volume',
-              'total_tx_token_volume',
-              'wallet_cost_usd_pbv'
-            ]}
+            options={['trade_usd_volume', 'tx_usd_volume', 'trade_token_volume', 'tx_token_volume', 'wallet_cost_usd_pbv']}
             sx={{ width: 300 }}
             onChange={(event, newValue) => {
               setPbvType(newValue);

@@ -8,6 +8,7 @@ import { Box, useMediaQuery } from '@mui/material';
 import Drawer from './Drawer';
 
 import { openDrawer } from 'store/reducers/sidebar';
+import DrawMenu from './DrawerMenu/index';
 
 // ==============================|| MAIN LAYOUT ||============================== //
 
@@ -33,8 +34,12 @@ const TokenLayout = () => {
       <Box>
         <Outlet />
       </Box>
+
       <Box component="nav" sx={{ flexShrink: { md: 0 }, zIndex: 1300, bgcolor: 'background.deep' }} aria-label="mailbox folders">
         <Drawer open={open} handleDrawerToggle={handleDrawerToggle} />
+      </Box>
+      <Box component="nav" sx={{ flexShrink: { md: 0 }, zIndex: 1300, bgcolor: 'background.deep' }} aria-label="mailbox folders">
+        <DrawMenu handleDrawerToggle={handleDrawerToggle} />
       </Box>
     </Box>
   );
