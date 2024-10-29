@@ -3,15 +3,15 @@ import Loadable from 'components/Loadable';
 
 import TokenLayout from 'layout/token-layout';
 
-const DashboardPage = Loadable(lazy(() => import('pages/token-dashboard')));
+const StudioPage = Loadable(lazy(() => import('pages/token-studio')));
 
 const StudioRoutes = {
-  path: '/dashboard',
+  path: '/studio',
   element: <TokenLayout />,
   children: [
     {
       path: ':symbol',
-      element: <DashboardPage />
+      element: <StudioPage />
     }
   ]
 };

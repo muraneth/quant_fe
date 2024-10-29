@@ -248,26 +248,53 @@ const ChartBox = ({ symbol }) => {
                 }
               }
             ]);
-          } else {
+          } else if  (pbvType.split('_')[0] == 'Tx')  {
+          
             setPbvSeries([
               {
                 name: 'PriceByVolume',
                 type: 'bar',
-                data: getPBVData(response, `total_+${pbvType}`),
+                data: getPBVData(response, `total_${pbvType}`),
                 barWidth: '40%',
                 yAxisIndex: 2,
                 xAxisIndex: 2,
                 itemStyle: {
-                  color: 'rgba(115, 192, 222, 0.5)' // Light blue with 50% transparency
+                  color: 'rgba(144, 238, 144, 0.5)' // Light blue with 50% transparency
+                }
+              }
+            ]);
+          }else if  (pbvType.split('_')[0] == 'FirstDayWallets') {
+            console.log("FirstDayWallets tpye");
+            
+            setPbvSeries([
+             
+              {
+                name: 'Positive PBV',
+                type: 'bar',
+                stack: 'pbvVolume',
+                data: getPBVData(response, `positive_Trade_token_volume`),
+                yAxisIndex: 2,
+                xAxisIndex: 2,
+                itemStyle: {
+                  color: 'rgba(144, 238, 144, 0.5)' // Light blue with 50% transparency
+                }
+              },
+              {
+                name: 'Negative PBV',
+                type: 'bar',
+                stack: 'pbvVolume',
+                data: getPBVData(response, `negative_Trade_token_volume`),
+                yAxisIndex: 2,
+                xAxisIndex: 2,
+                itemStyle: {
+                  color: ' rgba(255, 111, 97, 0.5)' // Light red with 50% transparency
                 }
               }
             ]);
           }
         }
       });
-    } else {
-      setPbvSeries([]);
-    }
+    } 
   }, [symbol, pbvType, startTime, endTime, stackPosAndNeg]);
 
   useEffect(() => {
@@ -409,8 +436,10 @@ const ChartBox = ({ symbol }) => {
 
   useEffect(() => {
     if (pbvType != '' && pbvData?.length > 0) {
-      const minPrice = priceData.reduce((min, p) => (p.low < min ? p.low : min), priceData[0].low);
-      let maxPrice = priceData.reduce((max, p) => (p.high > max ? p.high : max), priceData[0].high);
+      // let minPrice = priceData.reduce((min, p) => (p.low < min ? p.low : min), priceData[0].low);
+      // let maxPrice = priceData.reduce((max, p) => (p.high > max ? p.high : max), priceData[0].high);
+      let minPrice = pbvData.reduce((min, p) => (p.price_range_lower < min ? p.price_range_lower : min), pbvData[0].price_range_lower);
+      let maxPrice = pbvData.reduce((max, p) => (p.price_range_upper > max ? p.price_range_upper : max), pbvData[0].price_range_upper);
 
       setYAxisSeries([
         {
@@ -593,7 +622,7 @@ const ChartBox = ({ symbol }) => {
             <Autocomplete
               sx={{ height: '48px' }}
               disablePortal
-              options={['Trade_usd_volume', 'Tx_usd_volume', 'Trade_token_volume', 'Tx_token_volume', 'Wallet_cost_usd_pbv']}
+              options={['Trade_usd_volume', 'Tx_usd_volume', 'Trade_token_volume', 'Tx_token_volume', 'Wallet_cost_usd_pbv','FirstDayWallets_token_PBV']}
               onChange={(event, newValue) => {
                 setPbvType(newValue);
               }}

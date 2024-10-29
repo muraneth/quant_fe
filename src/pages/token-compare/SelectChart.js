@@ -24,8 +24,8 @@ export default function RenderGroup({ onSelect }) {
 
   React.useEffect(() => {
     getChartList().then((data) => {
-      const allCharts = data.flatMap((option) =>
-        option.children.map((child) => ({
+      const allCharts = data?.flatMap((option) =>
+        option.children?.map((child) => ({
           group: option.title,
           title: child.title
         }))
@@ -39,7 +39,7 @@ export default function RenderGroup({ onSelect }) {
     <Autocomplete
       options={chartList}
       //   groupBy={(option) => option.group}
-      getOptionLabel={(option) => option.title}
+      getOptionLabel={(option) => option?.title}
       sx={{ width: 300 }}
       onChange={(event, value) => {
         if (onSelect) {

@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
 import MainChart from './main-chart';
-export default function TokenDashboardPage() {
+export default function TokenStudio() {
   const {symbol} = useParams();
   return (
     <Box

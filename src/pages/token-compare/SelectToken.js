@@ -14,6 +14,9 @@ export default function CheckboxesTags({ onSelect }) {
 
   useEffect(() => {
     getTokens().then((data) => {
+      if (!data || data.length === 0) {
+        return;
+      }
       setTokens(data);
       setSelectedTokens([data[0]]);
     });

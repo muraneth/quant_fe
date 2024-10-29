@@ -51,12 +51,12 @@ const HeaderContent = () => {
           </Button>
 
           <Button
-            variant={isSelected('/dashboard/') ? 'contained' : 'text'}
-            color={isSelected('/dashboard/') ? 'secondary' : 'primary'}
+            variant={isSelected('/studio/') ? 'contained' : 'text'}
+            color={isSelected('/studio/') ? 'secondary' : 'primary'}
             size="midium"
-            href="/dashboard/"
+            href="/studio/"
           >
-            Dashboard
+            Studio
           </Button>
 
           <Button

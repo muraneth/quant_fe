@@ -54,8 +54,8 @@ const Navigation = () => {
         id: token.symbol,
         title: token.symbol,
         type: 'item',
-        icon: 'dashboard-default',
-        url: `/dashboard/${token.symbol}`,
+        icon: 'studio-default',
+        url: `/studio/${token.symbol}`,
       }));
       setMenuItems(menuItems);
     });
