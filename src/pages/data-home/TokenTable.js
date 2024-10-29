@@ -6,6 +6,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectToken } from 'store/reducers/token';
 import { formatBigNumber } from 'utils/common';
+import Tab from 'themes/overrides/Tab';
 
 // Comparator and sorting helpers
 function descendingComparator(a, b, orderBy) {
@@ -188,7 +189,9 @@ export default function TokenTable() {
                   >
                     {row.token}
                   </TableCell>
-                  <TableCell align="left">{formatBigNumber(row.mcp)}</TableCell> <TableCell align="left">{row.holder}</TableCell>
+                  <TableCell align="left">{formatBigNumber(row.mcp)}</TableCell>
+                  <TableCell align="left">{row.holder}</TableCell>
+                  <TableCell align="left">{row.holder_chg}</TableCell>
                   <TableCell align="left">{row.mcp_to_holder.toFixed(2)}</TableCell>
                   <TableCell align="left">{row.price}</TableCell>
                   <TableCell align="left">{row.avg_cost}</TableCell>

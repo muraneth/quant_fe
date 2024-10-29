@@ -19,10 +19,10 @@ const MainLayout = () => {
     <Box sx={{ width: '100%', bgcolor: 'background.deep' }}>
       <Header />
 
-      {/* <Box sx={{ flexGrow: 1 }}> */}
-      {/* Ensures Outlet takes full remaining width */}
-      <Outlet />
-      {/* </Box> */}
+      <Box sx={{ flexGrow: 1 }}>
+        {/* Ensures Outlet takes full remaining width */}
+        <Outlet />
+      </Box>
     </Box>
   );
 };
