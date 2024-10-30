@@ -5,10 +5,10 @@ import * as echarts from 'echarts/core';
 import { LineChart } from 'echarts/charts';
 import { GridComponent, TooltipComponent, TitleComponent, LegendComponent, DataZoomComponent } from 'echarts/components';
 import { CanvasRenderer } from 'echarts/renderers';
-
+import {padArrayAhead} from 'utils/common';
 echarts.use([LineChart, GridComponent, TooltipComponent, TitleComponent, LegendComponent, DataZoomComponent, CanvasRenderer]);
 
-const AvgCostChart = ({ chartName, chartData, priceSeries }) => {
+const AvgCostChart = ({ chartName, chartData, priceSeries,priceData }) => {
   const theme = useTheme();
   const chartRef = useRef(null);
   const [chartInstance, setChartInstance] = useState(null);
@@ -33,6 +33,9 @@ const AvgCostChart = ({ chartName, chartData, priceSeries }) => {
 
   useEffect(() => {
     if (chartInstance) {
+      if (chartData.length  < priceData.length) {
+        chartData = padArrayAhead(chartData, priceData.length);
+      }
       const option = {
         tooltip: {
           trigger: 'axis',
@@ -51,7 +54,7 @@ const AvgCostChart = ({ chartName, chartData, priceSeries }) => {
         },
         xAxis: {
           type: 'category',
-          data: chartData.map((item) => item.time),
+          data: priceData.map((item) => item.time),
           axisLabel: {
             color: 'gray'
           }
@@ -102,7 +105,7 @@ const AvgCostChart = ({ chartName, chartData, priceSeries }) => {
             lineStyle: {
               color: 'rgb(0, 123, 255)' // Optionally, set the line color
             },
-            data: chartData.map((item) => item.value),
+            data: chartData.map((item) => item?.value),
             smooth: true
           },
           ...priceSeries
@@ -111,7 +114,7 @@ const AvgCostChart = ({ chartName, chartData, priceSeries }) => {
 
       chartInstance.setOption(option);
     }
-  }, [chartData, priceSeries, chartInstance, chartName]);
+  }, [chartData, priceSeries, chartInstance, chartName,priceData]);
 
   return (
     <div>

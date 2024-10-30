@@ -35,3 +35,10 @@ export const formatBigNumber = (value) => {
 export const numberToPercentage = (value) => {
   return (value * 100).toFixed(2) + '%';
 };
+
+export const padArrayAhead = (arr, length) => {
+  while (arr.length < length) {
+    arr.unshift(null);
+  }
+  return arr;
+};

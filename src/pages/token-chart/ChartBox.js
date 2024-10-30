@@ -33,8 +33,10 @@ function isBaseLineChart(chart) {
   return !isAvgCostChart(chart) && !isBasicVolumeChart(chart) && !isPriceByVolumeChart(chart);
 }
 function isAvgCostChart(chart) {
-  const items = ['AvgCost', 'DexAvgCost', 'CexAvgCost', 'AvgCostExcept'];
-  return items.includes(chart);
+  // const items = ['AvgCost', 'DexAvgCost', 'CexAvgCost', 'AvgCostExcept'];
+  
+  // return items.includes(chart);
+  return chart.includes("AvgCost")
 }
 function isBasicVolumeChart(chart) {
   const items = [
@@ -140,7 +142,7 @@ const ChartBox = () => {
         <FormControlLabel control={<Switch onChange={switchKlineType} />} label="Kline" />
       </Box>
       {isBaseLineChart(chartId) && <BaseLineChart chartName={chartId} chartData={chartData} priceSeries={priceSeries} />}
-      {isAvgCostChart(chartId) && <AvgCostChart chartName={chartId} chartData={chartData} priceSeries={priceSeries} />}
+      {isAvgCostChart(chartId) && <AvgCostChart chartName={chartId} chartData={chartData} priceSeries={priceSeries} priceData={priceData}/>}
       {isBasicVolumeChart(chartId) && <BasicVolumeChart chartName={chartId} chartData={chartData} priceSeries={priceSeries} />}
       {isPriceByVolumeChart(chartId) && (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
