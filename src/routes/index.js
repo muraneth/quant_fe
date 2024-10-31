@@ -8,7 +8,7 @@ import UserRoutes from './User';
 import StrategyPageRoutes from './StrategyRoutes';
 import InvestRoutes from './InvestRoutes';
 import AdminRoutes from './AdminRoutes';
-import DataPageRoutes from './TokenChart';
+import DataPageRoutes from './TokenChartRoutes';
 import CompareRoutes from './CompareToken';
 import WalletRoutes from './WalletRoutes';
 import StudioRoutes from './StudioRoutes';

@@ -91,8 +91,8 @@ export default function WalletTable() {
   const [orderBy, setOrderBy] = useState('balance');
   const [selected] = useState([]);
   const [data, setData] = useState([]);
-  // const { symbol } = useParams();
-  const { tokenItem } = useSelector((state) => state.token);
+  const { symbol } = useParams();
+  // const { tokenItem } = useSelector((state) => state.token);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -102,7 +102,7 @@ export default function WalletTable() {
       const url = `http://127.0.0.1:5005/api/data/topWallet`;
       try {
         const postData = {
-          token_symbol: tokenItem.symbol,
+          token_symbol: symbol,
           order_by: orderBy
         };
         const response = await axios.post(url, postData, {
@@ -117,11 +117,11 @@ export default function WalletTable() {
       }
     };
     fetchTrades();
-  }, [tokenItem, orderBy]);
+  }, [symbol, orderBy]);
 
   const isSelected = (walletAddress) => selected.indexOf(walletAddress) !== -1;
   const handleCellClick = (walletAddress) => {
-    navigate(`/wallet-detail/${tokenItem.symbol}/${walletAddress}`);
+    navigate(`/wallet-detail/${symbol}/${walletAddress}`);
   };
 
   const handleRequestSort = (event, property) => {

@@ -9,7 +9,7 @@ const WalletRoutes = {
   element: <MainLayout />,
   children: [
     {
-      path: 'wallet',
+      path: 'wallet/:symbol',
       element: <WalletTablePage />
     },
 

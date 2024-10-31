@@ -7,7 +7,6 @@ import TokenLayout from 'layout/token-layout';
 const ChartPage = Loadable(lazy(() => import('pages/token-chart')));
 const DataHomePage = Loadable(lazy(() => import('pages/data-home')));
 
-
 const DataPageRoutes = {
   path: '',
   element: <MainLayout />,
