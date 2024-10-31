@@ -141,7 +141,7 @@ const ChartBox = () => {
         </Typography>
         <FormControlLabel control={<Switch onChange={switchKlineType} />} label="Kline" />
       </Box>
-      {isBaseLineChart(chartId) && <BaseLineChart chartName={chartId} chartData={chartData} priceSeries={priceSeries} />}
+      {isBaseLineChart(chartId) && <BaseLineChart chartName={chartId} chartData={chartData} priceSeries={priceSeries} priceData={priceData} />}
       {isAvgCostChart(chartId) && <AvgCostChart chartName={chartId} chartData={chartData} priceSeries={priceSeries} priceData={priceData}/>}
       {isBasicVolumeChart(chartId) && <BasicVolumeChart chartName={chartId} chartData={chartData} priceSeries={priceSeries} />}
       {isPriceByVolumeChart(chartId) && (
