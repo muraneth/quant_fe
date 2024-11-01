@@ -45,11 +45,11 @@ const headCells = [
   { id: 'mcp_to_holder', align: 'left', label: 'Mcp/Holder' },
   { id: 'price', align: 'left', label: 'Price' },
   { id: 'price_chg', align: 'left', label: 'PriceChg' },
-  // { id: 'price_to_avg_cost', align: 'left', label: 'PVA' },
+  { id: 'price_to_avg_cost', align: 'left', label: 'PVA' },
   { id: 'poolsize', align: 'left', label: 'PoolSize' },
   { id: 'poolsize_to_mcp', align: 'left', label: 'PoolSize/Mcp' },
   { id: 'volumn', align: 'left', label: 'Volume' },
-  { id: 'volumn_chg', align: 'left', label: 'VolumeChg' },
+  // { id: 'volumn_chg', align: 'left', label: 'VolumeChg' },
   { id: 'volumn_to_mcp', align: 'left', label: 'Volume/Mcp' },
   { id: 'volumn_to_poolsize', align: 'left', label: 'Volume/PoolSize' },
   { id: 'time', align: 'left', label: 'Time' }
