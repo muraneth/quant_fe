@@ -7,12 +7,12 @@ const StudioPage = Loadable(lazy(() => import('pages/token-studio')));
 
 const StudioRoutes = {
   path: '/studio',
-  element: <TokenLayout />,
-  children: [
-    {
-      path: ':symbol',
-      element: <StudioPage />
-    }
-  ]
+  element: <StudioPage />
+  //   children: [
+  //     {
+  //       path: ':symbol',
+  //       element: <StudioPage />
+  //     }
+  //   ]
 };
 export default StudioRoutes;

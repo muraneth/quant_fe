@@ -1,23 +1,14 @@
 import React, { useEffect, useRef } from 'react';
-import { init, dispose, registerIndicator } from 'klinecharts';
-import generatedDataList from './generatedDataList';
-import MainCard from 'components/MainCard';
-import { Box } from '@mui/material';
-
-// const Layout: React.FC<LayoutProps> = ({ title, children }) => {
-//   return (
-//     <div
-//       className="k-line-chart-container">
-//       <h3
-//         className="k-line-chart-title">{title}</h3>
-//       {children}
-//     </div>
-//   )
-// }
-
+import { init, dispose, registerIndicator, Chart } from 'klinecharts';
+import generatedDataList from '../generatedDataList';
+import Layout from '../Layout';
+import { log } from 'console';
+interface VolumeByPrice {
+  [key: string]: number; // Price as key, accumulated volume as value
+}
 const PriceByVolumeIndicator = () => {
-  const chart = useRef(null);
-  const paneId = useRef('');
+  const chart = useRef<Chart | null>();
+  const paneId = useRef<string>('');
 
   // Register the PBV indicator
   registerIndicator({
@@ -32,14 +23,13 @@ const PriceByVolumeIndicator = () => {
       const { from, to } = visibleRange;
       let sellStartX = bounding.width; // Start drawing sell volume from the right
       let buyStartX = sellStartX; // Start drawing buy volume from the right
-
       // Set drawing styles
       ctx.strokeStyle = '#4caf50';
       ctx.lineWidth = 2;
       ctx.setLineDash([]); // Ensure the line is solid
 
       // Initialize an object to store accumulated volumes by price
-      const volumeByPrice = {};
+      const volumeByPrice: VolumeByPrice = {};
 
       // First pass: accumulate volumes for each price
       for (let i = from; i < to; i++) {
@@ -49,7 +39,6 @@ const PriceByVolumeIndicator = () => {
           volumeByPrice[priceKey] = (volumeByPrice[priceKey] || 0) + volume; // Accumulate volume
         }
       }
-
       console.log('from', from, 'to', to);
       console.log('volumeByPrice', volumeByPrice);
 
@@ -57,6 +46,8 @@ const PriceByVolumeIndicator = () => {
         const accumulatedVolume = volumeByPrice[price];
         const priceY = yAxis.convertToPixel(Number(price)); // Convert price back to a number for pixel position
         const lineLength = accumulatedVolume; // Use accumulated volume for line length
+        // console.log('priceY', priceY, "lineLength", lineLength);
+        // console.log('bounding.height', bounding.height, "bounding.width", bounding.width);
 
         ctx.beginPath();
         ctx.moveTo(bounding.width, priceY); // Start from the right side of the chart
@@ -70,6 +61,7 @@ const PriceByVolumeIndicator = () => {
 
   useEffect(() => {
     chart.current = init('indicator-k-line');
+    // paneId.current = chart.current?.createIndicator('PriceByVolume', false) as string;
     chart.current?.createIndicator('PriceByVolume', false, { id: 'candle_pane' });
     chart.current?.applyNewData(generatedDataList());
 
@@ -78,19 +70,13 @@ const PriceByVolumeIndicator = () => {
     };
   }, []);
 
-  return <div id="indicator-k-line" className="k-line-chart" style={{ height: '600px' }} />;
+  return (
+    <Layout title="Price by Volume">
+      <div id="indicator-k-line" className="k-line-chart" />
+    </Layout>
+  );
 };
 
 export default function Indicator() {
-  return (
-    <Box
-    // sx={{
-    //   flexGrow: 1,
-    //   height: '100%', // Ensure it takes the full height
-    //   width: '100%' // Ensure it takes the full width
-    // }}
-    >
-      <PriceByVolumeIndicator />
-    </Box>
-  );
+  return <PriceByVolumeIndicator />;
 }
