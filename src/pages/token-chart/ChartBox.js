@@ -18,7 +18,7 @@ import dayjs from 'dayjs';
 import { useSelector } from 'react-redux';
 import { getTokenPrice } from 'server/common';
 import { getChartData } from 'server/chart';
-
+import {useParams} from 'react-router-dom';
 const parsePriceToKlineSeries = (data) => {
   return data.map((item) => {
     return [item.open, item.close, item.low, item.high];
@@ -67,11 +67,11 @@ const ChartBox = () => {
   const [priceData, setPriceData] = useState([]);
   const { drawerOpen, openItem } = useSelector((state) => state.menu);
   const chartId = openItem ? openItem[0] : null;
-
+  const { symbol } = useParams();
   useEffect(() => {
     try {
       getChartData({
-        token_symbol: tokenItem.symbol,
+        token_symbol: symbol,
         chart_label: chartId,
         start_time: formatToDateTimeString(startTime),
         end_time: formatToDateTimeString(endTime)
@@ -79,7 +79,7 @@ const ChartBox = () => {
         setChartData(response ? response : []);
       });
       getTokenPrice({
-        token_symbol: tokenItem.symbol,
+        token_symbol: symbol,
         start_time: formatToDateTimeString(startTime),
         end_time: formatToDateTimeString(endTime)
       }).then((response) => {
@@ -90,7 +90,7 @@ const ChartBox = () => {
       setChartData([]);
       setPriceData([]);
     }
-  }, [tokenItem, chartId]);
+  }, [chartId]);
 
   const switchKlineType = () => {
     setPriceLineType((prev) => (prev === 'line' ? 'candlestick' : 'line'));
