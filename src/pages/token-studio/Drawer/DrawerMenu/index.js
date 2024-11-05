@@ -10,24 +10,22 @@ import GradeIcon from '@mui/icons-material/Grade';
 
 import MiniDrawerStyled from './MiniDrawerStyled';
 
-
-
 // ==============================|| MAIN LAYOUT - DRAWER ||============================== //
 
 const DrawMenu = ({ handleDrawerToggle }) => {
   return (
-    <Box component="nav" sx={{ flexShrink: { md: 0 }, bgcolor: 'background.deep' }} aria-label="mailbox folders">
-      <MiniDrawerStyled variant="permanent" open={false} anchor="right" sx={{ bgcolor: 'background.deep', marginTop: '0px' }}>
+    // <Box component="nav" sx={{ flexShrink: { md: 0 }, bgcolor: 'background.deep' }} aria-label="mailbox folders">
+    <MiniDrawerStyled variant="permanent" open={false} anchor="right" sx={{ bgcolor: 'background.deep', marginTop: '0px' }}>
       <Box display="flex" flexDirection="column" alignItems="center">
-      <Button onClick={handleDrawerToggle}>
-        <MenuIcon />
-      </Button>
-      <Button>
-        <GradeIcon />
-      </Button>
-    </Box>
-      </MiniDrawerStyled>
-    </Box>
+        <Button onClick={handleDrawerToggle}>
+          <MenuIcon />
+        </Button>
+        <Button>
+          <GradeIcon />
+        </Button>
+      </Box>
+    </MiniDrawerStyled>
+    // </Box>
   );
 };
 

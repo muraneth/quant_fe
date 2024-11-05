@@ -11,22 +11,15 @@ export default function TokenStudio() {
       <Box
         sx={{
           flexGrow: 1,
-          overflow: 'hidden' // Prevent overflow
+          overflow: 'hidden',
+          m: 5
         }}
       >
         <Indicator />
       </Box>
-      <Box
-        sx={{
-          width: '250px', // Set width based on drawer state
-          transition: 'width 0.3s ease', // Smooth transition for width change
-          overflow: 'hidden' // Prevent overflow when drawer is closed
-        }}
-      >
-        <Drawer />
-      </Box>
 
-      <Box sx={{ height: 100 }}></Box>
+      <Drawer />
+      {/* <Box sx={{ height: 100 }}></Box> */}
     </Box>
   );
 }
