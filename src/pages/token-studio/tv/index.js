@@ -1,19 +1,10 @@
 import React, { useEffect, useRef } from 'react';
 import { init, dispose, registerIndicator } from 'klinecharts';
 import generatedDataList from './generatedDataList';
-import MainCard from 'components/MainCard';
-import { Box } from '@mui/material';
 
-// const Layout: React.FC<LayoutProps> = ({ title, children }) => {
-//   return (
-//     <div
-//       className="k-line-chart-container">
-//       <h3
-//         className="k-line-chart-title">{title}</h3>
-//       {children}
-//     </div>
-//   )
-// }
+
+
+
 
 const PriceByVolumeIndicator = () => {
   const chart = useRef(null);
@@ -83,14 +74,8 @@ const PriceByVolumeIndicator = () => {
 
 export default function Indicator() {
   return (
-    <Box
-    // sx={{
-    //   flexGrow: 1,
-    //   height: '100%', // Ensure it takes the full height
-    //   width: '100%' // Ensure it takes the full width
-    // }}
-    >
+
       <PriceByVolumeIndicator />
-    </Box>
+
   );
 }
