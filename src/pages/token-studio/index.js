@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
 import MainChart from './main-chart';
+import PriceByVolumeChart from './tv';
 export default function TokenStudio() {
   const {symbol} = useParams();
   return (
@@ -18,7 +19,8 @@ export default function TokenStudio() {
       }}
     >
 
-      <MainChart symbol={symbol} />
+      {/* <MainChart symbol={symbol} /> */}
+      <PriceByVolumeChart/>
       <Box sx={{ height: 100 }}></Box>
     </Box>
   );
