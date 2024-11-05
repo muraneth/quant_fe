@@ -41,17 +41,17 @@ const headCells = [
   { id: 'token', align: 'left', label: 'Token' },
   { id: 'mcp', align: 'left', label: 'MarketCap' },
   { id: 'holder', align: 'left', label: 'Holder' },
-  { id: 'holder_chg', align: 'left', label: 'HolderChg' },
+  // { id: 'holder_chg', align: 'left', label: 'HolderChg' },
   { id: 'mcp_to_holder', align: 'left', label: 'Mcp/Holder' },
   { id: 'price', align: 'left', label: 'Price' },
-  { id: 'price_chg', align: 'left', label: 'PriceChg' },
+  { id: 'avg_cost', align: 'left', label: 'AvgCost' },
   { id: 'price_to_avg_cost', align: 'left', label: 'PVA' },
   { id: 'poolsize', align: 'left', label: 'PoolSize' },
-  { id: 'poolsize_to_mcp', align: 'left', label: 'PoolSize/Mcp' },
+  { id: 'poolsize_to_mcp', align: 'left', label: 'PoolSz/Mcp' },
   { id: 'volumn', align: 'left', label: 'Volume' },
   // { id: 'volumn_chg', align: 'left', label: 'VolumeChg' },
   { id: 'volumn_to_mcp', align: 'left', label: 'Volume/Mcp' },
-  { id: 'volumn_to_poolsize', align: 'left', label: 'Volume/PoolSize' },
+  { id: 'volumn_to_poolsize', align: 'left', label: 'Vol/PoolSz' },
   { id: 'time', align: 'left', label: 'Time' }
 ];
 
@@ -191,10 +191,10 @@ export default function TokenTable() {
                   </TableCell>
                   <TableCell align="left">{formatBigNumber(row.mcp)}</TableCell>
                   <TableCell align="left">{row.holder}</TableCell>
-                  <TableCell align="left">{row.holder_chg}</TableCell>
+                  {/* <TableCell align="left">{row.holder_chg}</TableCell> */}
                   <TableCell align="left">{row.mcp_to_holder.toFixed(2)}</TableCell>
-                  <TableCell align="left">{row.price}</TableCell>
-                  <TableCell align="left">{row.avg_cost}</TableCell>
+                  <TableCell align="left">{row.price.toFixed(8)}</TableCell>
+                  <TableCell align="left">{row.avg_cost.toFixed(8)}</TableCell>
                   <TableCell align="left">{row.price_to_avg_cost.toFixed(3)}</TableCell>
                   <TableCell align="left">{formatBigNumber(row.poolsize)}</TableCell>
                   <TableCell align="left">{row.poolsize_to_mcp.toFixed(3)}</TableCell>

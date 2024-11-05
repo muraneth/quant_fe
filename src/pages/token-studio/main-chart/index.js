@@ -24,6 +24,7 @@ import TokenInf from './TokenInfo';
 
 import { getTokenInfo } from 'server/tokenlist';
 import { set } from 'lodash';
+import { use } from 'echarts';
 
 const parsePriceToKlineSeries = (data) => {
   return data.map((item) => {
@@ -82,6 +83,7 @@ const ChartBox = ({ symbol }) => {
   const [priceSeries, setPriceSeries] = useState([]);
   const [ma7Series, setMa7Series] = useState([]);
   const [ma30Series, setMa30Series] = useState([]);
+
   const [showMa7, setShowMa7] = useState(false);
   const [showMa30, setShowMa30] = useState(false);
 
@@ -100,8 +102,11 @@ const ChartBox = ({ symbol }) => {
   const [volumeType, setVolumeType] = useState('usd_volume');
   const [showPbv, setShowPbv] = useState(true);
   const [showWalletPbv, setShowWalletPbv] = useState(false);
-
+  const [showRollingPrice, setShowRollingPrice] = useState(false);
   const [priceData, setPriceData] = useState([]);
+  const [rollingPriceData, setRollingPriceData] = useState([]);
+  const [rollingPriceSeries, setRollingPriceSeries] = useState([]);
+
   const [avgCostData, setAvgCostData] = useState([]);
   const [volumeData, setVolumeData] = useState([]);
   const [pbvData, setPbvData] = useState([]);
@@ -128,6 +133,9 @@ const ChartBox = ({ symbol }) => {
   };
   const onMa30Change = (event) => {
     setShowMa30(event.target.checked);
+  };
+  const onRollingPriceChange = (event) => {
+    setShowRollingPrice(event.target.checked);
   };
 
   useEffect(() => {
@@ -383,7 +391,7 @@ const ChartBox = ({ symbol }) => {
           name: 'MA7',
           type: 'line',
           data: calculateMA(
-            priceData.map((item) => item.avg_price),
+            priceData.map((item) => item.close),
             7
           ),
           smooth: true,
@@ -410,6 +418,7 @@ const ChartBox = ({ symbol }) => {
       ]);
     }
   }, [priceData, showMa7]);
+
   useEffect(() => {
     if (showMa30) {
       setMa30Series([
@@ -444,6 +453,46 @@ const ChartBox = ({ symbol }) => {
       ]);
     }
   }, [priceData, showMa30]);
+
+  useEffect(() => {
+    if (showRollingPrice) {
+      getChartData({
+        token_symbol: symbol,
+        chart_label: 'RollingPrice',
+        start_time: formatToDateTimeString(startTime),
+        end_time: formatToDateTimeString(endTime)
+      }).then((response) => {
+        // setRollingPriceData(response ? response : []);
+        setRollingPriceSeries([
+          {
+            name: 'RollingPrice',
+            type: 'line',
+            data: response.map((item) => item.avg_price),
+            smooth: true,
+            yAxisIndex: 0,
+            symbol: 'none',
+            lineStyle: {
+              color: 'rgb(255, 100, 0)' // Optionally, set the line color
+            }
+          }
+        ]);
+      });
+    } else {
+      setRollingPriceSeries([
+        {
+          name: 'RollingPrice',
+          type: 'line',
+          data: [],
+          smooth: true,
+          yAxisIndex: 0,
+          symbol: 'none',
+          lineStyle: {
+            color: 'rgb(255, 100, 0)' // Optionally, set the line color
+          }
+        }
+      ]);
+    }
+  }, [symbol, showRollingPrice, startTime, endTime]);
 
   useEffect(() => {
     if (pbvType != '' && pbvData?.length > 0) {
@@ -578,8 +627,16 @@ const ChartBox = ({ symbol }) => {
   }, [symbol, priceData, pbvData]);
 
   useEffect(() => {
-    setCombinedSeries([...priceSeries, ...avgCostSeries, ...volumeSeries, ...pbvSeries, ...ma7Series, ...ma30Series]);
-  }, [priceSeries, avgCostSeries, volumeSeries, pbvSeries, ma7Series, ma30Series]);
+    setCombinedSeries([
+      ...priceSeries,
+      ...avgCostSeries,
+      ...volumeSeries,
+      ...pbvSeries,
+      ...ma7Series,
+      ...ma30Series,
+      ...rollingPriceSeries
+    ]);
+  }, [priceSeries, avgCostSeries, volumeSeries, pbvSeries, ma7Series, ma30Series, rollingPriceSeries]);
 
   return (
     <MainCard sx={{ mt: 0, p: 0 }}>
@@ -628,6 +685,19 @@ const ChartBox = ({ symbol }) => {
               />
             }
             label={<span style={{ fontSize: '14px' }}>MA30</span>}
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                onChange={onRollingPriceChange}
+                sx={{
+                  '& .MuiSvgIcon-root': {
+                    fontSize: 16 // Change the size of the checkbox icon (default is 24px)
+                  }
+                }}
+              />
+            }
+            label={<span style={{ fontSize: '14px' }}>RollingPrice</span>}
           />
           <Box sx={{ height: '48px', width: 300 }}>
             <Autocomplete

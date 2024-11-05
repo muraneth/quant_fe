@@ -1,12 +1,10 @@
 import { Box } from '@mui/system';
 import { useParams } from 'react-router-dom';
-
 import { useEffect, useState } from 'react';
-
 import MainChart from './main-chart';
-import PriceByVolumeChart from './tv';
+import Indicator from './tv';
 export default function TokenStudio() {
-  const {symbol} = useParams();
+  const { symbol } = useParams();
   return (
     <Box
       sx={{
@@ -18,9 +16,8 @@ export default function TokenStudio() {
         overflowX: 'hidden' // Prevent horizontal scrolling
       }}
     >
-
-      {/* <MainChart symbol={symbol} /> */}
-      <PriceByVolumeChart/>
+      <MainChart symbol={symbol} />
+      {/* <Indicator /> */}
       <Box sx={{ height: 100 }}></Box>
     </Box>
   );
