@@ -3,14 +3,10 @@ import ReactECharts from 'echarts-for-react';
 
 import { useState, useEffect } from 'react';
 import { numberFormatter } from 'utils/common';
-const MainChart = ({ chartName, chartData, yAxisSeries, dataSeries, priceData }) => {
+const MainChart = ({ chartName, xAxis, yAxis, dataSeries }) => {
   const [options, setOptions] = useState({});
 
   useEffect(() => {
-    if (!priceData.length) {
-      return;
-    }
-
     const option = {
       tooltip: {
         trigger: 'axis',
@@ -102,61 +98,15 @@ const MainChart = ({ chartName, chartData, yAxisSeries, dataSeries, priceData })
           end: 100
         }
       ],
-      xAxis: [
-        {
-          offset: 10,
-          type: 'category',
-          data: priceData.map((item) => item.time),
-          // name: 'Time',
-          nameLocation: 'middle',
-          axisLine: {
-            show: false,
-            lineStyle: {
-              color: '#999'
-            }
-          }
-        },
-
-        {
-          type: 'category',
-          gridIndex: 1,
-          data: priceData.map((item) => item.time),
-          boundaryGap: false,
-          splitLine: { show: false },
-          axisLabel: { show: false },
-          axisTick: { show: false },
-          axisLine: { lineStyle: { color: '#777' } },
-          min: 'dataMin',
-          max: 'dataMax'
-        },
-        {
-          type: 'value',
-          // name: 'PriceByVolume',
-          offset: 0,
-          nameLocation: 'middle',
-          axisLine: {
-            lineStyle: {
-              color: '#999'
-            }
-          },
-          axisLabel: {
-            formatter: '{value}'
-          },
-          splitLine: {
-            show: false
-          }
-        }
-      ],
-      yAxis: [...yAxisSeries],
+      xAxis: [...xAxis],
+      yAxis: [...yAxis],
       series: [...dataSeries]
     };
     console.log('option', option);
 
     setOptions(option);
-  }, [chartName, chartData, dataSeries, priceData, yAxisSeries]);
-  if (!priceData.length || !options || !options.series) {
-    return <div>Loading...</div>;
-  }
+  }, [chartName, xAxis, yAxis, dataSeries]);
+
   return <ReactECharts option={options} style={{ height: '85vh', width: '100%' }} />;
 };
 
