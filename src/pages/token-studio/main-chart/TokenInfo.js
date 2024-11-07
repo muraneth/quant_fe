@@ -1,4 +1,4 @@
-import { getTokenInfo } from 'server/tokenlist';
+import { getTokenInfo } from 'data-server/tokenlist';
 import { useState, useEffect } from 'react';
 
 import { Box, Grid, Typography, Stack, Tooltip } from '@mui/material';

@@ -31,15 +31,15 @@ const TokenLayout = () => {
 
   return (
     <Box
-      sx={{
-        width: '200px', // Set width based on drawer state
-        transition: 'width 0.5s ease', // Smooth transition for width change
-        overflow: 'hidden' // Prevent overflow when drawer is closed
-      }}
-    >
-      <DrawerContent open={open} handleDrawerToggle={handleDrawerToggle} />
-      <DrawMenu handleDrawerToggle={handleDrawerToggle} />
-    </Box>
+    sx={{
+      width: open ? '200px' : '64px', // 64px for icon-only view when closed
+      transition: 'width 0.3s ease',
+      overflow: 'hidden'
+    }}
+  >
+    <DrawerContent open={open} handleDrawerToggle={handleDrawerToggle} />
+    <DrawMenu handleDrawerToggle={handleDrawerToggle} />
+  </Box>
   );
 };
 

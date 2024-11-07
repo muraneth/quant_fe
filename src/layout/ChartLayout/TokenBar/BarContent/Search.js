@@ -2,7 +2,7 @@
 import { SearchOutlined } from '@ant-design/icons';
 import React, { useState } from 'react';
 import { Box, FormControl, Autocomplete, TextField, InputAdornment } from '@mui/material';
-import { searchToken } from 'server/tokenlist';
+import { searchToken } from 'data-server/tokenlist';
 
 // ==============================|| HEADER CONTENT - SEARCH ||============================== //
 

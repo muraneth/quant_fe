@@ -6,7 +6,7 @@ import Drawer from '@mui/material/Drawer';
 import { drawerWidth } from 'config';
 
 const openedMixin = (theme) => ({
-  width: '240px',
+  width: '200px',
   borderRight: `1px solid ${theme.palette.divider}`,
   // borderLeft: `1px solid ${theme.palette.divider}`,
   transition: theme.transitions.create('width', {

@@ -6,7 +6,7 @@ import Search from './Search2';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectToken } from 'store/reducers/token';
-import { getTokens } from 'server/tokenlist';
+import { getTokens } from 'data-server/tokenlist';
 import { over } from 'lodash';
 
 

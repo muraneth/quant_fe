@@ -2,7 +2,7 @@ import * as React from 'react';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import { styled, lighten, darken } from '@mui/system';
-import { getChartList } from 'server/chart';
+import { getChartList } from 'data-server/chart';
 
 const GroupHeader = styled('div')(({ theme }) => ({
   position: 'sticky',

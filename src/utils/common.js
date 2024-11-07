@@ -42,3 +42,30 @@ export const padArrayAhead = (arr, length) => {
   }
   return arr;
 };
+
+
+export const numberFormatter = (data) => {
+  if (data === undefined) {
+    return 'N/A';
+  }
+  if (Math.abs(data) > 1000000000) {
+    return (data / 1000000000).toFixed(2) + 'B';
+  } else if (Math.abs(data) > 1000000) {
+    return (data / 1000000).toFixed(2) + 'M';
+  } else if (Math.abs(data) > 1000) {
+    return (data / 1000).toFixed(2) + 'K';
+  } else if (Math.abs(data) > 1) {
+    return data.toFixed(2);
+  } else if (Math.abs(data) > 0.01) {
+    return data.toFixed(3);
+  } else if (Math.abs(data) > 0.0001) {
+    return data.toFixed(5);
+  } else if (Math.abs(data) > 0.00001) {
+    return data.toFixed(6);
+  }else if (Math.abs(data) > 0.000001) {
+    return data.toFixed(7);
+  }else if (Math.abs(data) > 0.0000001) {
+    return data.toFixed(8);
+  }
+  return data.toFixed(10);
+};

@@ -30,7 +30,7 @@ import { jwtDecode } from 'jwt-decode';
 import axios from 'axios';
 import CustomTextField from 'components/overrides/CustomTextField';
 import { GoogleLogin } from '@react-oauth/google';
-import { httpClient, post } from 'server/httpClient';
+import { httpClient, post } from 'data-server/httpClient';
 function ToggleCustomTheme({ showCustomTheme, toggleCustomTheme }) {
   return (
     <Box

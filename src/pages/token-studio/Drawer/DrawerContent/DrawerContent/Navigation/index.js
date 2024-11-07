@@ -3,7 +3,7 @@ import { Box, Typography, List } from '@mui/material';
 import { useState, useEffect } from 'react';
 
 import { useSelector, useDispatch } from 'react-redux';
-import { getTokens } from 'server/tokenlist';
+import { getTokens } from 'data-server/tokenlist';
 
 import NavItem from './NavItem';
 

@@ -16,8 +16,8 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 import { useSelector } from 'react-redux';
-import { getTokenPrice } from 'server/common';
-import { getChartData } from 'server/chart';
+import { getTokenPrice } from 'data-server/common';
+import { getChartData } from 'data-server/chart';
 import {useParams} from 'react-router-dom';
 const parsePriceToKlineSeries = (data) => {
   return data.map((item) => {

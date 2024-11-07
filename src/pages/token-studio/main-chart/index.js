@@ -10,21 +10,21 @@ import Autocomplete from '@mui/material/Autocomplete';
 import Button from '@mui/material/Button';
 import SettingsIcon from '@mui/icons-material/Settings';
 import MainChart from './MainChart';
-import MainCard from 'components/MainCard';
 
-import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
-import { getTokenPrice } from 'server/common';
-import { getChartData } from 'server/chart';
+import { getTokenPrice } from 'data-server/common';
+import { getChartData } from 'data-server/chart';
 
 import { Divider } from '@mui/material';
 import TokenInf from './TokenInfo';
 
-import { getTokenInfo } from 'server/tokenlist';
-import { set } from 'lodash';
-import { use } from 'echarts';
+import { getTokenInfo } from 'data-server/tokenlist';
+import {numberFormatter} from 'utils/common';
+
+import CompactDateTimePicker from './CompactDataPicker';
+
 
 const parsePriceToKlineSeries = (data) => {
   return data.map((item) => {
@@ -55,9 +55,7 @@ const getPBVData = (response, type) => {
     } else if (type === 'negative_Trade_usd_volume') {
       return item.negative_trade_usd_volume;
     }
-    // else if (type === 'wallet_cost_usd_pbv') {
-    //   return item.wallet_cost_usd_pbv;
-    // }
+   
   });
 };
 const calculateMA = (data, dayCount) => {
@@ -78,7 +76,7 @@ const calculateMA = (data, dayCount) => {
 };
 
 const ChartBox = ({ symbol }) => {
-  const [tokenInfo, setTokenInfo] = useState({});
+
   const [priceLineType, setPriceLineType] = useState('candlestick');
   const [priceSeries, setPriceSeries] = useState([]);
   const [ma7Series, setMa7Series] = useState([]);
@@ -140,7 +138,7 @@ const ChartBox = ({ symbol }) => {
 
   useEffect(() => {
     getTokenInfo(symbol).then((response) => {
-      setTokenInfo(response);
+    
       if (response?.create_time) {
         let startTime = response.create_time.split(' ')[0] + ' 00:00:00';
         setStartTime(dayjs(startTime));
@@ -287,6 +285,19 @@ const ChartBox = ({ symbol }) => {
         end_time: formatToDateTimeString(endTime)
       }).then((response) => {
         setPriceData(response ? response : []);
+        setPriceSeries( [{
+          name: 'Price',
+          type: 'candlestick',
+          data: parsePriceToKlineSeries(response),
+          yAxisIndex: 0,
+          itemStyle: {
+            color0: '#ef232a',
+            color: '#14b143',
+            borderColor0: '#ef232a',
+            borderColor: '#14b143'
+          }
+        }]);
+        
         setVolumeSeries([
           {
             name: 'Buy Volume',
@@ -329,60 +340,7 @@ const ChartBox = ({ symbol }) => {
     }
   }, [symbol, startTime, endTime]);
 
-  const switchKlineType = () => {
-    setPriceLineType((prev) => (prev === 'line' ? 'candlestick' : 'line'));
-  };
-  useEffect(() => {
-    let priceSeries = [
-      {
-        name: 'AvgPrice',
-        type: 'line',
-        yAxisIndex: 0,
-        symbol: 'none',
-        data: priceData.map((item) => item.avg_price),
-        smooth: true
-      },
-      {
-        name: 'Price',
-        type: 'candlestick',
-        data: [],
-        yAxisIndex: 0,
-        itemStyle: {
-          color0: '#ef232a',
-          color: '#14b143',
-          borderColor0: '#ef232a',
-          borderColor: '#14b143'
-        }
-      }
-    ];
-    if (priceLineType === 'candlestick') {
-      priceSeries = [
-        {
-          name: 'AvgPrice',
-          type: 'line',
-          yAxisIndex: 0,
-          symbol: 'none',
-          data: priceData.map((item) => item.avg_price),
-          smooth: true
-        },
-        {
-          name: 'Price',
-          type: 'candlestick',
-          data: parsePriceToKlineSeries(priceData),
-          yAxisIndex: 0,
-          itemStyle: {
-            color0: '#ef232a',
-            color: '#14b143',
-            borderColor0: '#ef232a',
-            borderColor: '#14b143'
-          }
-        }
-      ];
-    }
-
-    setPriceSeries(priceSeries);
-  }, [priceLineType, priceData]);
-
+ 
   useEffect(() => {
     if (showMa7) {
       setMa7Series([
@@ -505,8 +463,8 @@ const ChartBox = ({ symbol }) => {
           type: 'value',
           position: 'right',
           // name: 'Price',
-          max: maxPrice,
-          min: minPrice,
+          max: numberFormatter(maxPrice),
+          min: numberFormatter(minPrice),
           axisLine: {
             lineStyle: {
               color: '#f39c12'
@@ -564,20 +522,27 @@ const ChartBox = ({ symbol }) => {
           }
         }
       ]);
-    } else if (priceData?.length > 0) {
-      let minPrice = priceData?.reduce((min, p) => (p?.low < min ? p?.low : min), priceData[0].low);
+    } else {
+      let minPrice = 0;
+      if (priceData?.length > 0) {
+        minPrice = priceData.reduce((min, p) => (p.low < min ? p.low : min), priceData[0].low);
+      }
+
 
       setYAxisSeries([
         {
           type: 'value',
           position: 'right',
-          min: minPrice,
+          min: numberFormatter(minPrice),
+
           axisLine: {
+           
             lineStyle: {
               color: '#f39c12'
             }
           },
           axisLabel: {
+            inside:false,
             formatter: '${value}'
           },
           splitLine: {
@@ -599,7 +564,7 @@ const ChartBox = ({ symbol }) => {
             }
           },
           axisLabel: {
-            show: false,
+            show: true,
             formatter: '{value}'
           },
           splitLine: {
@@ -611,32 +576,13 @@ const ChartBox = ({ symbol }) => {
           }
         }
       ]);
-    } else {
-      setYAxisSeries([
-        {
-          type: 'value',
-          position: 'right',
-
-          axisLine: {
-            lineStyle: {
-              color: '#f39c12'
-            }
-          },
-          splitLine: {
-            show: true,
-            lineStyle: {
-              color: 'rgba(150, 150, 150, 0.5)', // Light gray color with transparency
-              width: 1 // Optional: you can adjust the width to make the lines thinner
-            }
-          }
-        }
-      ]);
-    }
+    } 
+    
   }, [symbol, priceData, pbvData]);
 
   useEffect(() => {
-    setCombinedSeries([...priceSeries, ...avgCostSeries, ...pbvSeries, ...ma7Series, ...ma30Series, ...rollingPriceSeries]);
-  }, [priceSeries, avgCostSeries, pbvSeries, ma7Series, ma30Series, rollingPriceSeries]);
+    setCombinedSeries([...priceSeries, ...avgCostSeries, ...pbvSeries, ...ma7Series, ...ma30Series, ...rollingPriceSeries,...volumeSeries]);
+  }, [priceSeries, avgCostSeries, pbvSeries, ma7Series, ma30Series, rollingPriceSeries,volumeSeries]);
 
   return (
     <Box sx={{ mt: 0, p: 0 }}>
@@ -718,7 +664,7 @@ const ChartBox = ({ symbol }) => {
             />
           </Box>
         </FormGroup>
-        <FormControlLabel control={<Switch onChange={switchKlineType} />} label="Kline" />
+        {/* <FormControlLabel control={<Switch onChange={switchKlineType} />} label="Kline" /> */}
         <FormControlLabel control={<Switch onChange={onVolumeChange} />} label="TokenVolume" />
 
         <Button>
@@ -734,25 +680,53 @@ const ChartBox = ({ symbol }) => {
             sx={{
               position: 'absolute',
               top: 24, // Adjust based on the desired vertical placement
-              left: 12, // Adjust based on the desired horizontal placement
+              left: 60, // Adjust based on the desired horizontal placement
               zIndex: 10, // Ensures the picker is on top of the chart
               backgroundColor: 'transparent',
               padding: 1, // Optional: add some padding for spacing
               borderRadius: 1 // Optional: round the corners of the background box
             }}
           >
-            <DateTimePicker
-              label="Start Time"
-              value={startTime}
-              onChange={(newValue) => setStartTime(newValue)}
-              renderInput={(params) => <TextField {...params} size="small" sx={{ width: 120 }} />}
-            />
-            <DateTimePicker
-              label="End Time"
-              value={endTime}
-              onChange={(newValue) => setEndTime(newValue)}
-              renderInput={(params) => <TextField {...params} size="small" sx={{ width: 120 }} />}
-            />
+           
+            <CompactDateTimePicker
+          label="Start Time"
+          value={startTime}
+          onChange={(newValue) => setStartTime(newValue)}
+          slotProps={{
+            textField: {
+              size: "small",
+              sx: { width: '200px' }
+            },
+            // Customize the popper (dropdown) size
+            popper: {
+              sx: {
+                '& .MuiPaper-root': {
+                  transform: 'scale(0.9)',
+                  transformOrigin: 'top left',
+                }
+              }
+            }
+          }}
+        />
+        <CompactDateTimePicker
+          label="End Time"
+          value={endTime}
+          onChange={(newValue) => setEndTime(newValue)}
+          slotProps={{
+            textField: {
+              size: "small",
+              sx: { width: '200px' }
+            },
+            popper: {
+              sx: {
+                '& .MuiPaper-root': {
+                  transform: 'scale(0.9)',
+                  transformOrigin: 'top left',
+                }
+              }
+            }
+          }}
+        />
           </Box>
 
           {/* Main Chart Component */}

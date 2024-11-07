@@ -2,31 +2,10 @@ import React from 'react';
 import ReactECharts from 'echarts-for-react';
 
 import { useState, useEffect } from 'react';
-
+import {numberFormatter} from 'utils/common';
 const MainChart = ({ chartName, chartData, yAxisSeries, dataSeries, priceData }) => {
   const [options, setOptions] = useState({});
 
-  const dataFormatter = (data) => {
-    if (data === undefined) {
-      return 'N/A';
-    }
-    if (Math.abs(data) > 1000000000) {
-      return (data / 1000000000).toFixed(2) + 'B';
-    } else if (Math.abs(data) > 1000000) {
-      return (data / 1000000).toFixed(2) + 'M';
-    } else if (Math.abs(data) > 1000) {
-      return (data / 1000).toFixed(2) + 'K';
-    } else if (Math.abs(data) > 1) {
-      return data.toFixed(2);
-    } else if (Math.abs(data) > 0.01) {
-      return data.toFixed(4);
-    } else if (Math.abs(data) > 0.0001) {
-      return data.toFixed(6);
-    } else if (Math.abs(data) > 0.00001) {
-      return data.toFixed(8);
-    }
-    return data.toFixed(10);
-  };
   useEffect(() => {
     if (!priceData.length) {
       return;
@@ -45,11 +24,11 @@ const MainChart = ({ chartName, chartData, yAxisSeries, dataSeries, priceData })
               const [key, open, close, low, high] = param.value;
               result += `
                 <div style="margin: 5px 0; line-height: 1.5;">
-                  <strong>${param.seriesName}:</strong><br/>
-                  <span style="color: #999;">Open:</span> ${dataFormatter(open)}<br/>
-                  <span style="color: #999;">Close:</span> ${dataFormatter(close)}<br/>
-                  <span style="color: #999;">Low:</span> ${dataFormatter(low)}<br/>
-                  <span style="color: #999;">High:</span> ${dataFormatter(high)}
+                  <strong>${param.seriesName}:</strong> 
+                  <span style="color: #999;">Open:</span> ${numberFormatter(open)} 
+                  <span style="color: #999;">Close:</span> ${numberFormatter(close)} 
+                  <span style="color: #999;">Low:</span> ${numberFormatter(low)} 
+                  <span style="color: #999;">High:</span> ${numberFormatter(high)}
                 </div>
               `;
             } else {
@@ -60,7 +39,7 @@ const MainChart = ({ chartName, chartData, yAxisSeries, dataSeries, priceData })
                 result += `
                 <div style="margin: 5px 0; line-height: 1.5;">
                   <span style="display: inline-block; width: 10px; height: 10px; background-color: ${param.color}; border-radius: 50%; margin-right: 5px;"></span>
-                  <strong>${param.seriesName}:</strong> [range: ${param.axisValue} value: ${dataFormatter(param.value)}]
+                  <strong>${param.seriesName}:</strong> [range: ${param.axisValue} value: ${numberFormatter(param.value)}]
                  
                 </div>
               `;
@@ -68,7 +47,7 @@ const MainChart = ({ chartName, chartData, yAxisSeries, dataSeries, priceData })
                 result += `
                 <div style="margin: 5px 0; line-height: 1.5;">
                   <span style="display: inline-block; width: 10px; height: 10px; background-color: ${param.color}; border-radius: 50%; margin-right: 5px;"></span>
-                  <strong>${param.seriesName}:</strong> ${dataFormatter(param.value)}
+                  <strong>${param.seriesName}:</strong> ${numberFormatter(param.value)}
                 </div>
               `;
               }
@@ -93,16 +72,16 @@ const MainChart = ({ chartName, chartData, yAxisSeries, dataSeries, priceData })
       grid: [
         {
           // Grid for price (main chart)
-          left: '1%',
-          right: '8%',
+          left: '40',
+          right: '40',
           // height: '65%',
           top: 20,
           bottom: 180
         },
         {
           // Grid for volume (sub-chart)
-          left: '1%',
-          right: '8%',
+          left: '40',
+          right: '40',
           height: 80,
           bottom: 60
         }

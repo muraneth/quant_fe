@@ -8,8 +8,8 @@ import * as echarts from 'echarts/core';
 import { LineChart } from 'echarts/charts';
 import { GridComponent, TooltipComponent, TitleComponent, LegendComponent, DataZoomComponent } from 'echarts/components';
 import { CanvasRenderer } from 'echarts/renderers';
-import { getTokenPrice } from 'server/common';
-import {getChartData} from 'server/chart';
+import { getTokenPrice } from 'data-server/common';
+import {getChartData} from 'data-server/chart';
 
 echarts.use([LineChart, GridComponent, TooltipComponent, TitleComponent, LegendComponent, DataZoomComponent, CanvasRenderer]);
 

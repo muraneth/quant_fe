@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { init, dispose, registerIndicator } from 'klinecharts';
 import generatedDataList from './generatedDataList';
 
-import { getTokenPrice } from 'server/common';
+import { getTokenPrice } from 'data-server/common';
 
 const PriceByVolumeIndicator = () => {
   const chart = useRef(null);

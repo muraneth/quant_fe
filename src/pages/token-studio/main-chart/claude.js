@@ -9,7 +9,7 @@ import dayjs from 'dayjs';
 import MainChart from './MainChart';
 import MainCard from 'components/MainCard';
 import TokenInfo from './TokenInfo';
-import { getTokenPrice, getChartData, getTokenInfo } from 'server/common';
+import { getTokenPrice, getChartData, getTokenInfo } from 'data-server/common';
 
 // Constants
 const INDICATOR_OPTIONS = [

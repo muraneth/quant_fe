@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { Autocomplete, TextField, Checkbox, Button } from '@mui/material';
 import { CheckBoxOutlineBlank, CheckBox } from '@mui/icons-material';
 
-import { getTokens } from 'server/tokenlist';
+import { getTokens } from 'data-server/tokenlist';
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
