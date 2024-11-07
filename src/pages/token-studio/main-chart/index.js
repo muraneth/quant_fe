@@ -97,7 +97,7 @@ const ChartBox = ({ symbol }) => {
   const [startTime, setStartTime] = useState();
   const [endTime, setEndTime] = useState(dayjs()); // current time
 
-  const [showAvgCost, setShowAvgCost] = useState(true);
+  const [showAvgCost, setShowAvgCost] = useState(false);
   const [showVolume, setShowVolume] = useState(true);
   const [volumeType, setVolumeType] = useState('usd_volume');
   const [showPbv, setShowPbv] = useState(true);
@@ -607,6 +607,26 @@ const ChartBox = ({ symbol }) => {
             lineStyle: {
               color: 'rgba(150, 150, 150, 0.2)', // Light gray with transparency
               width: 1 // Adjust the width if needed
+            }
+          }
+        }
+      ]);
+    } else {
+      setYAxisSeries([
+        {
+          type: 'value',
+          position: 'right',
+
+          axisLine: {
+            lineStyle: {
+              color: '#f39c12'
+            }
+          },
+          splitLine: {
+            show: true,
+            lineStyle: {
+              color: 'rgba(150, 150, 150, 0.5)', // Light gray color with transparency
+              width: 1 // Optional: you can adjust the width to make the lines thinner
             }
           }
         }

@@ -180,10 +180,13 @@ const MainChart = ({ chartName, chartData, yAxisSeries, dataSeries, priceData })
       yAxis: [...yAxisSeries],
       series: [...dataSeries]
     };
+    console.log('option', option);
 
     setOptions(option);
   }, [chartName, chartData, dataSeries, priceData, yAxisSeries]);
-
+  if (!priceData.length || !options || !options.series) {
+    return <div>Loading...</div>;
+  }
   return <ReactECharts option={options} style={{ height: '85vh', width: '100%' }} />;
 };
 
