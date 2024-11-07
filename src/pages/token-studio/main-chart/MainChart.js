@@ -95,8 +95,9 @@ const MainChart = ({ chartName, chartData, yAxisSeries, dataSeries, priceData })
           // Grid for price (main chart)
           left: '1%',
           right: '8%',
-          // height: '65%'
-          bottom: 200
+          // height: '65%',
+          top: 20,
+          bottom: 180
         },
         {
           // Grid for volume (sub-chart)
@@ -124,22 +125,24 @@ const MainChart = ({ chartName, chartData, yAxisSeries, dataSeries, priceData })
       ],
       xAxis: [
         {
+          offset: 10,
           type: 'category',
           data: priceData.map((item) => item.time),
           // name: 'Time',
           nameLocation: 'middle',
           axisLine: {
-            lineStyle: {
-              color: '#999'
-            }
-          },
-          splitLine: {
-            show: false,
-            lineStyle: {
-              color: 'rgba(150, 150, 150, 0.3)', // Lighter color with transparency
-              width: 1 // Optional: adjust the width for thinner lines
-            }
+            show: false
+            // lineStyle: {
+            //   color: '#999'
+            // }
           }
+          // splitLine: {
+          //   show: false,
+          //   lineStyle: {
+          //     color: 'rgba(150, 150, 150, 0.3)', // Lighter color with transparency
+          //     width: 1 // Optional: adjust the width for thinner lines
+          //   }
+          // }
         },
 
         {
@@ -157,10 +160,11 @@ const MainChart = ({ chartName, chartData, yAxisSeries, dataSeries, priceData })
         {
           type: 'value',
           // name: 'PriceByVolume',
-          offset: 10,
+          offset: 0,
           nameLocation: 'middle',
 
           axisLine: {
+            // show: false,
             lineStyle: {
               color: '#999'
             }
@@ -180,7 +184,7 @@ const MainChart = ({ chartName, chartData, yAxisSeries, dataSeries, priceData })
     setOptions(option);
   }, [chartName, chartData, dataSeries, priceData, yAxisSeries]);
 
-  return <ReactECharts option={options} style={{ height: '800px', width: '100%' }} />;
+  return <ReactECharts option={options} style={{ height: '85vh', width: '100%' }} />;
 };
 
 export default MainChart;

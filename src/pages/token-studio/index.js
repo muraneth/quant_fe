@@ -6,30 +6,27 @@ import MainChart from './main-chart';
 import Indicator from './tv';
 import Drawer from './Drawer';
 import { use } from 'echarts';
+import { height } from '../../../node_modules/@mui/system/index';
 export default function TokenStudio() {
   const { symbol } = useParams();
-  const [studioType,setStudioType] = useState('chart');
- const onSwitch = () => {
-    setStudioType( studioType === 'chart' ? 'indicator' : 'chart');
-  }
+  const [studioType, setStudioType] = useState('chart');
+  const onSwitch = () => {
+    setStudioType(studioType === 'chart' ? 'indicator' : 'chart');
+  };
   return (
-    <Box sx={{ display: 'flex', width: '100%', bgcolor: 'background.deep' }}>
+    <Box sx={{ display: 'flex', width: '100%', bgcolor: 'background.deep', height: '100vh', m: 0, p: 0 }}>
       <Button onClick={() => onSwitch()}>Switch</Button>
       <Box
         sx={{
           flexGrow: 1,
           overflow: 'hidden',
-          m: 5
+          p: 0
         }}
       >
-        {
-          studioType === 'chart' ? <MainChart symbol={symbol} /> : <Indicator />
-        }
-       
+        {studioType === 'chart' ? <MainChart symbol={symbol} /> : <Indicator />}
       </Box>
-      
+
       <Drawer />
-      {/* <Box sx={{ height: 100 }}></Box> */}
     </Box>
   );
 }

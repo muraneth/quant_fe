@@ -177,62 +177,25 @@ const ChartBox = ({ symbol }) => {
         }
       });
     } else {
-      setAvgCostSeries([]);
+      setAvgCostSeries([
+        {
+          name: 'AvgCost',
+          type: 'line',
+          data: [],
+          smooth: true,
+          yAxisIndex: 0,
+          symbol: 'none',
+          areaStyle: {
+            color: 'rgba(0, 123, 255, 0.2)' // Adjust the RGB and opacity as needed
+          },
+          lineStyle: {
+            color: 'rgb(0, 123, 255)' // Optionally, set the line color
+          }
+        }
+      ]);
     }
   }, [symbol, showAvgCost, startTime, endTime]);
 
-  useEffect(() => {
-    if (showVolume) {
-      getChartData({
-        token_symbol: symbol,
-        chart_label: 'TradeTokenVolume',
-        start_time: formatToDateTimeString(startTime),
-        end_time: formatToDateTimeString(endTime)
-      }).then((response) => {
-        setVolumeData(response ? response : []);
-        if (response?.length > 0) {
-          setVolumeSeries([
-            {
-              name: 'Buy Volume',
-              type: 'bar',
-              stack: 'Volume',
-              data: response?.map((item) => {
-                if (volumeType == 'usd_volume') {
-                  return item.buy_usd_volume;
-                } else {
-                  return item.buy_token_volume;
-                }
-              }),
-              yAxisIndex: 1,
-              xAxisIndex: 1,
-              itemStyle: {
-                color: '#73C0DE'
-              }
-            },
-            {
-              name: 'Sell Volume',
-              type: 'bar',
-              stack: 'Volume',
-              data: response?.map((item) => {
-                if (volumeType == 'usd_volume') {
-                  return item.sell_usd_volume;
-                } else {
-                  return item.sell_token_volume;
-                }
-              }),
-              yAxisIndex: 1,
-              xAxisIndex: 1,
-              itemStyle: {
-                color: '#FF6F61'
-              }
-            }
-          ]);
-        }
-      });
-    } else {
-      setVolumeSeries([]);
-    }
-  }, [symbol, showVolume, volumeType, startTime, endTime]);
   useEffect(() => {
     if (pbvType) {
       let label = pbvType.split('_')[0] + 'PriceByVolume';
@@ -324,6 +287,42 @@ const ChartBox = ({ symbol }) => {
         end_time: formatToDateTimeString(endTime)
       }).then((response) => {
         setPriceData(response ? response : []);
+        setVolumeSeries([
+          {
+            name: 'Buy Volume',
+            type: 'bar',
+            stack: 'Volume',
+            data: response?.map((item) => {
+              if (volumeType == 'usd_volume') {
+                return item.buy_volume;
+              } else {
+                return item.buy_turn_over;
+              }
+            }),
+            yAxisIndex: 1,
+            xAxisIndex: 1,
+            itemStyle: {
+              color: '#73C0DE'
+            }
+          },
+          {
+            name: 'Sell Volume',
+            type: 'bar',
+            stack: 'Volume',
+            data: response?.map((item) => {
+              if (volumeType == 'usd_volume') {
+                return -item.sell_volume;
+              } else {
+                return -item.sell_turn_over;
+              }
+            }),
+            yAxisIndex: 1,
+            xAxisIndex: 1,
+            itemStyle: {
+              color: '#FF6F61'
+            }
+          }
+        ]);
       });
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -496,9 +495,9 @@ const ChartBox = ({ symbol }) => {
 
   useEffect(() => {
     if (pbvType != '' && pbvData?.length > 0) {
-      // let minPrice = priceData.reduce((min, p) => (p.low < min ? p.low : min), priceData[0].low);
-      // let maxPrice = priceData.reduce((max, p) => (p.high > max ? p.high : max), priceData[0].high);
       let minPrice = pbvData.reduce((min, p) => (p.price_range_lower < min ? p.price_range_lower : min), pbvData[0].price_range_lower);
+
+      // let maxPrice = priceData.reduce((max, p) => (p.high > max ? p.high : max), priceData[0].high);
       let maxPrice = pbvData.reduce((max, p) => (p.price_range_upper > max ? p.price_range_upper : max), pbvData[0].price_range_upper);
 
       setYAxisSeries([
@@ -565,11 +564,14 @@ const ChartBox = ({ symbol }) => {
           }
         }
       ]);
-    } else {
+    } else if (priceData?.length > 0) {
+      let minPrice = priceData?.reduce((min, p) => (p?.low < min ? p?.low : min), priceData[0].low);
+
       setYAxisSeries([
         {
           type: 'value',
           position: 'right',
+          min: minPrice,
           axisLine: {
             lineStyle: {
               color: '#f39c12'
@@ -607,39 +609,17 @@ const ChartBox = ({ symbol }) => {
               width: 1 // Adjust the width if needed
             }
           }
-        },
-        {
-          type: 'category',
-          data: pbvData?.map((item) => item.price_range_lower),
-          name: 'Price Levels',
-          nameLocation: 'middle',
-          axisLine: {
-            lineStyle: {
-              color: '#999'
-            }
-          },
-          axisLabel: {
-            show: false
-          }
         }
       ]);
     }
   }, [symbol, priceData, pbvData]);
 
   useEffect(() => {
-    setCombinedSeries([
-      ...priceSeries,
-      ...avgCostSeries,
-      ...volumeSeries,
-      ...pbvSeries,
-      ...ma7Series,
-      ...ma30Series,
-      ...rollingPriceSeries
-    ]);
-  }, [priceSeries, avgCostSeries, volumeSeries, pbvSeries, ma7Series, ma30Series, rollingPriceSeries]);
+    setCombinedSeries([...priceSeries, ...avgCostSeries, ...pbvSeries, ...ma7Series, ...ma30Series, ...rollingPriceSeries]);
+  }, [priceSeries, avgCostSeries, pbvSeries, ma7Series, ma30Series, rollingPriceSeries]);
 
   return (
-    <MainCard sx={{ mt: 0, p: 0 }}>
+    <Box sx={{ mt: 0, p: 0 }}>
       <Box display="flex" justifyContent="space-between" alignItems="center">
         <TokenInf symbol={symbol} />
       </Box>
@@ -728,19 +708,34 @@ const ChartBox = ({ symbol }) => {
       <Divider />
 
       <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <Box sx={{ mt: 1 }}>
-          <DateTimePicker
-            label="Start Time"
-            value={startTime}
-            onChange={(newValue) => setStartTime(newValue)}
-            renderInput={(params) => <TextField {...params} />}
-          />
-          <DateTimePicker
-            label="End Time"
-            value={endTime}
-            onChange={(newValue) => setEndTime(newValue)}
-            renderInput={(params) => <TextField {...params} />}
-          />
+        <Box sx={{ mt: 1, position: 'relative' }}>
+          {/* Container for Date Pickers with absolute positioning */}
+          <Box
+            sx={{
+              position: 'absolute',
+              top: 24, // Adjust based on the desired vertical placement
+              left: 12, // Adjust based on the desired horizontal placement
+              zIndex: 10, // Ensures the picker is on top of the chart
+              backgroundColor: 'transparent',
+              padding: 1, // Optional: add some padding for spacing
+              borderRadius: 1 // Optional: round the corners of the background box
+            }}
+          >
+            <DateTimePicker
+              label="Start Time"
+              value={startTime}
+              onChange={(newValue) => setStartTime(newValue)}
+              renderInput={(params) => <TextField {...params} size="small" sx={{ width: 120 }} />}
+            />
+            <DateTimePicker
+              label="End Time"
+              value={endTime}
+              onChange={(newValue) => setEndTime(newValue)}
+              renderInput={(params) => <TextField {...params} size="small" sx={{ width: 120 }} />}
+            />
+          </Box>
+
+          {/* Main Chart Component */}
           <MainChart
             chartName={symbol}
             chartData={volumeData}
@@ -750,7 +745,7 @@ const ChartBox = ({ symbol }) => {
           />
         </Box>
       </LocalizationProvider>
-    </MainCard>
+    </Box>
   );
 };
 export default ChartBox;

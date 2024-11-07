@@ -1,79 +1,61 @@
-
 import { getTokenInfo } from 'server/tokenlist';
 import { useState, useEffect } from 'react';
 
-import { Box, Grid, Typography,Stack,Tooltip } from '@mui/material';
+import { Box, Grid, Typography, Stack, Tooltip } from '@mui/material';
 
 import { formatBigNumber, numberToPercentage } from 'utils/common';
 
-
 const BaseInfo = ({ title, value }) => {
-    return (
-      <Stack  direction="row" spacing={1} alignItems="center">
-        <Typography sx={{ color: 'text.secondary', fontSize: 10 }}>
-          {title}
-        </Typography>
+  return (
+    <Stack direction="row" spacing={1} alignItems="center">
+      <Typography sx={{ color: 'text.secondary', fontSize: 10 }}>{title}</Typography>
 
-          <Typography sx={{ color: 'text.primary', fontSize: 13 }}  >
-            {value}
-          </Typography>
-      </Stack>
-    );
-  };
-  
+      <Typography sx={{ color: 'text.primary', fontSize: 13 }}>{value}</Typography>
+    </Stack>
+  );
+};
 
 const TokenInf = ({ symbol }) => {
+  const [baseInfo, setBaseInfo] = useState({});
 
-    const [baseInfo, setBaseInfo] = useState({});
+  useEffect(() => {
+    getTokenInfo(symbol).then((data) => {
+      setBaseInfo(data ? data : {});
+    });
+  }, [symbol]);
 
-    useEffect(() => {
-      getTokenInfo(symbol).then((data) => {
-        setBaseInfo(data ? data : {});
-      });
-    }, [symbol]);
+  return (
+    // <Box sx={{ width: '100%' ,p:0 }}>
+    <Grid container rowSpacing={4.5} columnSpacing={2.75} alignItems="center" sx={{ width: '100%', p: 0 }}>
+      {/* Symbol takes 2 columns width */}
+      <Grid item xs={8} sm={4} md={3} lg={1}>
+        <Typography variant="h6">{symbol}</Typography>
+      </Grid>
 
-    return (
-        // <Box sx={{ width: '100%' ,p:0 }}>
-            <Grid
-                container
-                rowSpacing={4.5}
-                columnSpacing={2.75}
-                alignItems="center"
-                sx={{ width: '100%'}}
-            >
-                {/* Symbol takes 2 columns width */}
-                <Grid item xs={8} sm={4} md={3} lg={1}>
-                    <Typography variant="h6">
-                        {symbol}
-                    </Typography>
-                </Grid>
-
-                {/* First row of info starts after symbol */}
-                <Grid item xs={8} sm={4} md={3} lg={1}>
-                    <BaseInfo title={'MarketCap'} value={formatBigNumber(baseInfo.mcp)} />
-                </Grid>
-                <Grid item xs={8} sm={4} md={3} lg={1}>
-                    <BaseInfo title={'Holder'} value={formatBigNumber(baseInfo.holder)} />
-                </Grid>
-                {/* Rest of the grid items */}
-                <Grid item xs={8} sm={4} md={3} lg={1}>
-                    <BaseInfo title={'PoolSize'} value={formatBigNumber(baseInfo.poolsize)} />
-                </Grid>
-                <Grid item xs={8} sm={4} md={3} lg={1}>
-                    <BaseInfo title={'Volume'} value={formatBigNumber(baseInfo.volumn)} />
-                </Grid>
-                <Grid item xs={8} sm={4} md={3} lg={1}>
-                    <BaseInfo title={'VolumeToMcp'} value={numberToPercentage(baseInfo.volumn_to_mcp)} />
-                </Grid>
-                <Grid item xs={8} sm={4} md={3} lg={1}>
-                    <BaseInfo title={'VolumeToPool'} value={numberToPercentage(baseInfo.volumn_to_poolsize)} />
-                </Grid>
-            </Grid>
-        // </Box>
-    );
-  
-
-}
+      {/* First row of info starts after symbol */}
+      <Grid item xs={8} sm={4} md={3} lg={1}>
+        <BaseInfo title={'MCP'} value={formatBigNumber(baseInfo.mcp)} />
+      </Grid>
+      <Grid item xs={8} sm={4} md={3} lg={1}>
+        <BaseInfo title={'Holder'} value={formatBigNumber(baseInfo.holder)} />
+      </Grid>
+      {/* Rest of the grid items */}
+      <Grid item xs={8} sm={4} md={3} lg={1}>
+        <BaseInfo title={'PoolSize'} value={formatBigNumber(baseInfo.poolsize)} />
+      </Grid>
+      <Grid item xs={8} sm={4} md={3} lg={1}>
+        <BaseInfo title={'Volume'} value={formatBigNumber(baseInfo.volumn)} />
+      </Grid>
+      <Grid item xs={8} sm={4} md={3} lg={1.5}>
+        <BaseInfo title={'VolumeToMcp'} value={numberToPercentage(baseInfo.volumn_to_mcp)} />
+      </Grid>
+      <Grid item xs={8} sm={4} md={3} lg={1}>
+        <BaseInfo title={'VolumeToPool'} value={numberToPercentage(baseInfo.volumn_to_poolsize)} />
+      </Grid>
+    </Grid>
+    // </Box>
+  );
+};
 export default TokenInf;
 
 // import { getTokenInfo } from 'server/tokenlist';
