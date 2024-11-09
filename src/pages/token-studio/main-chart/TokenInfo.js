@@ -33,23 +33,23 @@ const TokenInf = ({ symbol }) => {
       </Grid>
 
       {/* First row of info starts after symbol */}
-      <Grid item xs={8} sm={4} md={3} lg={1}>
+      <Grid item xs={8} sm={2} md={1} lg={1}>
         <BaseInfo title={'MCP'} value={formatBigNumber(baseInfo.mcp)} />
       </Grid>
-      <Grid item xs={8} sm={4} md={3} lg={1}>
+      <Grid item xs={8} sm={2} md={1} lg={1}>
         <BaseInfo title={'Holder'} value={formatBigNumber(baseInfo.holder)} />
       </Grid>
       {/* Rest of the grid items */}
-      <Grid item xs={8} sm={4} md={3} lg={1}>
+      <Grid item xs={8} sm={2} md={1} lg={1}>
         <BaseInfo title={'PoolSize'} value={formatBigNumber(baseInfo.poolsize)} />
       </Grid>
-      <Grid item xs={8} sm={4} md={3} lg={1}>
+      <Grid item xs={8} sm={2} md={1} lg={1}>
         <BaseInfo title={'Volume'} value={formatBigNumber(baseInfo.volumn)} />
       </Grid>
-      <Grid item xs={8} sm={4} md={3} lg={1.5}>
+      <Grid item xs={8} sm={2} md={1.5} lg={1.5}>
         <BaseInfo title={'VolumeToMcp'} value={numberToPercentage(baseInfo.volumn_to_mcp)} />
       </Grid>
-      <Grid item xs={8} sm={4} md={3} lg={1}>
+      <Grid item xs={8} sm={2} md={1} lg={1}>
         <BaseInfo title={'VolumeToPool'} value={numberToPercentage(baseInfo.volumn_to_poolsize)} />
       </Grid>
     </Grid>

@@ -8,7 +8,7 @@ import { CanvasRenderer } from 'echarts/renderers';
 
 echarts.use([LineChart, GridComponent, TooltipComponent, TitleComponent, LegendComponent, DataZoomComponent, CanvasRenderer]);
 
-const BaseLineChart = ({ chartName, chartData, priceSeries,priceData }) => {
+const BaseLineChart = ({ chartName, chartData, priceSeries, priceData }) => {
   const theme = useTheme();
   const chartRef = useRef(null);
   const [chartInstance, setChartInstance] = useState(null);
@@ -63,6 +63,13 @@ const BaseLineChart = ({ chartName, chartData, priceSeries,priceData }) => {
             position: 'left',
             axisLabel: {
               formatter: '{value}'
+            },
+            splitLine: {
+              show: false,
+              lineStyle: {
+                color: 'rgba(150, 150, 150, 0.5)', // Light gray color with transparency
+                width: 1 // Optional: you can adjust the width to make the lines thinner
+              }
             }
           },
           {
@@ -107,7 +114,8 @@ const BaseLineChart = ({ chartName, chartData, priceSeries,priceData }) => {
             // areaStyle: {},
             data: chartData?.map((item) => item?.value),
             smooth: true,
-            yAxisIndex: 1
+            yAxisIndex: 1,
+            symbol: 'none'
           },
           ...priceSeries
         ]
@@ -115,7 +123,7 @@ const BaseLineChart = ({ chartName, chartData, priceSeries,priceData }) => {
 
       chartInstance.setOption(option);
     }
-  }, [chartData, priceSeries, chartInstance, chartName,priceData]);
+  }, [chartData, priceSeries, chartInstance, chartName, priceData]);
 
   return (
     <div>

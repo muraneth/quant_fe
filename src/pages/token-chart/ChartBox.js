@@ -18,7 +18,7 @@ import dayjs from 'dayjs';
 import { useSelector } from 'react-redux';
 import { getTokenPrice } from 'data-server/common';
 import { getChartData } from 'data-server/chart';
-import {useParams} from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 const parsePriceToKlineSeries = (data) => {
   return data.map((item) => {
     return [item.open, item.close, item.low, item.high];
@@ -34,9 +34,9 @@ function isBaseLineChart(chart) {
 }
 function isAvgCostChart(chart) {
   // const items = ['AvgCost', 'DexAvgCost', 'CexAvgCost', 'AvgCostExcept'];
-  
+
   // return items.includes(chart);
-  return chart.includes("AvgCost")
+  return chart.includes('AvgCost') || chart.includes('avg_cost');
 }
 function isBasicVolumeChart(chart) {
   const items = [
@@ -90,7 +90,7 @@ const ChartBox = () => {
       setChartData([]);
       setPriceData([]);
     }
-  }, [chartId]);
+  }, [chartId, symbol, startTime]);
 
   const switchKlineType = () => {
     setPriceLineType((prev) => (prev === 'line' ? 'candlestick' : 'line'));
@@ -115,7 +115,8 @@ const ChartBox = () => {
           type: 'line',
           yAxisIndex: 0,
           data: priceData.map((item) => item.avg_price),
-          smooth: true
+          smooth: true,
+          symbol: 'none'
         }
       ];
       setPriceSeries(series);
@@ -126,7 +127,8 @@ const ChartBox = () => {
           type: 'line',
           yAxisIndex: 0,
           data: priceData.map((item) => item.avg_price),
-          smooth: true
+          smooth: true,
+          symbol: 'none'
         }
       ];
       setPriceSeries(series);
@@ -141,8 +143,28 @@ const ChartBox = () => {
         </Typography>
         <FormControlLabel control={<Switch onChange={switchKlineType} />} label="Kline" />
       </Box>
-      {isBaseLineChart(chartId) && <BaseLineChart chartName={chartId} chartData={chartData} priceSeries={priceSeries} priceData={priceData} />}
-      {isAvgCostChart(chartId) && <AvgCostChart chartName={chartId} chartData={chartData} priceSeries={priceSeries} priceData={priceData}/>}
+      {isBaseLineChart(chartId) && (
+        <BaseLineChart chartName={chartId} chartData={chartData} priceSeries={priceSeries} priceData={priceData} />
+      )}
+      {isAvgCostChart(chartId) && (
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <div>
+            <DateTimePicker
+              label="Start Time"
+              value={startTime}
+              onChange={(newValue) => setStartTime(newValue)}
+              renderInput={(params) => <TextField {...params} />}
+            />
+            <DateTimePicker
+              label="End Time"
+              value={endTime}
+              onChange={(newValue) => setEndTime(newValue)}
+              renderInput={(params) => <TextField {...params} />}
+            />
+            <AvgCostChart chartName={chartId} chartData={chartData} priceSeries={priceSeries} priceData={priceData} />
+          </div>
+        </LocalizationProvider>
+      )}
       {isBasicVolumeChart(chartId) && <BasicVolumeChart chartName={chartId} chartData={chartData} priceSeries={priceSeries} />}
       {isPriceByVolumeChart(chartId) && (
         <LocalizationProvider dateAdapter={AdapterDayjs}>

@@ -29,6 +29,8 @@ const MainChart = ({ chartName, chartData, yAxisSeries, dataSeries, priceData })
                   <span style="color: #999;">Close:</span> ${numberFormatter(close)} 
                   <span style="color: #999;">Low:</span> ${numberFormatter(low)} 
                   <span style="color: #999;">High:</span> ${numberFormatter(high)}
+                   <strong>Change:</strong> 
+                   
                 </div>
               `;
             } else {

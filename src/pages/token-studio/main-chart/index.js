@@ -5,11 +5,18 @@ import { useTheme } from '@mui/material/styles';
 import { generateDataSeries, generateXAxis, generateYAxis } from './ChartSeries';
 import CompactDateTimePicker from './CompactDataPicker';
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import { Divider } from '@mui/material';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import MainChart from './MainChart2';
 import dayjs from 'dayjs';
 import { debounce } from 'lodash';
+import TokenInf from './TokenInfo';
+import IndicatorOptions from './Indicators';
+
+import IndicatorPopup from './IndicatorPopup';
+import ShowChartIcon from '@mui/icons-material/ShowChart';
 
 const formatToDateTimeString = (date) => {
   return date ? date.format('YYYY-MM-DD HH:mm:ss') : '';
@@ -21,10 +28,8 @@ const ChartBox = ({ symbol }) => {
     startTime: dayjs(),
     endTime: dayjs()
   });
-  const [priceIndicators, setPriceIndicators] = useState({
-    ma_7: { checked: false, data: [] }
-  });
-
+  const [isIndicatorPumpupOpen, setIndicatorPumpupOpen] = useState(false);
+  const [selectedIndicators, setSelectedIndicators] = useState([]);
   const [indicators, setIndicators] = useState({
     pbvIndicator: { checked: false, data: [] },
     holderIndicator: { checked: false, data: [] },
@@ -34,6 +39,7 @@ const ChartBox = ({ symbol }) => {
   const [xAxis, setXAxis] = useState([]);
   const [yAxis, setYAxis] = useState([]);
   const [dataSeries, setDataSeries] = useState([]);
+  const [klineData, setKlineData] = useState([]);
 
   const handleStartTimeChange = useCallback((newValue) => {
     setTimeRange((prev) => ({ ...prev, startTime: newValue }));
@@ -42,6 +48,15 @@ const ChartBox = ({ symbol }) => {
   const handleEndTimeChange = useCallback((newValue) => {
     setTimeRange((prev) => ({ ...prev, endTime: newValue }));
   }, []);
+
+  const handleIndicatorOpenPumpup = () => {
+    setIndicatorPumpupOpen(true);
+  };
+
+  const handleIndicatorClosePumpup = () => {
+    setIndicatorPumpupOpen(false);
+  };
+
   const handleIndicatorChange = (event) => {
     const { name, checked } = event.target;
     setIndicators((prevIndicators) => ({
@@ -72,23 +87,58 @@ const ChartBox = ({ symbol }) => {
       start_time: formatToDateTimeString(timeRange.startTime),
       end_time: formatToDateTimeString(timeRange.endTime)
     }).then((priceData) => {
+      setKlineData(priceData);
       setXAxis(generateXAxis(theme, priceData));
       setYAxis(generateYAxis(theme, priceData));
       setDataSeries(generateDataSeries(theme, priceData));
     });
   }, 100);
-  const fetchIndicators = debounce(({}) => {}, 100);
-
   useEffect(() => {
     initPriceData();
     return () => initPriceData.cancel();
   }, [timeRange]);
 
+  const fetchIndicators = debounce(({ indicatorName }) => {
+    const responseData = getChartData(indicatorName); // Replace with actual API call
+    setIndicators((prevIndicators) => ({
+      ...prevIndicators,
+      [indicatorName]: {
+        ...prevIndicators[indicatorName],
+        data: responseData
+      }
+    }));
+  }, 100);
+
   return (
     <Box sx={{ mt: 0, p: 0 }}>
+      {isIndicatorPumpupOpen && (
+        <IndicatorPopup open={isIndicatorPumpupOpen} onClose={handleIndicatorClosePumpup} setSelectedIndicators={setSelectedIndicators} />
+      )}
+
+      <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ ml: 10 }}>
+        <TokenInf symbol={symbol} />
+      </Box>
+      <Divider />
+      {/* <Box>{selectedIndicators}</Box> */}
+
+      <Divider />
+      <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ mt: 1, height: '30px' }}>
+        <IndicatorOptions
+          symbol={symbol}
+          startTime={formatToDateTimeString(timeRange.startTime)}
+          endTime={formatToDateTimeString(timeRange.endTime)}
+          indicators={selectedIndicators}
+          klineData={klineData}
+          // setXAxis={setXAxis}
+          setDataSeries={setDataSeries}
+          setYAxis={setYAxis}
+        />
+        <Button variant="" onClick={handleIndicatorOpenPumpup} startIcon={<ShowChartIcon />}>
+          Indicator
+        </Button>
+      </Box>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <Box sx={{ mt: 1, position: 'relative' }}>
-          {/* Container for Date Pickers with absolute positioning */}
           <Box
             sx={{
               position: 'absolute',

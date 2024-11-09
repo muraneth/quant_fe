@@ -21,10 +21,9 @@ import { Divider } from '@mui/material';
 import TokenInf from './TokenInfo';
 
 import { getTokenInfo } from 'data-server/tokenlist';
-import {numberFormatter} from 'utils/common';
+import { numberFormatter } from 'utils/common';
 
 import CompactDateTimePicker from './CompactDataPicker';
-
 
 const parsePriceToKlineSeries = (data) => {
   return data.map((item) => {
@@ -55,9 +54,9 @@ const getPBVData = (response, type) => {
     } else if (type === 'negative_Trade_usd_volume') {
       return item.negative_trade_usd_volume;
     }
-   
   });
 };
+
 const calculateMA = (data, dayCount) => {
   const result = [];
   for (let i = 0, len = data.length; i < len; i++) {
@@ -76,7 +75,6 @@ const calculateMA = (data, dayCount) => {
 };
 
 const ChartBox = ({ symbol }) => {
-
   const [priceLineType, setPriceLineType] = useState('candlestick');
   const [priceSeries, setPriceSeries] = useState([]);
   const [ma7Series, setMa7Series] = useState([]);
@@ -138,7 +136,6 @@ const ChartBox = ({ symbol }) => {
 
   useEffect(() => {
     getTokenInfo(symbol).then((response) => {
-    
       if (response?.create_time) {
         let startTime = response.create_time.split(' ')[0] + ' 00:00:00';
         setStartTime(dayjs(startTime));
@@ -285,19 +282,21 @@ const ChartBox = ({ symbol }) => {
         end_time: formatToDateTimeString(endTime)
       }).then((response) => {
         setPriceData(response ? response : []);
-        setPriceSeries( [{
-          name: 'Price',
-          type: 'candlestick',
-          data: parsePriceToKlineSeries(response),
-          yAxisIndex: 0,
-          itemStyle: {
-            color0: '#ef232a',
-            color: '#14b143',
-            borderColor0: '#ef232a',
-            borderColor: '#14b143'
+        setPriceSeries([
+          {
+            name: 'Price',
+            type: 'candlestick',
+            data: parsePriceToKlineSeries(response),
+            yAxisIndex: 0,
+            itemStyle: {
+              color0: '#ef232a',
+              color: '#14b143',
+              borderColor0: '#ef232a',
+              borderColor: '#14b143'
+            }
           }
-        }]);
-        
+        ]);
+
         setVolumeSeries([
           {
             name: 'Buy Volume',
@@ -340,7 +339,6 @@ const ChartBox = ({ symbol }) => {
     }
   }, [symbol, startTime, endTime]);
 
- 
   useEffect(() => {
     if (showMa7) {
       setMa7Series([
@@ -528,7 +526,6 @@ const ChartBox = ({ symbol }) => {
         minPrice = priceData.reduce((min, p) => (p.low < min ? p.low : min), priceData[0].low);
       }
 
-
       setYAxisSeries([
         {
           type: 'value',
@@ -536,13 +533,12 @@ const ChartBox = ({ symbol }) => {
           min: numberFormatter(minPrice),
 
           axisLine: {
-           
             lineStyle: {
               color: '#f39c12'
             }
           },
           axisLabel: {
-            inside:false,
+            inside: false,
             formatter: '${value}'
           },
           splitLine: {
@@ -576,13 +572,20 @@ const ChartBox = ({ symbol }) => {
           }
         }
       ]);
-    } 
-    
+    }
   }, [symbol, priceData, pbvData]);
 
   useEffect(() => {
-    setCombinedSeries([...priceSeries, ...avgCostSeries, ...pbvSeries, ...ma7Series, ...ma30Series, ...rollingPriceSeries,...volumeSeries]);
-  }, [priceSeries, avgCostSeries, pbvSeries, ma7Series, ma30Series, rollingPriceSeries,volumeSeries]);
+    setCombinedSeries([
+      ...priceSeries,
+      ...avgCostSeries,
+      ...pbvSeries,
+      ...ma7Series,
+      ...ma30Series,
+      ...rollingPriceSeries,
+      ...volumeSeries
+    ]);
+  }, [priceSeries, avgCostSeries, pbvSeries, ma7Series, ma30Series, rollingPriceSeries, volumeSeries]);
 
   return (
     <Box sx={{ mt: 0, p: 0 }}>
@@ -687,46 +690,45 @@ const ChartBox = ({ symbol }) => {
               borderRadius: 1 // Optional: round the corners of the background box
             }}
           >
-           
             <CompactDateTimePicker
-          label="Start Time"
-          value={startTime}
-          onChange={(newValue) => setStartTime(newValue)}
-          slotProps={{
-            textField: {
-              size: "small",
-              sx: { width: '200px' }
-            },
-            // Customize the popper (dropdown) size
-            popper: {
-              sx: {
-                '& .MuiPaper-root': {
-                  transform: 'scale(0.9)',
-                  transformOrigin: 'top left',
+              label="Start Time"
+              value={startTime}
+              onChange={(newValue) => setStartTime(newValue)}
+              slotProps={{
+                textField: {
+                  size: 'small',
+                  sx: { width: '200px' }
+                },
+                // Customize the popper (dropdown) size
+                popper: {
+                  sx: {
+                    '& .MuiPaper-root': {
+                      transform: 'scale(0.9)',
+                      transformOrigin: 'top left'
+                    }
+                  }
                 }
-              }
-            }
-          }}
-        />
-        <CompactDateTimePicker
-          label="End Time"
-          value={endTime}
-          onChange={(newValue) => setEndTime(newValue)}
-          slotProps={{
-            textField: {
-              size: "small",
-              sx: { width: '200px' }
-            },
-            popper: {
-              sx: {
-                '& .MuiPaper-root': {
-                  transform: 'scale(0.9)',
-                  transformOrigin: 'top left',
+              }}
+            />
+            <CompactDateTimePicker
+              label="End Time"
+              value={endTime}
+              onChange={(newValue) => setEndTime(newValue)}
+              slotProps={{
+                textField: {
+                  size: 'small',
+                  sx: { width: '200px' }
+                },
+                popper: {
+                  sx: {
+                    '& .MuiPaper-root': {
+                      transform: 'scale(0.9)',
+                      transformOrigin: 'top left'
+                    }
+                  }
                 }
-              }
-            }
-          }}
-        />
+              }}
+            />
           </Box>
 
           {/* Main Chart Component */}

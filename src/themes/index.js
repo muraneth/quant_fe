@@ -72,6 +72,9 @@ export default function ThemeCustomization({ children }) {
       purple: {
         main: '#BB86FC'
       },
+      gray: {
+        main: '#424242'
+      },
 
       background: { default: '#121212', paper: '#1E1E1E', deep: '#0b0e1b' }
     },

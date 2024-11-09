@@ -9,8 +9,7 @@ export const formatBigNumber = (value) => {
         maximumFractionDigits: 2
       }) + 'B'
     );
-  }
-  else if (value >= 1000000) {
+  } else if (value >= 1000000) {
     return (
       (value / 1000000).toLocaleString(undefined, {
         minimumFractionDigits: 2,
@@ -24,7 +23,7 @@ export const formatBigNumber = (value) => {
         maximumFractionDigits: 2
       }) + 'K'
     );
-  }else{
+  } else {
     return value.toLocaleString(undefined, {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2
@@ -42,7 +41,25 @@ export const padArrayAhead = (arr, length) => {
   }
   return arr;
 };
+export const padArrayBehind = (arr, length) => {
+  while (arr.length < length) {
+    arr.push(null);
+  }
+  return arr;
+};
 
+export const padAarryAHeadByCount = (arr, count) => {
+  for (let i = 0; i < count; i++) {
+    arr.unshift(null);
+  }
+  return arr;
+};
+export const padAarryBehindByCount = (arr, count) => {
+  for (let i = 0; i < count; i++) {
+    arr.push(null);
+  }
+  return arr;
+};
 
 export const numberFormatter = (data) => {
   if (data === undefined) {
@@ -62,9 +79,9 @@ export const numberFormatter = (data) => {
     return data.toFixed(5);
   } else if (Math.abs(data) > 0.00001) {
     return data.toFixed(6);
-  }else if (Math.abs(data) > 0.000001) {
+  } else if (Math.abs(data) > 0.000001) {
     return data.toFixed(7);
-  }else if (Math.abs(data) > 0.0000001) {
+  } else if (Math.abs(data) > 0.0000001) {
     return data.toFixed(8);
   }
   return data.toFixed(10);

@@ -12,12 +12,13 @@ const MainChart = ({ chartName, xAxis, yAxis, dataSeries }) => {
         trigger: 'axis',
         formatter: function (params) {
           let result = `<strong>Date:</strong> ${params[0].axisValue}<br/>`;
-          console.log('params', params);
+          // console.log('params', params);
 
           params.forEach((param) => {
             if (param.seriesType === 'candlestick') {
-              // Assuming param.value format is [open, close, low, high] for K-line
               const [key, open, close, low, high] = param.value;
+              const percentageChange = (((close - open) / open) * 100).toFixed(2);
+
               result += `
                 <div style="margin: 5px 0; line-height: 1.5;">
                   <strong>${param.seriesName}:</strong> 
@@ -25,6 +26,9 @@ const MainChart = ({ chartName, xAxis, yAxis, dataSeries }) => {
                   <span style="color: #999;">Close:</span> ${numberFormatter(close)} 
                   <span style="color: #999;">Low:</span> ${numberFormatter(low)} 
                   <span style="color: #999;">High:</span> ${numberFormatter(high)}
+                  <strong>Change:</strong> 
+                  <span style="color: ${percentageChange >= 0 ? 'green' : 'red'};">${percentageChange}%</span>
+                   
                 </div>
               `;
             } else {
@@ -50,17 +54,6 @@ const MainChart = ({ chartName, xAxis, yAxis, dataSeries }) => {
             }
           });
 
-          // Calculate percentage change if both values are defined
-          if (params[1]?.value[2] !== undefined && params[1]?.value[1] !== undefined && params[1]?.value[1] !== 0) {
-            const percentageChange = (((params[1].value[2] - params[1].value[1]) / params[1].value[1]) * 100).toFixed(2);
-            result += `
-              <div style="margin: 5px 0; line-height: 1.5;">
-                <strong>Change:</strong> 
-                 <span style="color: ${percentageChange >= 0 ? 'green' : 'red'};">${percentageChange}%</span>
-              </div>
-            `;
-          }
-
           return result;
         }
       },
@@ -71,7 +64,7 @@ const MainChart = ({ chartName, xAxis, yAxis, dataSeries }) => {
           left: '40',
           right: '40',
           // height: '65%',
-          top: 20,
+          top: 0,
           bottom: 180
         },
         {
