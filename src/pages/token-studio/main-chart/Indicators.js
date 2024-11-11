@@ -12,55 +12,6 @@ import { getChartData } from 'data-server';
 import { max, set } from 'lodash';
 import { padAarryAHeadByCount, padAarryBehindByCount } from 'utils/common';
 
-// const INDICATOR_OPTIONS = [
-//   {
-//     volume: [
-//       'trade_usd_volume',
-//       'tx_usd_volume',
-//       'trade_token_volume',
-//       'tx_token_volume',
-//       'cex_deposit_token_volume',
-//       'filtered_addr_usd_volume',
-//       'filtered_addr_token_volume'
-//     ],
-//     pbv: [
-//       'trade_usd_pbv',
-//       'tx_usd_pbv',
-//       'trade_token_pbv',
-//       'tx_token_pbv',
-//       'cex_deposit_token_pbv',
-//       'filtered_addr_usd_pbv',
-//       'filtered_addr_token_pbv',
-//       'wallet_cost_usd_pbv',
-//       'filtered_addr_wallet_cost_usd_pbv'
-//     ],
-//     price: [
-//       'ma_7',
-//       'ma_30',
-//       'ma_x',
-//       'volume_weighted_avg_price',
-//       'volume_weighted_rolling_price_7',
-//       'volume_weighted_rolling_price_30',
-//       'volume_weighted_rolling_price_x',
-//       'avg_cost',
-//       'filtered_address_avg_cost'
-//     ],
-//     balance: ['cex_balance', 'cex_balance_ratio', 'filtered_addr_balance', 'filtered_addr_balance_ratio'],
-//     //   "holder":[
-//     //     'holder_count_1', // balance > 1 usd
-//     //     'holder_count_10', // balance > 10 usd
-//     //     'holder_count_x', // balance > x usd
-//     //   ],
-//     pnl: [
-//       'un_pnl', // unrealized pnl
-//       'un_pnl_ratio', // unrealized pnl vs mcp ratio
-//       'un_pos_pnl', // unrealized positive pnl
-//       'un_neg_pnl', // unrealized negative pnl
-//       'un_pos_pnl_ratio', // unrealized positive pnl vs mcp ratio
-//       'un_neg_pnl_ratio' // unrealized negative pnl vs mcp ratio
-//     ]
-//   }
-// ];
 
 const calculateMA = (klinedata, dayCount) => {
   const result = [];
@@ -82,6 +33,7 @@ const calculateMA = (klinedata, dayCount) => {
 const IndicatorOptions = ({ symbol, startTime, endTime, indicators, klineData, setDataSeries, setYAxis }) => {
   const [priceIndicators, setPriceIndicators] = useState([]);
   const [pbvIndicator, setPBVIndicators] = useState([]);
+  const [ratioIndicators, setRatioIndicators] = useState([]);
 
   // const pIndicators = indicators.filter((indicator) => indicator.type === 'price');
   // const pbvIndicators = indicators.filter((indicator) => indicator.type === 'pbv');
@@ -93,10 +45,49 @@ const IndicatorOptions = ({ symbol, startTime, endTime, indicators, klineData, s
 
     const pbvInd = indicators.filter((indicator) => indicator.type === 'pbv');
     setPBVIndicators(pbvInd);
-    pbvInd.forEach((indicator) => onPBVIndicatorChange(null, indicator));
+    // pbvInd.forEach((indicator) => onPBVIndicatorChange(null, indicator));
+    if (pbvInd.length > 0) {
+        onPBVIndicatorChange(null, pbvInd[0])
+    }
 
-    // setPBVIndicators(indicators.filter((indicator) => indicator.type === 'pbv'));
-  }, [indicators]);
+    const ratioInd = indicators.filter((indicator) => indicator.type === 'ratio');
+    setRatioIndicators(ratioInd)
+    ratioInd.forEach((indicator) => onRatioIndicatorChang(null, indicator));
+    
+
+  }, [indicators,startTime, endTime]);
+  const onRatioIndicatorChang=(event,indicator)=>{
+    const isChecked = event?.target?.checked ?? true;
+    if (isChecked){
+        setDataSeries((prev) => prev.filter((item) => item.id !== indicator.id));
+
+        if (indicator.need_fetch) {
+            getChartData({
+            token_symbol: symbol,
+            chart_label: indicator.id,
+            start_time: startTime,
+            end_time: endTime
+            }).then((data) => {
+                
+            setDataSeries((prev) => [
+                ...prev,
+                {
+                id: indicator.id,
+                name: indicator.name,
+                type: 'line',
+                yAxisIndex: 2,
+                
+                data: data?.map((item) => item.value),
+                smooth: true,
+                symbol: 'none'
+                }
+            ]);
+            });
+        }
+    }else {
+        setDataSeries((prev) => prev.map((item) => (item.id === indicator.id ? { ...item, data: [] } : item)));
+      }
+  }
 
   const onPriceIndicatorsChange = (event, indicator) => {
     const isChecked = event?.target?.checked ?? true;
@@ -189,7 +180,7 @@ const IndicatorOptions = ({ symbol, startTime, endTime, indicators, klineData, s
         start_time: startTime,
         end_time: endTime
       }).then((data) => {
-        if (data.length == 0) {
+        if (!data || data.length == 0) {
           return;
         }
         const step = data[0].price_range_upper - data[0].price_range_lower;
@@ -230,7 +221,7 @@ const IndicatorOptions = ({ symbol, startTime, endTime, indicators, klineData, s
             type: 'bar',
             stack: 'pbvVolume',
             data: data.map((item) => item?.positive_value),
-            yAxisIndex: 2,
+            yAxisIndex: 3,
             xAxisIndex: 2,
             itemStyle: {
               color: 'rgba(144, 238, 144, 0.5)' // Light blue with 50% transparency
@@ -296,6 +287,23 @@ const IndicatorOptions = ({ symbol, startTime, endTime, indicators, klineData, s
             <Checkbox
               defaultChecked
               onChange={(event) => onPBVIndicatorChange(event, indicator)}
+              sx={{
+                '& .MuiSvgIcon-root': {
+                  fontSize: 16
+                }
+              }}
+            />
+          }
+          label={<span style={{ fontSize: '14px' }}>{indicator.name}</span>}
+        />
+      ))}
+      {ratioIndicators?.map((indicator) => (
+        <FormControlLabel
+          key={indicator.id}
+          control={
+            <Checkbox
+              defaultChecked
+              onChange={(event) => onRatioIndicatorChang(event, indicator)}
               sx={{
                 '& .MuiSvgIcon-root': {
                   fontSize: 16

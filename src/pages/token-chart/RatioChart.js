@@ -5,11 +5,10 @@ import * as echarts from 'echarts/core';
 import { LineChart } from 'echarts/charts';
 import { GridComponent, TooltipComponent, TitleComponent, LegendComponent, DataZoomComponent } from 'echarts/components';
 import { CanvasRenderer } from 'echarts/renderers';
-import { padArrayAhead } from 'utils/common';
-import { symbol } from 'd3';
+
 echarts.use([LineChart, GridComponent, TooltipComponent, TitleComponent, LegendComponent, DataZoomComponent, CanvasRenderer]);
 
-const AvgCostChart = ({ chartName, chartData, priceSeries, priceData }) => {
+const RatioChart = ({ chartName, chartData, priceSeries, priceData }) => {
   const theme = useTheme();
   const chartRef = useRef(null);
   const [chartInstance, setChartInstance] = useState(null);
@@ -34,9 +33,6 @@ const AvgCostChart = ({ chartName, chartData, priceSeries, priceData }) => {
 
   useEffect(() => {
     if (chartInstance) {
-      if (chartData.length < priceData.length) {
-        chartData = padArrayAhead(chartData, priceData.length);
-      }
       const option = {
         tooltip: {
           trigger: 'axis',
@@ -63,7 +59,22 @@ const AvgCostChart = ({ chartName, chartData, priceSeries, priceData }) => {
         yAxis: [
           {
             type: 'value',
-            name: 'Value & Price',
+            name: 'Price ',
+            position: 'left',
+            axisLabel: {
+              formatter: '{value}'
+            },
+            splitLine: {
+              show: false,
+              lineStyle: {
+                color: 'rgba(150, 150, 150, 0.5)', // Light gray color with transparency
+                width: 1 // Optional: you can adjust the width to make the lines thinner
+              }
+            }
+          },
+          {
+            type: 'value',
+            name: 'Value',
             axisLabel: {
               formatter: '{value}'
             }
@@ -101,14 +112,10 @@ const AvgCostChart = ({ chartName, chartData, priceSeries, priceData }) => {
           {
             name: chartName,
             type: 'line',
-            areaStyle: {
-              color: 'rgba(0, 123, 255, 0.2)' // Adjust the RGB and opacity as needed
-            },
-            lineStyle: {
-              color: 'rgb(0, 123, 255)' // Optionally, set the line color
-            },
-            data: chartData.map((item) => item?.value),
+            areaStyle: {},
+            data: chartData?.map((item) => item?.value),
             smooth: true,
+            yAxisIndex: 1,
             symbol: 'none'
           },
           ...priceSeries
@@ -126,4 +133,4 @@ const AvgCostChart = ({ chartName, chartData, priceSeries, priceData }) => {
     </div>
   );
 };
-export default AvgCostChart;
+export default RatioChart;

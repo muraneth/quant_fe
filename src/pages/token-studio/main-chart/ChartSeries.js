@@ -216,7 +216,27 @@ export const generateYAxis = (theme, klineData, chartData) => {
           width: 1
         }
       }
-    }
+    },
+    {
+        type: 'value',
+        position: 'left',
+        axisLine: {
+          lineStyle: {
+            color: '#3498db'
+          }
+        },
+        axisLabel: {
+          inside: false,
+          formatter: '{value}'
+        },
+        splitLine: {
+          show: true,
+          lineStyle: {
+            color: 'rgba(150, 150, 150, 0.5)', // Light gray color with transparency
+            width: 1 // Optional: you can adjust the width to make the lines thinner
+          }
+        }
+      }
   ];
   if (chartData?.length > 0) {
     let pbvIndicatorData = chartData.pbvIndicatorData;
@@ -239,28 +259,9 @@ export const generateYAxis = (theme, klineData, chartData) => {
         }
       });
     }
-    if (chartData.balanceIndicatorData || chartData.holderIndicatorData || chartData.pnlIndicatorData) {
-      defaultYAxis.push({
-        type: 'value',
-        position: 'left',
-        axisLine: {
-          lineStyle: {
-            color: '#3498db'
-          }
-        },
-        axisLabel: {
-          inside: false,
-          formatter: '{value}'
-        },
-        splitLine: {
-          show: true,
-          lineStyle: {
-            color: 'rgba(150, 150, 150, 0.5)', // Light gray color with transparency
-            width: 1 // Optional: you can adjust the width to make the lines thinner
-          }
-        }
-      }); // Add a new yAxis for the new indicator
-    }
+    // if (chartData.balanceIndicatorData || chartData.holderIndicatorData || chartData.pnlIndicatorData) {
+    //   defaultYAxis.push(); // Add a new yAxis for the new indicator
+    // }
   }
 
   return defaultYAxis;
