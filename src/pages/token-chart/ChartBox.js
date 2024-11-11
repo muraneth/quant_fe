@@ -7,6 +7,7 @@ import TextField from '@mui/material/TextField';
 
 import BaseLineChart from './BaseLineChart';
 import BasicVolumeChart from './BasicVolumeChart';
+import RatioChart from './RatioChart';
 import PBVChart from './PBVChart';
 import AvgCostChart from './AvgCostChart';
 import { useState, useEffect } from 'react';
@@ -16,9 +17,11 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 import { useSelector } from 'react-redux';
-import { getTokenPrice } from 'data-server/common';
+import { getTokenPrice,getTokenInfo } from 'data-server';
 import { getChartData } from 'data-server/chart';
 import { useParams } from 'react-router-dom';
+import { set } from 'lodash';
+import StackAreaChart from './StackAreaChart';
 const parsePriceToKlineSeries = (data) => {
   return data.map((item) => {
     return [item.open, item.close, item.low, item.high];
@@ -28,9 +31,20 @@ const parsePriceToKlineSeries = (data) => {
 const formatToDateTimeString = (date) => {
   return date ? date.format('YYYY-MM-DD HH:mm:ss') : '';
 };
+function isSwingRatioChart(chart) {
+  const items = ['avgcost_ratio'];
+  return items.includes(chart);
+}
+function isStackAreaChart(chart) {
+  const items = ['stack_balance_ratio'];
+}
 
 function isBaseLineChart(chart) {
-  return !isAvgCostChart(chart) && !isBasicVolumeChart(chart) && !isPriceByVolumeChart(chart);
+  return !isAvgCostChart(chart)
+   && !isBasicVolumeChart(chart)
+    && !isPriceByVolumeChart(chart)
+    && !isSwingRatioChart(chart) 
+    && !isStackAreaChart(chart);
 }
 function isAvgCostChart(chart) {
   // const items = ['AvgCost', 'DexAvgCost', 'CexAvgCost', 'AvgCostExcept'];
@@ -59,8 +73,12 @@ const ChartBox = () => {
   const [priceLineType, setPriceLineType] = useState('line');
   const [priceSeries, setPriceSeries] = useState([]);
 
-  const [startTime, setStartTime] = useState(dayjs('2021-01-01T00:00:00'));
-  const [endTime, setEndTime] = useState(dayjs()); // current time
+  // const [startTime, setStartTime] = useState(dayjs('2021-01-01T00:00:00'));
+  // const [endTime, setEndTime] = useState(dayjs()); // current time
+  const [timeRange, setTimeRange] = useState({
+    startTime: dayjs(),
+    endTime: dayjs()
+  });
 
   const { tokenItem } = useSelector((state) => state.token);
   const [chartData, setChartData] = useState([]);
@@ -68,20 +86,53 @@ const ChartBox = () => {
   const { drawerOpen, openItem } = useSelector((state) => state.menu);
   const chartId = openItem ? openItem[0] : null;
   const { symbol } = useParams();
+  const [chartDataList, setChartDataList] = useState([]);
+
+
+  useEffect(() => {
+    getTokenInfo(symbol).then((response) => {
+      if (response?.create_time) {
+        let start = response.create_time.split(' ')[0] + ' 00:00:00';
+        let startTime = dayjs(start);
+        setTimeRange((prev) => ({ ...prev, startTime }));
+      }
+    });
+  }, [symbol]);
+
   useEffect(() => {
     try {
-      getChartData({
-        token_symbol: symbol,
-        chart_label: chartId,
-        start_time: formatToDateTimeString(startTime),
-        end_time: formatToDateTimeString(endTime)
-      }).then((response) => {
-        setChartData(response ? response : []);
+      if (isStackAreaChart(chartId)) {
+        getChartData({
+          token_symbol: symbol,
+          chart_label: 'wallet_balance_by_day_before_ratio',
+          start_time: '2024-01-01 00:00:00',
+          end_time: formatToDateTimeString(timeRange.endTime)
+        }).then((response) => {
+          setChartDataList(response ? response : []);
       });
+        getChartData({
+          token_symbol: symbol,
+          chart_label: 'wallet_balance_by_day_after_ratio',
+          start_time: formatToDateTimeString(timeRange.startTime),
+          end_time: formatToDateTimeString(timeRange.endTime)
+        }).then((response) => {
+          setChartDataList((pre) => [...pre, response ? response : []]);
+        });
+      }else{
+          getChartData({
+            token_symbol: symbol,
+            chart_label: chartId,
+            start_time: formatToDateTimeString(timeRange.startTime),
+            end_time: formatToDateTimeString(timeRange.endTime)
+          }).then((response) => {
+            setChartData(response ? response : []);
+        });
+      }
+
       getTokenPrice({
         token_symbol: symbol,
-        start_time: formatToDateTimeString(startTime),
-        end_time: formatToDateTimeString(endTime)
+        start_time: formatToDateTimeString(timeRange.startTime),
+        end_time: formatToDateTimeString(timeRange.endTime)
       }).then((response) => {
         setPriceData(response ? response : []);
       });
@@ -89,8 +140,7 @@ const ChartBox = () => {
       console.error('Error fetching data:', error);
       setChartData([]);
       setPriceData([]);
-    }
-  }, [chartId, symbol, startTime,endTime]);
+    }}, [chartId, symbol, timeRange]);
 
   const switchKlineType = () => {
     setPriceLineType((prev) => (prev === 'line' ? 'candlestick' : 'line'));
@@ -143,18 +193,37 @@ const ChartBox = () => {
         </Typography>
         <FormControlLabel control={<Switch onChange={switchKlineType} />} label="Kline" />
       </Box>
+      {isSwingRatioChart(chartId) && (
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <div>
+            <DateTimePicker
+              label="Start Time"
+              value={timeRange.startTime}
+              onChange={(newValue) => setStartTime(newValue)}
+              renderInput={(params) => <TextField {...params} />}
+            />
+            <DateTimePicker
+              label="End Time"
+              value={timeRange.endTime}
+              onChange={(newValue) => setEndTime(newValue)}
+              renderInput={(params) => <TextField {...params} />}
+            />
+            <RatioChart chartName={chartId} chartData={chartData} priceSeries={priceSeries} priceData={priceData} />
+          </div>
+        </LocalizationProvider>
+      )}
       {isBaseLineChart(chartId) && (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
         <div>
           <DateTimePicker
             label="Start Time"
-            value={startTime}
+            value={timeRange.startTime}
             onChange={(newValue) => setStartTime(newValue)}
             renderInput={(params) => <TextField {...params} />}
           />
           <DateTimePicker
             label="End Time"
-            value={endTime}
+            value={timeRange.endTime}
             onChange={(newValue) => setEndTime(newValue)}
             renderInput={(params) => <TextField {...params} />}
           />
@@ -167,13 +236,13 @@ const ChartBox = () => {
           <div>
             <DateTimePicker
               label="Start Time"
-              value={startTime}
+              value={timeRange.startTime}
               onChange={(newValue) => setStartTime(newValue)}
               renderInput={(params) => <TextField {...params} />}
             />
             <DateTimePicker
               label="End Time"
-              value={endTime}
+              value={timeRange.endTime}
               onChange={(newValue) => setEndTime(newValue)}
               renderInput={(params) => <TextField {...params} />}
             />
@@ -187,19 +256,38 @@ const ChartBox = () => {
           <div>
             <DateTimePicker
               label="Start Time"
-              value={startTime}
+              value={timeRange.startTime}
               onChange={(newValue) => setStartTime(newValue)}
               renderInput={(params) => <TextField {...params} />}
             />
             <DateTimePicker
               label="End Time"
-              value={endTime}
+              value={timeRange.endTime}
               onChange={(newValue) => setEndTime(newValue)}
               renderInput={(params) => <TextField {...params} />}
             />
             <PBVChart chartName={chartId} chartData={chartData} priceSeries={priceSeries} priceData={priceData} />
           </div>
         </LocalizationProvider>
+      )}
+      {isStackAreaChart(chartId) && (
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <div>
+          <DateTimePicker
+            label="Start Time"
+            value={timeRange.startTime}
+            onChange={(newValue) => setStartTime(newValue)}
+            renderInput={(params) => <TextField {...params} />}
+          />
+          <DateTimePicker
+            label="End Time"
+            value={timeRange.endTime}
+            onChange={(newValue) => setEndTime(newValue)}
+            renderInput={(params) => <TextField {...params} />}
+          />
+          <StackAreaChart chartName={chartId} chartDataList={chartDataList} priceSeries={priceSeries} priceData={priceData} />
+        </div>
+      </LocalizationProvider>
       )}
     </MainCard>
   );
