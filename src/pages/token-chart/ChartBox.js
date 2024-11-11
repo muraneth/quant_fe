@@ -90,7 +90,7 @@ const ChartBox = () => {
       setChartData([]);
       setPriceData([]);
     }
-  }, [chartId, symbol, startTime]);
+  }, [chartId, symbol, startTime,endTime]);
 
   const switchKlineType = () => {
     setPriceLineType((prev) => (prev === 'line' ? 'candlestick' : 'line'));
@@ -144,7 +144,23 @@ const ChartBox = () => {
         <FormControlLabel control={<Switch onChange={switchKlineType} />} label="Kline" />
       </Box>
       {isBaseLineChart(chartId) && (
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <div>
+          <DateTimePicker
+            label="Start Time"
+            value={startTime}
+            onChange={(newValue) => setStartTime(newValue)}
+            renderInput={(params) => <TextField {...params} />}
+          />
+          <DateTimePicker
+            label="End Time"
+            value={endTime}
+            onChange={(newValue) => setEndTime(newValue)}
+            renderInput={(params) => <TextField {...params} />}
+          />
         <BaseLineChart chartName={chartId} chartData={chartData} priceSeries={priceSeries} priceData={priceData} />
+        </div>
+        </LocalizationProvider>
       )}
       {isAvgCostChart(chartId) && (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
