@@ -44,6 +44,7 @@ const TRADE_PVB_INDICATORS = [
   { id: 'filter_addr_usd_pbv', name: 'Filter Address USD Price by Volume', need_fetch: true, type: 'pbv' },
   { id: 'filter_addr_token_pbv', name: 'Filter Address Token Price by Volume', need_fetch: true, type: 'pbv' }
 ];
+const HOLDER_INDICATORS = [{ id: 'holder_chg', name: 'Holder Change', need_fetch: true, type: 'holder' }];
 
 const IndicatorPopup = ({ open, onClose, setSelectedIndicators }) => {
   const theme = useTheme();

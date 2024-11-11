@@ -90,7 +90,7 @@ const ChartBox = () => {
       setChartData([]);
       setPriceData([]);
     }
-  }, [chartId, symbol, startTime]);
+  }, [chartId, symbol, startTime, endTime]);
 
   const switchKlineType = () => {
     setPriceLineType((prev) => (prev === 'line' ? 'candlestick' : 'line'));
