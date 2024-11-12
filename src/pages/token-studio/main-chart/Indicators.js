@@ -12,7 +12,6 @@ import { getChartData } from 'data-server';
 import { max, set } from 'lodash';
 import { padAarryAHeadByCount, padAarryBehindByCount } from 'utils/common';
 
-
 const calculateMA = (klinedata, dayCount) => {
   const result = [];
   for (let i = 0, len = klinedata.length; i < len; i++) {
@@ -47,47 +46,44 @@ const IndicatorOptions = ({ symbol, startTime, endTime, indicators, klineData, s
     setPBVIndicators(pbvInd);
     // pbvInd.forEach((indicator) => onPBVIndicatorChange(null, indicator));
     if (pbvInd.length > 0) {
-        onPBVIndicatorChange(null, pbvInd[0])
+      onPBVIndicatorChange(null, pbvInd[0]);
     }
 
     const ratioInd = indicators.filter((indicator) => indicator.type === 'ratio');
-    setRatioIndicators(ratioInd)
+    setRatioIndicators(ratioInd);
     ratioInd.forEach((indicator) => onRatioIndicatorChang(null, indicator));
-    
-
-  }, [indicators,startTime, endTime]);
-  const onRatioIndicatorChang=(event,indicator)=>{
+  }, [indicators, startTime, endTime]);
+  const onRatioIndicatorChang = (event, indicator) => {
     const isChecked = event?.target?.checked ?? true;
-    if (isChecked){
-        setDataSeries((prev) => prev.filter((item) => item.id !== indicator.id));
+    if (isChecked) {
+      setDataSeries((prev) => prev.filter((item) => item.id !== indicator.id));
 
-        if (indicator.need_fetch) {
-            getChartData({
-            token_symbol: symbol,
-            chart_label: indicator.id,
-            start_time: startTime,
-            end_time: endTime
-            }).then((data) => {
-                
-            setDataSeries((prev) => [
-                ...prev,
-                {
-                id: indicator.id,
-                name: indicator.name,
-                type: 'line',
-                yAxisIndex: 2,
-                
-                data: data?.map((item) => item.value),
-                smooth: true,
-                symbol: 'none'
-                }
-            ]);
-            });
-        }
-    }else {
-        setDataSeries((prev) => prev.map((item) => (item.id === indicator.id ? { ...item, data: [] } : item)));
+      if (indicator.need_fetch) {
+        getChartData({
+          token_symbol: symbol,
+          chart_label: indicator.id,
+          start_time: startTime,
+          end_time: endTime
+        }).then((data) => {
+          setDataSeries((prev) => [
+            ...prev,
+            {
+              id: indicator.id,
+              name: indicator.name,
+              type: 'line',
+              yAxisIndex: 2,
+
+              data: data?.map((item) => item.value),
+              smooth: true,
+              symbol: 'none'
+            }
+          ]);
+        });
       }
-  }
+    } else {
+      setDataSeries((prev) => prev.map((item) => (item.id === indicator.id ? { ...item, data: [] } : item)));
+    }
+  };
 
   const onPriceIndicatorsChange = (event, indicator) => {
     const isChecked = event?.target?.checked ?? true;
@@ -233,7 +229,7 @@ const IndicatorOptions = ({ symbol, startTime, endTime, indicators, klineData, s
             type: 'bar',
             stack: 'pbvVolume',
             data: data.map((item) => item?.negative_value),
-            yAxisIndex: 2,
+            yAxisIndex: 3,
             xAxisIndex: 2,
             itemStyle: {
               color: ' rgba(255, 111, 97, 0.5)' // Light red with 50% transparency
