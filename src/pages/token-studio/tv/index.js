@@ -3,8 +3,11 @@ import { init, dispose, registerIndicator } from 'klinecharts';
 import generatedDataList from './generatedDataList';
 
 import { getTokenPrice } from 'data-server/common';
+import { getChartData } from 'data-server';
 
-const PriceByVolumeIndicator = () => {
+
+
+const PriceByVolumeIndicator = ({ symbol }) => {
   const chart = useRef(null);
   const paneId = useRef('');
 
@@ -12,12 +15,19 @@ const PriceByVolumeIndicator = () => {
   registerIndicator({
     name: 'PriceByVolume',
     calc: (dataList) => {
-      return dataList.map((data) => {
-        return {
-          price: data.avg_price,
-          volume: data.volume
-        };
-      });
+      // return dataList.map((data) => {
+      //   return {
+      //     price: data.avg_price,
+      //     volume: data.volume
+      //   };
+      // });
+      
+      return getChartData({
+        token_symbol: symbol,
+        chart_label: 'trade_usd_pbv',
+        start_time: '2024-06-28 00:00:00',
+      })
+
     },
     draw: ({ ctx, kLineDataList, indicator, visibleRange, bounding, barSpace, xAxis, yAxis }) => {
       const { from, to } = visibleRange;
@@ -30,48 +40,52 @@ const PriceByVolumeIndicator = () => {
       ctx.setLineDash([]); // Ensure the line is solid
 
       // Initialize an object to store accumulated volumes by price range (0 to 100)
-      const volumeByPrice = Array(100).fill(0); // Initialize an array with 100 slots to accumulate volume
 
       // Calculate the price range
-      const prices = kLineDataList.slice(from, to).map((data) => data.close); // Assuming 'close' is the price to use
-      const minPrice = Math.min(...prices);
-      const maxPrice = Math.max(...prices);
+      // const prices = kLineDataList.slice(from, to).map((data) => data.close); // Assuming 'close' is the price to use
+  
+      const volumeByPrice =indicator.result;
+      console.log('volumeByPrice', volumeByPrice);
+      if (!volumeByPrice || volumeByPrice.length === 0) {
+        return false;
+      }
+      
+      const minPrice =volumeByPrice[0].price_range_lower
+      const maxPrice =volumeByPrice[99].price_range_lower
 
       // Calculate the price step for each slice
       const priceStep = (maxPrice - minPrice) / 100;
       console.log('minPrice', minPrice, 'maxPrice', maxPrice, 'priceStep', priceStep);
 
-      // First pass: accumulate volumes for each price range
-      for (let i = from; i < to; i++) {
-        const { price, volume } = indicator.result[i] || { price: 0, volume: 0 }; // Default to 0 if undefined
-        if (price) {
-          // Calculate which slice the price belongs to
-          const priceIndex = Math.floor((price - minPrice) / priceStep);
-
-          // Ensure the index is within bounds (0 to 99)
-          if (priceIndex >= 0 && priceIndex < 100) {
-            volumeByPrice[priceIndex] += volume; // Accumulate volume for the range
-          }
-        }
-      }
-
-      console.log('from', from, 'to', to);
-      console.log('volumeByPrice', volumeByPrice);
+      
 
       // Draw the accumulated volumes for each price range
       let maxVolume = 0;
       for (let i = 0; i < 100; i++) {
-        maxVolume = Math.max(maxVolume, volumeByPrice[i]);
+        maxVolume = Math.max(maxVolume, volumeByPrice[i].positive_value);
       }
       for (let i = 0; i < 100; i++) {
-        const accumulatedVolume = volumeByPrice[i];
+        const positiveVolume = volumeByPrice[i].positive_value;
+        const negativeVolume = volumeByPrice[i].negative_value;
         const priceY = yAxis.convertToPixel(minPrice + i * priceStep); // Convert the price range to a pixel position
-        const lineLength = (accumulatedVolume / maxVolume) * 1000; // Use accumulated volume for line length
+        const positiveLineLength = (positiveVolume / maxVolume) * 300;
+        const negativeLineLength = (negativeVolume / maxVolume) * 300;
+        // Draw the positive volume
+        if (positiveVolume > 0) {
+          ctx.strokeStyle = 'rgba(76, 175, 80, 0.5)'; // Set positive volume color
 
-        if (accumulatedVolume > 0) {
           ctx.beginPath();
           ctx.moveTo(bounding.width, priceY); // Start from the right side of the chart
-          ctx.lineTo(bounding.width - lineLength, priceY); // Draw the line based on accumulated volume
+          ctx.lineTo(bounding.width - positiveLineLength, priceY); // Draw the line based on positive volume
+          ctx.stroke();
+        }
+    
+        if (negativeVolume > 0) {
+          ctx.strokeStyle = 'rgba(244, 67, 54, 0.5)';
+
+          ctx.beginPath();
+          ctx.moveTo(bounding.width - positiveLineLength, priceY); // Start where the positive volume line ends
+          ctx.lineTo(bounding.width - positiveLineLength - negativeLineLength, priceY); // Draw the line based on negative volume
           ctx.stroke();
         }
       }
@@ -84,13 +98,13 @@ const PriceByVolumeIndicator = () => {
     chart.current = init('indicator-k-line');
     chart.current?.createIndicator('PriceByVolume', false, { id: 'candle_pane' });
     getTokenPrice({
-      token_symbol: 'NEIRO',
+      token_symbol: symbol,
       start_time: '2024-07-28 00:00:00',
       end_time: '2024-10-22 23:59:59'
     }).then((data) => {
       chart.current?.applyNewData(data);
     });
-    // chart.current?.applyNewData(generatedDataList());
+
 
     return () => {
       dispose('indicator-k-line');
@@ -100,6 +114,4 @@ const PriceByVolumeIndicator = () => {
   return <div id="indicator-k-line" className="k-line-chart" style={{ height: '600px' }} />;
 };
 
-export default function Indicator() {
-  return <PriceByVolumeIndicator />;
-}
+export default PriceByVolumeIndicator;

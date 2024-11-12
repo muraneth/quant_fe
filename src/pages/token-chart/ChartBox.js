@@ -10,7 +10,7 @@ import BasicVolumeChart from './BasicVolumeChart';
 import RatioChart from './RatioChart';
 import PBVChart from './PBVChart';
 import AvgCostChart from './AvgCostChart';
-import { useState, useEffect } from 'react';
+import { useState, useEffect,useCallback } from 'react';
 
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -22,6 +22,7 @@ import { getChartData } from 'data-server/chart';
 import { useParams } from 'react-router-dom';
 import { set } from 'lodash';
 import StackAreaChart from './StackAreaChart';
+import {padArrayAhead} from 'utils/common';
 const parsePriceToKlineSeries = (data) => {
   return data.map((item) => {
     return [item.open, item.close, item.low, item.high];
@@ -37,6 +38,7 @@ function isSwingRatioChart(chart) {
 }
 function isStackAreaChart(chart) {
   const items = ['stack_balance_ratio'];
+  return items.includes(chart);
 }
 
 function isBaseLineChart(chart) {
@@ -87,6 +89,13 @@ const ChartBox = () => {
   const chartId = openItem ? openItem[0] : null;
   const { symbol } = useParams();
   const [chartDataList, setChartDataList] = useState([]);
+  const handleStartTimeChange = useCallback((newValue) => {
+    setTimeRange((prev) => ({ ...prev, startTime: newValue }));
+  }, []);
+
+  const handleEndTimeChange = useCallback((newValue) => {
+    setTimeRange((prev) => ({ ...prev, endTime: newValue }));
+  }, []);
 
 
   useEffect(() => {
@@ -102,21 +111,31 @@ const ChartBox = () => {
   useEffect(() => {
     try {
       if (isStackAreaChart(chartId)) {
-        getChartData({
-          token_symbol: symbol,
-          chart_label: 'wallet_balance_by_day_before_ratio',
-          start_time: '2024-01-01 00:00:00',
-          end_time: formatToDateTimeString(timeRange.endTime)
-        }).then((response) => {
-          setChartDataList(response ? response : []);
-      });
-        getChartData({
-          token_symbol: symbol,
-          chart_label: 'wallet_balance_by_day_after_ratio',
-          start_time: formatToDateTimeString(timeRange.startTime),
-          end_time: formatToDateTimeString(timeRange.endTime)
-        }).then((response) => {
-          setChartDataList((pre) => [...pre, response ? response : []]);
+        Promise.all([
+          getChartData({
+            token_symbol: symbol,
+            chart_label: 'wallet_balance_by_day_rang_ratio',
+            start_time: '2024-07-27 00:00:00',
+            end_time: '2024-08-28 00:00:00'
+          }),
+          getChartData({
+            token_symbol: symbol,
+            chart_label: 'wallet_balance_by_day_rang_ratio',
+            start_time: '2024-08-28 00:00:00',
+            end_time: '2024-09-28 00:00:00'
+          }),
+          getChartData({
+            token_symbol: symbol,
+            chart_label: 'wallet_balance_by_day_rang_ratio',
+            start_time: '2024-09-28 00:00:00',
+            end_time: '2024-11-20800:00:00'
+          })
+        ]).then(([r1, r2,r3]) => {
+          setChartDataList([
+            r1 || [],
+            padArrayAhead(r2 ,r1.length)|| [],
+            padArrayAhead(r3 ,r1.length)|| []
+          ]);
         });
       }else{
           getChartData({
@@ -237,13 +256,13 @@ const ChartBox = () => {
             <DateTimePicker
               label="Start Time"
               value={timeRange.startTime}
-              onChange={(newValue) => setStartTime(newValue)}
+              onChange={handleStartTimeChange}
               renderInput={(params) => <TextField {...params} />}
             />
             <DateTimePicker
               label="End Time"
               value={timeRange.endTime}
-              onChange={(newValue) => setEndTime(newValue)}
+              onChange={handleEndTimeChange}
               renderInput={(params) => <TextField {...params} />}
             />
             <AvgCostChart chartName={chartId} chartData={chartData} priceSeries={priceSeries} priceData={priceData} />
@@ -257,13 +276,13 @@ const ChartBox = () => {
             <DateTimePicker
               label="Start Time"
               value={timeRange.startTime}
-              onChange={(newValue) => setStartTime(newValue)}
+              onChange={handleStartTimeChange}
               renderInput={(params) => <TextField {...params} />}
             />
             <DateTimePicker
               label="End Time"
               value={timeRange.endTime}
-              onChange={(newValue) => setEndTime(newValue)}
+              onChange={handleEndTimeChange}
               renderInput={(params) => <TextField {...params} />}
             />
             <PBVChart chartName={chartId} chartData={chartData} priceSeries={priceSeries} priceData={priceData} />
@@ -276,13 +295,13 @@ const ChartBox = () => {
           <DateTimePicker
             label="Start Time"
             value={timeRange.startTime}
-            onChange={(newValue) => setStartTime(newValue)}
+            onChange={handleStartTimeChange}
             renderInput={(params) => <TextField {...params} />}
           />
           <DateTimePicker
             label="End Time"
             value={timeRange.endTime}
-            onChange={(newValue) => setEndTime(newValue)}
+            onChange={handleEndTimeChange}
             renderInput={(params) => <TextField {...params} />}
           />
           <StackAreaChart chartName={chartId} chartDataList={chartDataList} priceSeries={priceSeries} priceData={priceData} />
