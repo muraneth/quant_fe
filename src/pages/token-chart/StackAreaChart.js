@@ -16,6 +16,23 @@ const StackAreaChart = ({ chartName, chartDataList, priceSeries, priceData }) =>
   const [dataSeries, setDataSeries] = useState([]);
 
   useEffect(() => {
+    if (chartDataList) {
+      console.log("length datalist", chartDataList.length);
+      
+      const series = chartDataList.map((chartData) => {
+        return {
+          name: chartData.name,
+          type: 'line',
+          areaStyle: {},
+          stack: 'total',
+          yAxisIndex: 1,
+          data: chartData?.map((item) => item?.value),
+          smooth: true,
+          symbol: 'none'
+        };
+      });
+      setDataSeries(series);
+    }
     if (chartRef.current) {
       const myChart = echarts.init(chartRef.current);
       setChartInstance(myChart);
@@ -31,22 +48,8 @@ const StackAreaChart = ({ chartName, chartDataList, priceSeries, priceData }) =>
         myChart.dispose();
       };
     }
-    if (chartDataList) {
-      const series = chartDataList.map((chartData) => {
-        return {
-          name: chartData.name,
-          type: 'line',
-          areaStyle: {},
-          stack: 'total',
-          yAxisIndex: 1,
-          data: chartData?.map((item) => item?.value),
-          smooth: true,
-          symbol: 'none'
-        };
-      });
-      setDataSeries(series);
-    }
-  }, []);
+    
+  }, [chartDataList]);
 
   useEffect(() => {
     if (chartInstance) {
@@ -57,9 +60,9 @@ const StackAreaChart = ({ chartName, chartDataList, priceSeries, priceData }) =>
             type: 'cross'
           }
         },
-        legend: {
-          data: [chartName, ...priceSeries.map((series) => series.name)]
-        },
+        // legend: {
+        //   data: [chartName, ...priceSeries.map((series) => series.name)]
+        // },
         grid: {
           left: '3%',
           right: '4%',
@@ -131,7 +134,10 @@ const StackAreaChart = ({ chartName, chartDataList, priceSeries, priceData }) =>
           ...dataSeries
         ]
       };
-
+      console.log('stack option', option);
+      
+      console.log("dataSeries", dataSeries);
+      
       chartInstance.setOption(option);
     }
   }, [dataSeries, priceSeries, chartInstance, chartName, priceData]);

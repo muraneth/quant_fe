@@ -16,14 +16,14 @@ export default function TokenStudio() {
   };
   return (
     <Box sx={{ display: 'flex', width: '100%', bgcolor: 'background.deep', height: '100vh', m:0 , pl: 1 }}>
-      {/* <Button onClick={() => onSwitch()}>Switch</Button> */}
+      <Button onClick={() => onSwitch()}>Switch</Button>
       <Box
         sx={{
           flexGrow: 1,
           overflow: 'hidden'
         }}
       >
-        {studioType === 'chart' ? <MainChart symbol={symbol} /> : <Indicator />}
+        {studioType === 'chart' ? <MainChart symbol={symbol} /> : <Indicator  symbol={symbol} />}
       </Box>
 
       <Drawer />
