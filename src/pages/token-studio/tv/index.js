@@ -5,8 +5,6 @@ import generatedDataList from './generatedDataList';
 import { getTokenPrice } from 'data-server/common';
 import { getChartData } from 'data-server';
 
-
-
 const PriceByVolumeIndicator = ({ symbol }) => {
   const chart = useRef(null);
   const paneId = useRef('');
@@ -21,13 +19,12 @@ const PriceByVolumeIndicator = ({ symbol }) => {
       //     volume: data.volume
       //   };
       // });
-      
+
       return getChartData({
         token_symbol: symbol,
         chart_label: 'trade_usd_pbv',
-        start_time: '2024-06-28 00:00:00',
-      })
-
+        start_time: '2024-06-28 00:00:00'
+      });
     },
     draw: ({ ctx, kLineDataList, indicator, visibleRange, bounding, barSpace, xAxis, yAxis }) => {
       const { from, to } = visibleRange;
@@ -43,21 +40,19 @@ const PriceByVolumeIndicator = ({ symbol }) => {
 
       // Calculate the price range
       // const prices = kLineDataList.slice(from, to).map((data) => data.close); // Assuming 'close' is the price to use
-  
-      const volumeByPrice =indicator.result;
+
+      const volumeByPrice = indicator.result;
       console.log('volumeByPrice', volumeByPrice);
       if (!volumeByPrice || volumeByPrice.length === 0) {
         return false;
       }
-      
-      const minPrice =volumeByPrice[0].price_range_lower
-      const maxPrice =volumeByPrice[99].price_range_lower
+
+      const minPrice = volumeByPrice[0].price_range_lower;
+      const maxPrice = volumeByPrice[99].price_range_lower;
 
       // Calculate the price step for each slice
       const priceStep = (maxPrice - minPrice) / 100;
       console.log('minPrice', minPrice, 'maxPrice', maxPrice, 'priceStep', priceStep);
-
-      
 
       // Draw the accumulated volumes for each price range
       let maxVolume = 0;
@@ -79,7 +74,7 @@ const PriceByVolumeIndicator = ({ symbol }) => {
           ctx.lineTo(bounding.width - positiveLineLength, priceY); // Draw the line based on positive volume
           ctx.stroke();
         }
-    
+
         if (negativeVolume > 0) {
           ctx.strokeStyle = 'rgba(244, 67, 54, 0.5)';
 
@@ -97,6 +92,7 @@ const PriceByVolumeIndicator = ({ symbol }) => {
   useEffect(() => {
     chart.current = init('indicator-k-line');
     chart.current?.createIndicator('PriceByVolume', false, { id: 'candle_pane' });
+    chart.current.setPriceVolumePrecision(10, 1);
     getTokenPrice({
       token_symbol: symbol,
       start_time: '2024-07-28 00:00:00',
@@ -104,7 +100,6 @@ const PriceByVolumeIndicator = ({ symbol }) => {
     }).then((data) => {
       chart.current?.applyNewData(data);
     });
-
 
     return () => {
       dispose('indicator-k-line');
