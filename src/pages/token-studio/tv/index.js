@@ -13,7 +13,33 @@ const PriceByVolumeIndicator = ({ symbol }) => {
 
   // Register the PBV indicator
   registerIndicator({
+    name: 'AvgCost',
+    shortName: 'AC',
+    figures: [
+      { key: 'ac', title: 'AvgCost: ', type: 'line' },
+    ],
+    calc: (kLineDataList) => {
+      let result = [];
+      getChartData({
+        token_symbol: symbol,
+        chart_label: 'avg_cost',
+        start_time: '2024-06-28 00:00:00',
+      }) .then((data) => {
+        console.log('data', data);
+        for (let i = 0; i < data.length; i++) {
+          result.push({ ac: data[i].value });
+        }
+        
+      });
+      console.log('result', result);
+      
+      return result;
+    }
+  })
+
+  registerIndicator({
     name: 'PriceByVolume',
+    shortName: 'PBV',
     calc: (dataList) => {
       // return dataList.map((data) => {
       //   return {
@@ -30,36 +56,26 @@ const PriceByVolumeIndicator = ({ symbol }) => {
 
     },
     draw: ({ ctx, kLineDataList, indicator, visibleRange, bounding, barSpace, xAxis, yAxis }) => {
-      const { from, to } = visibleRange;
-      let sellStartX = bounding.width; // Start drawing sell volume from the right
-      let buyStartX = sellStartX; // Start drawing buy volume from the right
 
       // Set drawing styles
       ctx.strokeStyle = '#4caf50';
       ctx.lineWidth = 2;
       ctx.setLineDash([]); // Ensure the line is solid
 
-      // Initialize an object to store accumulated volumes by price range (0 to 100)
 
       // Calculate the price range
       // const prices = kLineDataList.slice(from, to).map((data) => data.close); // Assuming 'close' is the price to use
   
       const volumeByPrice =indicator.result;
-      console.log('volumeByPrice', volumeByPrice);
+      // console.log('volumeByPrice', volumeByPrice);
       if (!volumeByPrice || volumeByPrice.length === 0) {
         return false;
       }
       
       const minPrice =volumeByPrice[0].price_range_lower
       const maxPrice =volumeByPrice[99].price_range_lower
-
-      // Calculate the price step for each slice
       const priceStep = (maxPrice - minPrice) / 100;
-      console.log('minPrice', minPrice, 'maxPrice', maxPrice, 'priceStep', priceStep);
 
-      
-
-      // Draw the accumulated volumes for each price range
       let maxVolume = 0;
       for (let i = 0; i < 100; i++) {
         maxVolume = Math.max(maxVolume, volumeByPrice[i].positive_value);
@@ -96,7 +112,6 @@ const PriceByVolumeIndicator = ({ symbol }) => {
 
   useEffect(() => {
     chart.current = init('indicator-k-line');
-    chart.current?.createIndicator('PriceByVolume', false, { id: 'candle_pane' });
     getTokenPrice({
       token_symbol: symbol,
       start_time: '2024-07-28 00:00:00',
@@ -104,6 +119,11 @@ const PriceByVolumeIndicator = ({ symbol }) => {
     }).then((data) => {
       chart.current?.applyNewData(data);
     });
+
+    chart.current?.createIndicator('PriceByVolume', false, { id: 'candle_pane' });
+    chart.current?.createIndicator('AvgCost', true, { id: 'candle_pane' });
+    // chart.current?.createIndicator('MA', true, { id: 'candle_pane' })
+    chart.current?.createIndicator('KDJ', false, { height: 80 })
 
 
     return () => {
