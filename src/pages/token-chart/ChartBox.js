@@ -147,8 +147,8 @@ const ChartBox = () => {
 
       getTokenPrice({
         token_symbol: symbol,
-        start_time: formatToDateTimeString(timeRange.startTime),
-        end_time: formatToDateTimeString(timeRange.endTime)
+        // start_time: formatToDateTimeString(timeRange.startTime),
+        // end_time: formatToDateTimeString(timeRange.endTime)
       }).then((response) => {
         setPriceData(response ? response : []);
       });

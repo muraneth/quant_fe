@@ -28,3 +28,22 @@ export const getChartData = async (postData) => {
     console.error('Request error:', error);
   }
 };
+
+export const getChartDataSync = (postData) => {
+  const token = localStorage.getItem('token');
+  const uid = localStorage.getItem('uid');
+  try {
+    const response = post(
+      `/api/data/chart`,
+      {
+        Authorization: `${token}`,
+        Uid: `${uid}`
+      },
+      postData
+    );
+
+    return response?.data;
+  } catch (error) {
+    console.error('Request error:', error);
+  }
+};

@@ -12,10 +12,10 @@ export default function TokenStudio() {
 
   const [studioType, setStudioType] = useState('chart');
   const onSwitch = () => {
-    setStudioType(studioType === 'chart' ? 'indicator' : 'chart');
+    setStudioType(studioType === 'tv' ? 'old' : 'tv');
   };
   return (
-    <Box sx={{ display: 'flex', width: '100%', bgcolor: 'background.deep', height: '100vh', m:0 , pl: 1 }}>
+    <Box sx={{ display: 'flex', width: '100%', bgcolor: 'background.deep', height: '100vh', m: 0, pl: 1 }}>
       <Button onClick={() => onSwitch()}>Switch</Button>
       <Box
         sx={{
@@ -23,7 +23,7 @@ export default function TokenStudio() {
           overflow: 'hidden'
         }}
       >
-        {studioType === 'chart' ? <MainChart symbol={symbol} /> : <Indicator  symbol={symbol} />}
+        {studioType === 'old' ? <MainChart symbol={symbol} /> : <Indicator symbol={symbol} />}
       </Box>
 
       <Drawer />
