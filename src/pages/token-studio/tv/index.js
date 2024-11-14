@@ -9,7 +9,6 @@ import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
-import { use } from 'echarts';
 const formatToDateTimeString = (date) => {
   return date ? date.format('YYYY-MM-DD HH:mm:ss') : '';
 };
@@ -143,11 +142,8 @@ const PriceByVolumeIndicator = ({ symbol }) => {
 
   useEffect(() => {
     if (!chart.current) {
-      console.log('chart.current is null');
-
       return;
     }
-    console.log('chart.current is not null');
     let pvbInd = chart.current.getIndicatorByPaneId('candle_pane', 'PriceByVolume');
 
     chart.current.overrideIndicator({
