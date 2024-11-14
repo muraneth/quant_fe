@@ -9,7 +9,7 @@ import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
-import { use } from 'echarts';
+
 const formatToDateTimeString = (date) => {
   return date ? date.format('YYYY-MM-DD HH:mm:ss') : '';
 };
@@ -22,8 +22,6 @@ const PriceByVolumeIndicator = ({ symbol }) => {
     endTime: dayjs()
   });
   const handleStartTimeChange = useCallback((newValue) => {
-    console.log('newValue', newValue);
-
     setTimeRange((prev) => ({ ...prev, startTime: newValue }));
   }, []);
 
@@ -31,7 +29,40 @@ const PriceByVolumeIndicator = ({ symbol }) => {
     setTimeRange((prev) => ({ ...prev, endTime: newValue }));
   }, []);
 
-  // Register the PBV indicator
+  registerIndicator({
+    name:'Volume',
+    shortName:'Vol',
+    calc: (kLineDataList) => {
+      let result = [];
+      for (let i = 0; i < kLineDataList.length; i++) {
+        result.push(kLineDataList[i].buy_volume);
+      }      
+      return result;
+    },
+    draw: ({ctx, indicator, visibleRange, yAxis, barSpace, bounding}) => {
+      ctx.strokeStyle = 'rgba(76, 175, 80, 0.5)';
+      ctx.lineWidth = 1;
+      ctx.setLineDash([5, 5]);
+      const from = Math.floor(visibleRange.from);
+      const to = Math.floor(visibleRange.to);
+      console.log("indicator", indicator);
+      console.log("barspace",barSpace, "bounding",bounding);
+      
+      for (let i = from; i < to; i++) {
+        const data = indicator.result[i];
+        const x = i * barSpace.bar + bounding.left;
+        const y = -yAxis.convertToPixel(data);
+        // console.log('x',x,'y',y);
+        
+        ctx.beginPath();
+        ctx.moveTo(x, bounding.bottom);
+        ctx.lineTo(x, y);
+        ctx.stroke();
+      }
+      return false;
+    }
+  })
+
   registerIndicator({
     name: 'AvgCost',
     shortName: 'AC',
@@ -135,6 +166,7 @@ const PriceByVolumeIndicator = ({ symbol }) => {
     chart.current?.createIndicator('MA', true, { id: 'candle_pane' });
     chart.current?.createIndicator('KDJ', true, { height: 80 });
     chart.current?.createIndicator('PriceByVolume', true, { id: 'candle_pane' });
+    chart.current?.createIndicator('Volume', true);
 
     return () => {
       dispose('indicator-k-line');
