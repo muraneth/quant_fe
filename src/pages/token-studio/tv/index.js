@@ -9,6 +9,7 @@ import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
+import { values } from 'lodash';
 
 const formatToDateTimeString = (date) => {
   return date ? date.format('YYYY-MM-DD HH:mm:ss') : '';
@@ -29,39 +30,39 @@ const PriceByVolumeIndicator = ({ symbol }) => {
     setTimeRange((prev) => ({ ...prev, endTime: newValue }));
   }, []);
 
-  registerIndicator({
-    name:'Volume',
-    shortName:'Vol',
-    calc: (kLineDataList) => {
-      let result = [];
-      for (let i = 0; i < kLineDataList.length; i++) {
-        result.push(kLineDataList[i].buy_volume);
-      }      
-      return result;
-    },
-    draw: ({ctx, indicator, visibleRange, yAxis, barSpace, bounding}) => {
-      ctx.strokeStyle = 'rgba(76, 175, 80, 0.5)';
-      ctx.lineWidth = 1;
-      ctx.setLineDash([5, 5]);
-      const from = Math.floor(visibleRange.from);
-      const to = Math.floor(visibleRange.to);
-      console.log("indicator", indicator);
-      console.log("barspace",barSpace, "bounding",bounding);
+  // registerIndicator({
+  //   name:'Volume',
+  //   shortName:'Vol',
+  //   calc: (kLineDataList) => {
+  //     let result = [];
+  //     for (let i = 0; i < kLineDataList.length; i++) {
+  //       result.push(kLineDataList[i].buy_volume);
+  //     }      
+  //     return result;
+  //   },
+  //   draw: ({ctx, indicator, visibleRange, yAxis, barSpace, bounding}) => {
+  //     ctx.strokeStyle = 'rgba(76, 175, 80, 0.5)';
+  //     ctx.lineWidth = 1;
+  //     ctx.setLineDash([5, 5]);
+  //     const from = Math.floor(visibleRange.from);
+  //     const to = Math.floor(visibleRange.to);
+  //     console.log("indicator", indicator);
+  //     console.log("barspace",barSpace, "bounding",bounding);
       
-      for (let i = from; i < to; i++) {
-        const data = indicator.result[i];
-        const x = i * barSpace.bar + bounding.left;
-        const y = -yAxis.convertToPixel(data);
-        // console.log('x',x,'y',y);
+  //     for (let i = from; i < to; i++) {
+  //       const data = indicator.result[i];
+  //       const x = i * barSpace.bar + bounding.left;
+  //       const y = -yAxis.convertToPixel(data);
+  //       // console.log('x',x,'y',y);
         
-        ctx.beginPath();
-        ctx.moveTo(x, bounding.bottom);
-        ctx.lineTo(x, y);
-        ctx.stroke();
-      }
-      return false;
-    }
-  })
+  //       ctx.beginPath();
+  //       ctx.moveTo(x, bounding.bottom);
+  //       ctx.lineTo(x, y);
+  //       ctx.stroke();
+  //     }
+  //     return false;
+  //   }
+  // })
 
   registerIndicator({
     name: 'AvgCost',
@@ -77,12 +78,12 @@ const PriceByVolumeIndicator = ({ symbol }) => {
         if (!data || data.length == 0) {
           return [];
         }
-        console.log('data', data);
+        // console.log('data', data);
         for (let i = 0; i < data.length; i++) {
           result.push({ ac: data[i].value });
         }
       });
-      console.log('result', result);
+      // console.log('result', result);
 
       return result;
     }
@@ -98,10 +99,52 @@ const PriceByVolumeIndicator = ({ symbol }) => {
         end_time: formatToDateTimeString(timeRange.endTime)
       });
     },
+    createTooltipDataSource: ({ indicator, xAxis, yAxis, crosshair }) => {
+      if (!indicator.result || indicator.result.length === 0) {
+        return {
+          values: [
+            { title: "Price Range Lower",value:'n/a'},
+            { title: "PBV Positive", value: 'n/a'},
+            { title: "PBV Negative", value: 'n/a'},
+            { title: "PBV Total", value: 'n/a'},
+          ]
+        };
+      }
+
+      // Find the price range index closest to the crosshair position
+      const { x, y } = crosshair;
+      const priceStep = (indicator.result[99].price_range_lower - indicator.result[0].price_range_lower) / 100;
+      const index = Math.floor((yAxis.convertFromPixel(y) - indicator.result[0].price_range_lower) / priceStep);
+
+      if ( !index || index < 0 || index >= indicator.result.length) {
+        return { 
+          values: [
+          { title: "Price Range Lower",value:'n/a'},
+          { title: "PBV Positive", value: 'n/a'},
+          { title: "PBV Negative", value: 'n/a'},
+          { title: "PBV Total", value: 'n/a'},
+        ]
+        };
+      }
+
+      const pbvData = indicator.result[index];
+      if (!pbvData) {
+        return {};
+      }       
+      return {
+        // name: "PriceByVolume",
+        values: [
+          { title: "Price Range Lower", value: pbvData.price_range_lower.toFixed(2) },
+          { title: "PBV Positive", value: pbvData.positive_value .toFixed(2) },
+          { title: "PBV Negative", value: pbvData.negative_value .toFixed(2) },
+          { title: "PBV Total", value: (pbvData.positive_value + pbvData.negative_value).toFixed(2) }
+        ]
+      };
+    },
     draw: ({ ctx, kLineDataList, indicator, visibleRange, bounding, barSpace, xAxis, yAxis }) => {
       // Set drawing styles
       ctx.strokeStyle = '#4caf50';
-      ctx.lineWidth = 2;
+      ctx.lineWidth = 2;    
       ctx.setLineDash([]); // Ensure the line is solid
 
       // Calculate the price range
@@ -109,7 +152,7 @@ const PriceByVolumeIndicator = ({ symbol }) => {
 
       const volumeByPrice = indicator.result;
 
-      console.log('volumeByPrice', volumeByPrice);
+      // console.log('volumeByPrice', volumeByPrice);
       if (!volumeByPrice || volumeByPrice.length === 0) {
         return false;
       }
@@ -166,7 +209,7 @@ const PriceByVolumeIndicator = ({ symbol }) => {
     chart.current?.createIndicator('MA', true, { id: 'candle_pane' });
     chart.current?.createIndicator('KDJ', true, { height: 80 });
     chart.current?.createIndicator('PriceByVolume', true, { id: 'candle_pane' });
-    chart.current?.createIndicator('Volume', true);
+    chart.current?.createIndicator('VOL', true);
 
     return () => {
       dispose('indicator-k-line');

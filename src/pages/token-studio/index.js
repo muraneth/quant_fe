@@ -12,7 +12,7 @@ export default function TokenStudio() {
 
   const [studioType, setStudioType] = useState('chart');
   const onSwitch = () => {
-    setStudioType(studioType === 'tv' ? 'old' : 'tv');
+    setStudioType(studioType === 'tv' ? 'tv' : 'old');
   };
   return (
     <Box sx={{ display: 'flex', width: '100%', bgcolor: 'background.deep', height: '100vh', m: 0, pl: 1 }}>
