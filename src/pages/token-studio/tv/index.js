@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { init, dispose, registerIndicator } from 'klinecharts';
 
 import { getTokenPrice } from 'data-server/common';
-import { getChartData, getChartDataSync } from 'data-server';
+import { getChartData, getTokenInfo } from 'data-server';
 import TextField from '@mui/material/TextField';
 
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
@@ -18,7 +18,7 @@ const PriceByVolumeIndicator = ({ symbol }) => {
   const chart = useRef(null);
   const paneId = useRef('');
   const [timeRange, setTimeRange] = useState({
-    startTime: dayjs('2024-06-28 00:00:00'),
+    startTime: dayjs(),
     endTime: dayjs()
   });
   const handleStartTimeChange = useCallback((newValue) => {
@@ -29,39 +29,49 @@ const PriceByVolumeIndicator = ({ symbol }) => {
     setTimeRange((prev) => ({ ...prev, endTime: newValue }));
   }, []);
 
-  registerIndicator({
-    name: 'Volume',
-    shortName: 'Vol',
-    calc: (kLineDataList) => {
-      let result = [];
-      for (let i = 0; i < kLineDataList.length; i++) {
-        result.push(kLineDataList[i].buy_volume);
+  useEffect(() => {
+    getTokenInfo(symbol).then((response) => {
+      if (response?.create_time) {
+        let start = response.create_time.split(' ')[0] + ' 00:00:00';
+        let startTime = dayjs(start);
+        setTimeRange((prev) => ({ ...prev, startTime }));
       }
-      return result;
-    },
-    draw: ({ ctx, indicator, visibleRange, yAxis, barSpace, bounding }) => {
-      ctx.strokeStyle = 'rgba(76, 175, 80, 0.5)';
-      ctx.lineWidth = 1;
-      ctx.setLineDash([5, 5]);
-      const from = Math.floor(visibleRange.from);
-      const to = Math.floor(visibleRange.to);
-      console.log('indicator', indicator);
-      console.log('barspace', barSpace, 'bounding', bounding);
+    });
+  }, [symbol]);
 
-      for (let i = from; i < to; i++) {
-        const data = indicator.result[i];
-        const x = i * barSpace.bar + bounding.left;
-        const y = -yAxis.convertToPixel(data);
-        // console.log('x',x,'y',y);
+  // registerIndicator({
+  //   name:'Volume',
+  //   shortName:'Vol',
+  //   calc: (kLineDataList) => {
+  //     let result = [];
+  //     for (let i = 0; i < kLineDataList.length; i++) {
+  //       result.push(kLineDataList[i].buy_volume);
+  //     }
+  //     return result;
+  //   },
+  //   draw: ({ctx, indicator, visibleRange, yAxis, barSpace, bounding}) => {
+  //     ctx.strokeStyle = 'rgba(76, 175, 80, 0.5)';
+  //     ctx.lineWidth = 1;
+  //     ctx.setLineDash([5, 5]);
+  //     const from = Math.floor(visibleRange.from);
+  //     const to = Math.floor(visibleRange.to);
+  //     console.log("indicator", indicator);
+  //     console.log("barspace",barSpace, "bounding",bounding);
 
-        ctx.beginPath();
-        ctx.moveTo(x, bounding.bottom);
-        ctx.lineTo(x, y);
-        ctx.stroke();
-      }
-      return false;
-    }
-  });
+  //     for (let i = from; i < to; i++) {
+  //       const data = indicator.result[i];
+  //       const x = i * barSpace.bar + bounding.left;
+  //       const y = -yAxis.convertToPixel(data);
+  //       // console.log('x',x,'y',y);
+
+  //       ctx.beginPath();
+  //       ctx.moveTo(x, bounding.bottom);
+  //       ctx.lineTo(x, y);
+  //       ctx.stroke();
+  //     }
+  //     return false;
+  //   }
+  // })
 
   registerIndicator({
     name: 'AvgCost',
@@ -71,18 +81,39 @@ const PriceByVolumeIndicator = ({ symbol }) => {
       let result = [];
       getChartData({
         token_symbol: symbol,
-        chart_label: 'AvgCostByDayAfter',
+        chart_label: 'avg_cost_by_day_after',
         start_time: '2024-07-28 00:00:00'
       }).then((data) => {
         if (!data || data.length == 0) {
           return [];
         }
-        console.log('data', data);
         for (let i = 0; i < data.length; i++) {
           result.push({ ac: data[i].value });
         }
       });
-      console.log('result', result);
+      // console.log('result', result);
+
+      return result;
+    }
+  });
+  registerIndicator({
+    name: 'AvgCostFirstDay',
+    shortName: 'AC_D1',
+    figures: [{ key: 'ac', title: 'AvgCost_D1: ', type: 'line' }],
+    calc: (kLineDataList) => {
+      let result = [];
+      getChartData({
+        token_symbol: symbol,
+        chart_label: 'AvgCostByStartDayBefore1'
+        // start_time: '2024-07-28 00:00:00'
+      }).then((data) => {
+        if (!data || data.length == 0) {
+          return [];
+        }
+        for (let i = 0; i < data.length; i++) {
+          result.push({ ac: data[i].value });
+        }
+      });
 
       return result;
     }
@@ -93,10 +124,50 @@ const PriceByVolumeIndicator = ({ symbol }) => {
     calc: (dataList) => {
       return getChartData({
         token_symbol: symbol,
-        chart_label: 'trade_usd_pbv',
+        // chart_label: 'trade_usd_pbv',
+        chart_label: 'trade_token_pbv',
         start_time: formatToDateTimeString(timeRange.startTime),
         end_time: formatToDateTimeString(timeRange.endTime)
       });
+    },
+    createTooltipDataSource: ({ indicator, xAxis, yAxis, crosshair }) => {
+      if (!indicator.result || indicator.result.length === 0 || crosshair.paneId !== 'candle_pane') {
+        return {
+          values: [
+            // { title: "Price Range Lower", value: 'n/a' },
+            { title: 'PBV Positive', value: 'n/a' },
+            { title: 'PBV Negative', value: 'n/a' },
+            { title: 'PBV Total', value: 'n/a' }
+          ]
+        };
+      }
+
+      const { x, y } = crosshair;
+
+      // Calculate the price range index closest to the crosshair position
+      const priceStep = (indicator.result[99].price_range_lower - indicator.result[0].price_range_lower) / 100;
+      let index = Math.floor((yAxis.convertFromPixel(y) - indicator.result[0].price_range_lower) / priceStep);
+
+      // Ensure index is within bounds
+      if (isNaN(index) || index < 0) index = 0;
+      if (index >= indicator.result.length) index = indicator.result.length - 1;
+
+      const pbvData = indicator.result[index];
+      if (!pbvData) {
+        return {};
+      }
+
+      console.log('index', index, 'pbvData', pbvData);
+
+      return {
+        values: [
+          // { title: "Price Range Lower", value: pbvData.price_range_lower.toFixed(2) },
+          { title: 'Positive', value: pbvData.positive_value.toFixed(2) },
+          { title: 'Negative', value: pbvData.negative_value.toFixed(2) },
+          { title: 'Total', value: (pbvData.positive_value + pbvData.negative_value).toFixed(2) },
+          { title: 'PN Ratio', value: (pbvData.positive_value / pbvData.negative_value).toFixed(2) }
+        ]
+      };
     },
     draw: ({ ctx, kLineDataList, indicator, visibleRange, bounding, barSpace, xAxis, yAxis }) => {
       // Set drawing styles
@@ -109,7 +180,7 @@ const PriceByVolumeIndicator = ({ symbol }) => {
 
       const volumeByPrice = indicator.result;
 
-      console.log('volumeByPrice', volumeByPrice);
+      // console.log('volumeByPrice', volumeByPrice);
       if (!volumeByPrice || volumeByPrice.length === 0) {
         return false;
       }
@@ -154,16 +225,52 @@ const PriceByVolumeIndicator = ({ symbol }) => {
 
   useEffect(() => {
     chart.current = init('indicator-k-line');
+    chart.current.setStyles({
+      grid: {
+        show: false,
+        horizontal: {
+          show: true,
+          size: 1,
+          color: '#EDEDED',
+          style: 'dashed',
+          dashedValue: [2, 2]
+        },
+        vertical: {
+          show: false,
+          size: 1,
+          color: '#EDEDED',
+          style: 'dashed',
+          dashedValue: [2, 2]
+        }
+      },
+      candle: {
+        // 蜡烛图类型 'candle_solid'|'candle_stroke'|'candle_up_stroke'|'candle_down_stroke'|'ohlc'|'area'
+        type: 'candle_solid',
+        // 蜡烛柱
+        bar: {
+          upColor: '#2DC08E',
+          downColor: '#F92855',
+          noChangeColor: '#888888',
+          upBorderColor: '#2DC08E',
+          downBorderColor: '#F92855',
+          noChangeBorderColor: '#888888',
+          upWickColor: '#2DC08E',
+          downWickColor: '#F92855',
+          noChangeWickColor: '#888888'
+        }
+      }
+    });
     getTokenPrice({
-      token_symbol: symbol,
-      start_time: '2024-07-28 00:00:00',
-      end_time: '2024-11-22 23:59:59'
+      token_symbol: symbol
+      // start_time: '2024-07-28 00:00:00',
+      // end_time: '2024-09-22 23:59:59'
     }).then((data) => {
       chart.current?.applyNewData(data);
     });
 
     chart.current?.createIndicator('AvgCost', true, { id: 'candle_pane' });
-    chart.current?.createIndicator('MA', true, { id: 'candle_pane' });
+    chart.current?.createIndicator('AvgCostFirstDay', true, { id: 'candle_pane' });
+    // chart.current?.createIndicator('MA', true, { id: 'candle_pane' });
     chart.current?.createIndicator('KDJ', true, { height: 80 });
     chart.current?.createIndicator('PriceByVolume', true, { id: 'candle_pane' });
     chart.current?.createIndicator('VOL', true);
@@ -177,6 +284,15 @@ const PriceByVolumeIndicator = ({ symbol }) => {
     if (!chart.current) {
       return;
     }
+    getTokenPrice({
+      token_symbol: symbol,
+      start_time: formatToDateTimeString(timeRange.startTime),
+      end_time: formatToDateTimeString(timeRange.endTime)
+    }).then((data) => {
+      chart.current.applyNewData(data);
+    });
+
+    console.log('chart.current is not null');
     let pvbInd = chart.current.getIndicatorByPaneId('candle_pane', 'PriceByVolume');
 
     chart.current.overrideIndicator({
@@ -184,10 +300,32 @@ const PriceByVolumeIndicator = ({ symbol }) => {
       calc: (dataList) => {
         return getChartData({
           token_symbol: symbol,
-          chart_label: 'trade_usd_pbv',
+          // chart_label: 'trade_usd_pbv',
+          chart_label: 'trade_token_pbv',
           start_time: formatToDateTimeString(timeRange.startTime),
           end_time: formatToDateTimeString(timeRange.endTime)
         });
+      }
+    });
+    chart.current.overrideIndicator({
+      name: 'AvgCost',
+      calc: (dataList) => {
+        let result = [];
+        getChartData({
+          token_symbol: symbol,
+          chart_label: 'avg_cost_by_day_after',
+          start_time: formatToDateTimeString(timeRange.startTime)
+        }).then((data) => {
+          if (!data || data.length == 0) {
+            return [];
+          }
+          for (let i = 0; i < data.length; i++) {
+            result.push({ ac: data[i].value });
+          }
+        });
+        // console.log('result', result);
+
+        return result;
       }
     });
   }, [symbol, timeRange]);
