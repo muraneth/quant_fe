@@ -2,14 +2,14 @@ import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { init, dispose, registerIndicator } from 'klinecharts';
 
 import { getTokenPrice } from 'data-server/common';
-import { getChartData, getChartDataSync } from 'data-server';
+import { getChartData, getTokenInfo } from 'data-server';
 import TextField from '@mui/material/TextField';
 
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
-import { values } from 'lodash';
+
 
 const formatToDateTimeString = (date) => {
   return date ? date.format('YYYY-MM-DD HH:mm:ss') : '';
@@ -19,7 +19,7 @@ const PriceByVolumeIndicator = ({ symbol }) => {
   const chart = useRef(null);
   const paneId = useRef('');
   const [timeRange, setTimeRange] = useState({
-    startTime: dayjs('2024-06-28 00:00:00'),
+    startTime: dayjs(),
     endTime: dayjs()
   });
   const handleStartTimeChange = useCallback((newValue) => {
@@ -29,6 +29,17 @@ const PriceByVolumeIndicator = ({ symbol }) => {
   const handleEndTimeChange = useCallback((newValue) => {
     setTimeRange((prev) => ({ ...prev, endTime: newValue }));
   }, []);
+
+  useEffect(() => {
+    getTokenInfo(symbol).then((response) => {
+      if (response?.create_time) {
+        let start = response.create_time.split(' ')[0] + ' 00:00:00';
+        let startTime = dayjs(start);
+        setTimeRange((prev) => ({ ...prev, startTime }));
+      }
+    });
+  }, [symbol]);
+
 
   // registerIndicator({
   //   name:'Volume',
@@ -72,13 +83,12 @@ const PriceByVolumeIndicator = ({ symbol }) => {
       let result = [];
       getChartData({
         token_symbol: symbol,
-        chart_label: 'AvgCostByDayAfter',
+        chart_label: 'avg_cost_by_day_after',
         start_time: '2024-07-28 00:00:00'
       }).then((data) => {
         if (!data || data.length == 0) {
           return [];
         }
-        // console.log('data', data);
         for (let i = 0; i < data.length; i++) {
           result.push({ ac: data[i].value });
         }
@@ -89,55 +99,78 @@ const PriceByVolumeIndicator = ({ symbol }) => {
     }
   });
   registerIndicator({
+    name: 'AvgCostFirstDay',
+    shortName: 'AC_D1',
+    figures: [{ key: 'ac', title: 'AvgCost_D1: ', type: 'line' }],
+    calc: (kLineDataList) => {
+      let result = [];
+      getChartData({
+        token_symbol: symbol,
+        chart_label: 'AvgCostByStartDayBefore1',
+        // start_time: '2024-07-28 00:00:00'
+      }).then((data) => {
+        if (!data || data.length == 0) {
+          return [];
+        }
+        for (let i = 0; i < data.length; i++) {
+          result.push({ ac: data[i].value });
+        }
+      });
+
+
+      return result;
+    }
+  });
+  registerIndicator({
     name: 'PriceByVolume',
     shortName: 'PBV',
     calc: (dataList) => {
       return getChartData({
         token_symbol: symbol,
-        chart_label: 'trade_usd_pbv',
+         // chart_label: 'trade_usd_pbv',
+         chart_label:'trade_token_pbv',
         start_time: formatToDateTimeString(timeRange.startTime),
         end_time: formatToDateTimeString(timeRange.endTime)
       });
     },
     createTooltipDataSource: ({ indicator, xAxis, yAxis, crosshair }) => {
-      if (!indicator.result || indicator.result.length === 0) {
+      
+      if (!indicator.result || indicator.result.length === 0 ||crosshair.paneId!=='candle_pane') {
         return {
           values: [
-            { title: "Price Range Lower",value:'n/a'},
-            { title: "PBV Positive", value: 'n/a'},
-            { title: "PBV Negative", value: 'n/a'},
-            { title: "PBV Total", value: 'n/a'},
+            // { title: "Price Range Lower", value: 'n/a' },
+            { title: "PBV Positive", value: 'n/a' },
+            { title: "PBV Negative", value: 'n/a' },
+            { title: "PBV Total", value: 'n/a' },
           ]
         };
       }
-
-      // Find the price range index closest to the crosshair position
+    
       const { x, y } = crosshair;
+    
+     
+      // Calculate the price range index closest to the crosshair position
       const priceStep = (indicator.result[99].price_range_lower - indicator.result[0].price_range_lower) / 100;
-      const index = Math.floor((yAxis.convertFromPixel(y) - indicator.result[0].price_range_lower) / priceStep);
-
-      if ( !index || index < 0 || index >= indicator.result.length) {
-        return { 
-          values: [
-          { title: "Price Range Lower",value:'n/a'},
-          { title: "PBV Positive", value: 'n/a'},
-          { title: "PBV Negative", value: 'n/a'},
-          { title: "PBV Total", value: 'n/a'},
-        ]
-        };
-      }
-
+      let index = Math.floor((yAxis.convertFromPixel(y) - indicator.result[0].price_range_lower) / priceStep);
+    
+      // Ensure index is within bounds
+      if (isNaN(index) || index < 0) index = 0;
+      if (index >= indicator.result.length) index = indicator.result.length - 1;
+    
       const pbvData = indicator.result[index];
       if (!pbvData) {
         return {};
-      }       
+      }
+    
+      console.log("index", index, "pbvData", pbvData);
+    
       return {
-        // name: "PriceByVolume",
         values: [
-          { title: "Price Range Lower", value: pbvData.price_range_lower.toFixed(2) },
-          { title: "PBV Positive", value: pbvData.positive_value .toFixed(2) },
-          { title: "PBV Negative", value: pbvData.negative_value .toFixed(2) },
-          { title: "PBV Total", value: (pbvData.positive_value + pbvData.negative_value).toFixed(2) }
+          // { title: "Price Range Lower", value: pbvData.price_range_lower.toFixed(2) },
+          { title: "Positive", value: pbvData.positive_value.toFixed(2) },
+          { title: "Negative", value: pbvData.negative_value.toFixed(2) },
+          { title: "Total", value: (pbvData.positive_value + pbvData.negative_value).toFixed(2) },
+          {title:"PN Ratio",value:(pbvData.positive_value/pbvData.negative_value).toFixed(2)}
         ]
       };
     },
@@ -197,16 +230,52 @@ const PriceByVolumeIndicator = ({ symbol }) => {
 
   useEffect(() => {
     chart.current = init('indicator-k-line');
+    chart.current.setStyles({
+      grid: {
+        show: false,
+        horizontal: {
+          show: true,
+          size: 1,
+          color: '#EDEDED',
+          style: 'dashed',
+          dashedValue: [2, 2]
+        },
+        vertical: {
+          show: false,
+          size: 1,
+          color: '#EDEDED',
+          style: 'dashed',
+          dashedValue: [2, 2]
+        }
+      },
+      candle: {
+        // 蜡烛图类型 'candle_solid'|'candle_stroke'|'candle_up_stroke'|'candle_down_stroke'|'ohlc'|'area'
+        type: 'candle_solid', 
+        // 蜡烛柱
+        bar: {
+          upColor: '#2DC08E',
+          downColor: '#F92855',
+          noChangeColor: '#888888',
+          upBorderColor: '#2DC08E',
+          downBorderColor: '#F92855',
+          noChangeBorderColor: '#888888',
+          upWickColor: '#2DC08E',
+          downWickColor: '#F92855',
+          noChangeWickColor: '#888888'
+        }
+      }
+    });
     getTokenPrice({
       token_symbol: symbol,
-      start_time: '2024-07-28 00:00:00',
-      end_time: '2024-10-22 23:59:59'
+      // start_time: '2024-07-28 00:00:00',
+      // end_time: '2024-09-22 23:59:59'
     }).then((data) => {
       chart.current?.applyNewData(data);
     });
 
     chart.current?.createIndicator('AvgCost', true, { id: 'candle_pane' });
-    chart.current?.createIndicator('MA', true, { id: 'candle_pane' });
+    chart.current?.createIndicator('AvgCostFirstDay', true, { id: 'candle_pane' });
+    // chart.current?.createIndicator('MA', true, { id: 'candle_pane' });
     chart.current?.createIndicator('KDJ', true, { height: 80 });
     chart.current?.createIndicator('PriceByVolume', true, { id: 'candle_pane' });
     chart.current?.createIndicator('VOL', true);
@@ -222,6 +291,15 @@ const PriceByVolumeIndicator = ({ symbol }) => {
 
       return;
     }
+    getTokenPrice({
+      token_symbol: symbol,
+      start_time: formatToDateTimeString(timeRange.startTime),
+      end_time: formatToDateTimeString(timeRange.endTime)
+    }).then((data) => {
+      chart.current.applyNewData(data)
+    });
+
+    
     console.log('chart.current is not null');
     let pvbInd = chart.current.getIndicatorByPaneId('candle_pane', 'PriceByVolume');
 
@@ -230,10 +308,32 @@ const PriceByVolumeIndicator = ({ symbol }) => {
       calc: (dataList) => {
         return getChartData({
           token_symbol: symbol,
-          chart_label: 'trade_usd_pbv',
+          // chart_label: 'trade_usd_pbv',
+          chart_label:'trade_token_pbv',
           start_time: formatToDateTimeString(timeRange.startTime),
           end_time: formatToDateTimeString(timeRange.endTime)
         });
+      }
+    });
+    chart.current.overrideIndicator({
+      name: 'AvgCost',
+      calc: (dataList) => {
+        let result = [];
+      getChartData({
+        token_symbol: symbol,
+        chart_label: 'avg_cost_by_day_after',
+        start_time: formatToDateTimeString(timeRange.startTime),
+      }).then((data) => {
+        if (!data || data.length == 0) {
+          return [];
+        }
+        for (let i = 0; i < data.length; i++) {
+          result.push({ ac: data[i].value });
+        }
+      });
+      // console.log('result', result);
+
+      return result;
       }
     });
   }, [symbol, timeRange]);
@@ -255,7 +355,7 @@ const PriceByVolumeIndicator = ({ symbol }) => {
             renderInput={(params) => <TextField {...params} />}
           />
           {/* <RatioChart chartName={chartId} chartData={chartData} priceSeries={priceSeries} priceData={priceData} /> */}
-          <div id="indicator-k-line" className="k-line-chart" style={{ height: '600px' }} />
+          <div id="indicator-k-line" className="k-line-chart" style={{ height: '600px'}} />
         </div>
       </LocalizationProvider>
     </>
