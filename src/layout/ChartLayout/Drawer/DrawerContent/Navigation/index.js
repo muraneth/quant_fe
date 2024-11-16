@@ -22,7 +22,7 @@ const Navigation = () => {
     console.log('fetching menu items');
     const fetchMenuItems = async () => {
       try {
-        const response = await axios.get('http://127.0.0.1:5005/api/token/menu?token_symbol=' + tokenItem.symbol);
+        const response = await axios.get('http://127.0.0.1:5005/data/api/token/menu?token_symbol=' + tokenItem.symbol);
         const chartMenu = response?.data?.data;
 
         setMenuItems(chartMenu);

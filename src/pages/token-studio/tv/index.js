@@ -124,8 +124,8 @@ const PriceByVolumeIndicator = ({ symbol }) => {
     calc: (dataList) => {
       return getChartData({
         token_symbol: symbol,
-        // chart_label: 'trade_usd_pbv',
-        chart_label: 'trade_token_pbv',
+        chart_label: 'trade_usd_pbv',
+        // chart_label: 'trade_token_pbv',
         start_time: formatToDateTimeString(timeRange.startTime),
         end_time: formatToDateTimeString(timeRange.endTime)
       });
@@ -267,6 +267,7 @@ const PriceByVolumeIndicator = ({ symbol }) => {
     }).then((data) => {
       chart.current?.applyNewData(data);
     });
+    chart.current.setPriceVolumePrecision(6, 1);
 
     chart.current?.createIndicator('AvgCost', true, { id: 'candle_pane' });
     chart.current?.createIndicator('AvgCostFirstDay', true, { id: 'candle_pane' });
@@ -300,8 +301,8 @@ const PriceByVolumeIndicator = ({ symbol }) => {
       calc: (dataList) => {
         return getChartData({
           token_symbol: symbol,
-          // chart_label: 'trade_usd_pbv',
-          chart_label: 'trade_token_pbv',
+          chart_label: 'trade_usd_pbv',
+          // chart_label: 'trade_token_pbv',
           start_time: formatToDateTimeString(timeRange.startTime),
           end_time: formatToDateTimeString(timeRange.endTime)
         });

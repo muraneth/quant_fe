@@ -6,7 +6,9 @@ import { LineChart } from 'echarts/charts';
 import { GridComponent, TooltipComponent, TitleComponent, LegendComponent, DataZoomComponent } from 'echarts/components';
 import { CanvasRenderer } from 'echarts/renderers';
 import { padArrayAhead } from 'utils/common';
-import { symbol } from 'd3';
+
+import { numberFormatter } from 'utils/common';
+
 echarts.use([LineChart, GridComponent, TooltipComponent, TitleComponent, LegendComponent, DataZoomComponent, CanvasRenderer]);
 
 const AvgCostChart = ({ chartName, chartData, priceSeries, priceData }) => {
@@ -38,12 +40,71 @@ const AvgCostChart = ({ chartName, chartData, priceSeries, priceData }) => {
         chartData = padArrayAhead(chartData, priceData.length);
       }
       const option = {
+        // tooltip: {
+        //   trigger: 'axis',
+        //   axisPointer: {
+        //     type: 'cross'
+        //   }
+        // },
         tooltip: {
           trigger: 'axis',
-          axisPointer: {
-            type: 'cross'
+          formatter: function (params) {
+            let result = `<strong>Date:</strong> ${params[0].axisValue}<br/>`;
+            console.log('params', params);
+
+            params.forEach((param) => {
+              if (param.seriesType === 'candlestick') {
+                // Assuming param.value format is [open, close, low, high] for K-line
+                const [key, open, close, low, high] = param.value;
+                result += `
+                  <div style="margin: 5px 0; line-height: 1.5;">
+                    <strong>${param.seriesName}:</strong> 
+                    <span style="color: #999;">Open:</span> ${numberFormatter(open)} 
+                    <span style="color: #999;">Close:</span> ${numberFormatter(close)} 
+                    <span style="color: #999;">Low:</span> ${numberFormatter(low)} 
+                    <span style="color: #999;">High:</span> ${numberFormatter(high)}
+                     <strong>Change:</strong> 
+                     
+                  </div>
+                `;
+              } else {
+                // For other series, just display series name and value
+                if ((param.seriesName == 'Positive PBV' || param.seriesName == 'Negative PBV') && param.axisDim == 'x') {
+                  //skip
+                } else if (param.seriesName == 'Positive PBV' && param.axisDim == 'y') {
+                  result += `
+                  <div style="margin: 5px 0; line-height: 1.5;">
+                    <span style="display: inline-block; width: 10px; height: 10px; background-color: ${param.color}; border-radius: 50%; margin-right: 5px;"></span>
+                    <strong>${param.seriesName}:</strong> [range: ${param.axisValue} value: ${numberFormatter(param.value)}]
+                   
+                  </div>
+                `;
+                } else {
+                  result += `
+                  <div style="margin: 5px 0; line-height: 1.5;">
+                    <span style="display: inline-block; width: 10px; height: 10px; background-color: ${param.color}; border-radius: 50%; margin-right: 5px;"></span>
+                    <strong>${param.seriesName}:</strong> ${numberFormatter(param.value)}
+                  </div>
+                `;
+                }
+              }
+            });
+
+            // Calculate percentage change if both values are defined
+            if (params[1]?.value[2] !== undefined && params[1]?.value[1] !== undefined && params[1]?.value[1] !== 0) {
+              const percentageChange = (((params[1].value[2] - params[1].value[1]) / params[1].value[1]) * 100).toFixed(2);
+              result += `
+                <div style="margin: 5px 0; line-height: 1.5;">
+                  <strong>Change:</strong> 
+                   <span style="color: ${percentageChange >= 0 ? 'green' : 'red'};">${percentageChange}%</span>
+                </div>
+              `;
+            }
+
+            return result;
           }
         },
+
         legend: {
           data: [chartName, ...priceSeries.map((series) => series.name)]
         },
@@ -69,7 +130,7 @@ const AvgCostChart = ({ chartName, chartData, priceSeries, priceData }) => {
             }
           }
         ].filter(Boolean),
-        
+
         dataZoom: [
           {
             type: 'slider',
