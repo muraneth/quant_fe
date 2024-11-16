@@ -108,7 +108,7 @@ export default function TokenTable() {
     const fetchTrades = async () => {
       const token = localStorage.getItem('token');
       const uid = localStorage.getItem('uid');
-      const url = `http://127.0.0.1:5005/data/api/token/getTokenTable`;
+      const url = `https://matrixcipher.com/data/api/token/getTokenTable`;
       try {
         const postData = {
           order_by: orderBy

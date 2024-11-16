@@ -99,7 +99,7 @@ export default function WalletTable() {
     const fetchTrades = async () => {
       const token = localStorage.getItem('token');
       const uid = localStorage.getItem('uid');
-      const url = `http://127.0.0.1:5005/api/data/topWallet`;
+      const url = `https://matrixcipher.com/data/api/data/topWallet`;
       try {
         const postData = {
           token_symbol: symbol,

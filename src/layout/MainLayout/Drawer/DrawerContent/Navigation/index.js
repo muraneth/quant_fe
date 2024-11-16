@@ -17,35 +17,34 @@ const Navigation = () => {
   useEffect(() => {
     if (location.pathname.includes('/analyze/')) {
       console.log('fetching menu items');
-      
+
       fetchMenuItems();
     }
   }, [location.pathname]);
 
   const fetchMenuItems = async () => {
     try {
-      const response =await axios.get('http://127.0.0.1:5005/api/data/menu');
+      const response = await axios.get('https://matrixcipher.com/data/api/data/menu');
       const chartMenu = response.data.data;
       const walletItem = {
         id: 'topwallet',
         title: 'TopWallet',
         type: 'group',
         children: [
-        {
-          id: 'topwallet',
-          title: 'TopWallet',
-          type: 'item',
-          url: '/analyze/topwallet',
-        }
+          {
+            id: 'topwallet',
+            title: 'TopWallet',
+            type: 'item',
+            url: '/analyze/topwallet'
+          }
         ]
-      }
+      };
       chartMenu.push(walletItem);
       setMenuItems(chartMenu);
     } catch (error) {
       console.error('Error fetching menu items:', error);
     }
   };
-
 
   const navGroups = menuItems.map((item) => {
     switch (item.type) {
@@ -64,8 +63,6 @@ const Navigation = () => {
 };
 
 export default Navigation;
-
-
 
 // import React, { useState, useEffect } from 'react';
 // import menuItem from 'menu-items';

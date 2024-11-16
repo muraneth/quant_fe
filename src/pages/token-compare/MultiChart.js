@@ -29,7 +29,7 @@ const MultiChart = ({ chart, symbols, zoom, onZoomChange }) => {
         const token = localStorage.getItem('token');
         const uid = localStorage.getItem('uid');
 
-        const response = await axios.post(`http://127.0.0.1:5005/api/data/chart`, postData, {
+        const response = await axios.post(`https://matrixcipher.com/data/api/data/chart`, postData, {
           headers: {
             Authorization: `${token}`,
             Uid: `${uid}`

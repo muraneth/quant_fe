@@ -23,7 +23,7 @@ export default function WalletDetail() {
     };
 
     try {
-      const response = await axios.post('http://127.0.0.1:5005/api/data/walletInfo', postData, {
+      const response = await axios.post('https://matrixcipher.com/data/api/data/walletInfo', postData, {
         headers: {
           Authorization: `${token}`,
           Uid: `${uid}`

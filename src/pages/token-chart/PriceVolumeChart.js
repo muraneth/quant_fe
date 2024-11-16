@@ -29,7 +29,7 @@ const PriceByVolumeChart = ({ symbol, path }) => {
     return data.map((item) => {
       return [item.day, item.open, item.close, item.low, item.high];
     });
-  }
+  };
   useEffect(() => {
     const fetchPrice = async () => {
       try {
@@ -56,7 +56,7 @@ const PriceByVolumeChart = ({ symbol, path }) => {
         };
         const token = localStorage.getItem('token');
         const uid = localStorage.getItem('uid');
-        const response = await axios.post(`http://127.0.0.1:5005/api/data/${path}`, postData, {
+        const response = await axios.post(`https://matrixcipher.com/data/api/data/${path}`, postData, {
           headers: {
             Authorization: `${token}`,
             Uid: `${uid}`
@@ -174,7 +174,7 @@ const PriceByVolumeChart = ({ symbol, path }) => {
           type: 'candlestick',
           yAxisIndex: 1, // Use the secondary Y-axis for price
           xAxisIndex: 1, // Use the secondary X-axis for time
-          data:  parseDataToKlineSeries(priceTimeSeriesData),
+          data: parseDataToKlineSeries(priceTimeSeriesData),
           // lineStyle: {
           //   color: '#f39c12',
           //   width: 2
@@ -196,7 +196,6 @@ const PriceByVolumeChart = ({ symbol, path }) => {
   }, [priceVolumeData, priceTimeSeriesData]);
 
   return (
-   
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <div>
         <DateTimePicker
