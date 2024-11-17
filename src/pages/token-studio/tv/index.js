@@ -267,7 +267,7 @@ const PriceByVolumeIndicator = ({ symbol }) => {
     }).then((data) => {
       chart.current?.applyNewData(data);
     });
-    chart.current.setPriceVolumePrecision(6, 1);
+    chart.current.setPriceVolumePrecision(10, 2);
 
     chart.current?.createIndicator('AvgCost', true, { id: 'candle_pane' });
     chart.current?.createIndicator('AvgCostFirstDay', true, { id: 'candle_pane' });

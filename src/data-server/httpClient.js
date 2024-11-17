@@ -1,8 +1,8 @@
 import axios, { AxiosRequestConfig, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
 
 const httpClient = axios.create({
-  // baseURL: `http://127.0.0.1:5005`,  // Include 'http://' here
-  baseURL: `https://www.matrixcipher.com/`
+  baseURL: `http://127.0.0.1:5005` // Include 'http://' here
+  // baseURL: `https://www.matrixcipher.com/`
 });
 
 export const get = async (url, headers) => {
