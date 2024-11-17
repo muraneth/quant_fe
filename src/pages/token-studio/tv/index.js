@@ -77,6 +77,7 @@ const PriceByVolumeIndicator = ({ symbol }) => {
     name: 'AvgCost',
     shortName: 'AC',
     figures: [{ key: 'ac', title: 'AvgCost: ', type: 'line' }],
+    series: 'price',
     calc: (kLineDataList) => {
       let result = [];
       getChartData({
@@ -271,11 +272,11 @@ const PriceByVolumeIndicator = ({ symbol }) => {
     chart.current.setPriceVolumePrecision(10, 2);
 
     chart.current?.createIndicator('AvgCost', true, { id: 'candle_pane' });
-    chart.current?.createIndicator('AvgCostFirstDay', true, { id: 'candle_pane' });
-    // chart.current?.createIndicator('MA', true, { id: 'candle_pane' });
-    chart.current?.createIndicator('KDJ', true, { height: 80 });
-    chart.current?.createIndicator('PriceByVolume', true, { id: 'candle_pane' });
-    chart.current?.createIndicator('VOL', true);
+    // chart.current?.createIndicator('AvgCostFirstDay', true, { id: 'candle_pane' });
+    chart.current?.createIndicator('MA', true, { id: 'candle_pane' });
+    // chart.current?.createIndicator('KDJ', true, { height: 80 });
+    // chart.current?.createIndicator('PriceByVolume', true, { id: 'candle_pane' });
+    // chart.current?.createIndicator('VOL', true);
 
     return () => {
       dispose('indicator-k-line');
