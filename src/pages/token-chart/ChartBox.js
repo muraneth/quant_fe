@@ -146,7 +146,7 @@ const ChartBox = () => {
       }
 
       getTokenPrice({
-        token_symbol: symbol,
+        token_symbol: symbol
         // start_time: formatToDateTimeString(timeRange.startTime),
         // end_time: formatToDateTimeString(timeRange.endTime)
       }).then((response) => {
@@ -216,13 +216,13 @@ const ChartBox = () => {
             <DateTimePicker
               label="Start Time"
               value={timeRange.startTime}
-              onChange={(newValue) => setStartTime(newValue)}
+              onChange={handleStartTimeChange}
               renderInput={(params) => <TextField {...params} />}
             />
             <DateTimePicker
               label="End Time"
               value={timeRange.endTime}
-              onChange={(newValue) => setEndTime(newValue)}
+              onChange={handleEndTimeChange}
               renderInput={(params) => <TextField {...params} />}
             />
             <RatioChart chartName={chartId} chartData={chartData} priceSeries={priceSeries} priceData={priceData} />
@@ -235,13 +235,13 @@ const ChartBox = () => {
             <DateTimePicker
               label="Start Time"
               value={timeRange.startTime}
-              onChange={(newValue) => setStartTime(newValue)}
+              onChange={handleStartTimeChange}
               renderInput={(params) => <TextField {...params} />}
             />
             <DateTimePicker
               label="End Time"
               value={timeRange.endTime}
-              onChange={(newValue) => setEndTime(newValue)}
+              onChange={handleEndTimeChange}
               renderInput={(params) => <TextField {...params} />}
             />
             <BaseLineChart chartName={chartId} chartData={chartData} priceSeries={priceSeries} priceData={priceData} />
