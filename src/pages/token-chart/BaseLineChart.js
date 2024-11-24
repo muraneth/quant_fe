@@ -65,10 +65,10 @@ const BaseLineChart = ({ chartName, chartData, priceSeries, priceData }) => {
               formatter: '{value}'
             },
             splitLine: {
-              show: false,
+              show: true,
               lineStyle: {
-                color: 'rgba(150, 150, 150, 0.5)', // Light gray color with transparency
-                width: 1 // Optional: you can adjust the width to make the lines thinner
+                color: 'rgba(150, 150, 150, 0.3)', // Light gray color with transparency
+                width: 0.5 // Optional: you can adjust the width to make the lines thinner
               }
             }
           },
@@ -77,6 +77,13 @@ const BaseLineChart = ({ chartName, chartData, priceSeries, priceData }) => {
             name: 'Value',
             axisLabel: {
               formatter: '{value}'
+            },
+            splitLine: {
+              show: false,
+              lineStyle: {
+                color: 'rgba(150, 150, 150, 0.3)', // Light gray color with transparency
+                width: 0.5 // Optional: you can adjust the width to make the lines thinner
+              }
             }
           }
         ].filter(Boolean),
@@ -99,7 +106,7 @@ const BaseLineChart = ({ chartName, chartData, priceSeries, priceData }) => {
             left: 'center',
             top: 'center',
             style: {
-              text: 'MatrixCipher.com',
+              // text: 'MatrixCipher.com',
               fontSize: 60,
               fontWeight: 'bold',
               fill: 'rgba(100, 1000, 0, 0.2)', // Semi-transparent watermark

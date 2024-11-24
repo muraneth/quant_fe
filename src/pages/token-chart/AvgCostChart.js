@@ -124,9 +124,18 @@ const AvgCostChart = ({ chartName, chartData, priceSeries, priceData }) => {
         yAxis: [
           {
             type: 'value',
-            name: 'Value & Price',
+            // name: 'Value & Price',
             axisLabel: {
               formatter: '{value}'
+            },
+            splitLine: {
+              show: true,
+              lineStyle: {
+                color: 'rgba(200, 200, 200, 0.3)', // Very light gray with transparency
+                // or use '#eeeeee' for a light solid color
+                width: 0.5, // Thinner line
+                type: 'solid' // or 'dashed', 'dotted'
+              }
             }
           }
         ].filter(Boolean),
@@ -147,12 +156,14 @@ const AvgCostChart = ({ chartName, chartData, priceSeries, priceData }) => {
         graphic: [
           {
             type: 'text',
-            left: 'center',
-            top: 'center',
+            left: 200, // pixels from left
+            top: 100,
+            // left: 'center',
+            // top: 'center',
             style: {
-              text: 'MatrixCipher.com',
-              fontSize: 60,
-              fontWeight: 'bold',
+              // text: 'tokenalytic.com',
+              fontSize: 20,
+              // fontWeight: 'bold',
               fill: 'rgba(100, 1000, 0, 0.2)', // Semi-transparent watermark
               textAlign: 'center'
             }

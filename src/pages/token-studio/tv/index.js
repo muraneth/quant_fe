@@ -4,11 +4,13 @@ import { init, dispose, registerIndicator } from 'klinecharts';
 import { getTokenPrice } from 'data-server/common';
 import { getChartData, getTokenInfo } from 'data-server';
 import TextField from '@mui/material/TextField';
+import { Box, Divider } from '@mui/material';
 
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
+import TokenInf from './TokenInfo';
 
 const formatToDateTimeString = (date) => {
   return date ? date.format('YYYY-MM-DD HH:mm:ss') : '';
@@ -100,6 +102,7 @@ const PriceByVolumeIndicator = ({ symbol }) => {
   registerIndicator({
     name: 'AvgCostFirstDay',
     shortName: 'AC_D1',
+    series: 'price',
     figures: [{ key: 'ac', title: 'AvgCost_D1: ', type: 'line' }],
     calc: (kLineDataList) => {
       let result = [];
@@ -122,6 +125,7 @@ const PriceByVolumeIndicator = ({ symbol }) => {
   registerIndicator({
     name: 'PriceByVolume',
     shortName: 'PBV',
+    series: 'price',
     calc: (dataList) => {
       return getChartData({
         token_symbol: symbol,
@@ -269,14 +273,14 @@ const PriceByVolumeIndicator = ({ symbol }) => {
       chart.current?.applyNewData(data);
     });
     /*  */
-    chart.current.setPriceVolumePrecision(10, 2);
+    chart.current.setPriceVolumePrecision(8, 2);
 
     chart.current?.createIndicator('AvgCost', true, { id: 'candle_pane' });
-    // chart.current?.createIndicator('AvgCostFirstDay', true, { id: 'candle_pane' });
-    chart.current?.createIndicator('MA', true, { id: 'candle_pane' });
+    chart.current?.createIndicator('AvgCostFirstDay', true, { id: 'candle_pane' });
+    // chart.current?.createIndicator('MA', true, { id: 'candle_pane' });
     // chart.current?.createIndicator('KDJ', true, { height: 80 });
-    // chart.current?.createIndicator('PriceByVolume', true, { id: 'candle_pane' });
-    // chart.current?.createIndicator('VOL', true);
+    chart.current?.createIndicator('PriceByVolume', true, { id: 'candle_pane' });
+    chart.current?.createIndicator('VOL', true);
 
     return () => {
       dispose('indicator-k-line');
@@ -303,8 +307,8 @@ const PriceByVolumeIndicator = ({ symbol }) => {
       calc: (dataList) => {
         return getChartData({
           token_symbol: symbol,
-          // chart_label: 'trade_usd_pbv',
-          chart_label: 'trade_token_pbv',
+          chart_label: 'trade_usd_pbv',
+          // chart_label: 'trade_token_pbv',
           start_time: formatToDateTimeString(timeRange.startTime),
           end_time: formatToDateTimeString(timeRange.endTime)
         });
@@ -335,6 +339,10 @@ const PriceByVolumeIndicator = ({ symbol }) => {
 
   return (
     <>
+      <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ ml: 10 }}>
+        <TokenInf symbol={symbol} />
+      </Box>
+      <Divider />
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <div>
           <DateTimePicker
