@@ -4,12 +4,13 @@ import { init, dispose, registerIndicator } from 'klinecharts';
 import { getTokenPrice } from 'data-server/common';
 import { getChartData, getTokenInfo } from 'data-server';
 import TextField from '@mui/material/TextField';
+import { Box, Divider } from '@mui/material';
 
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
-
+import TokenInf from './TokenInfo';
 
 const formatToDateTimeString = (date) => {
   return date ? date.format('YYYY-MM-DD HH:mm:ss') : '';
@@ -40,7 +41,6 @@ const PriceByVolumeIndicator = ({ symbol }) => {
     });
   }, [symbol]);
 
-
   // registerIndicator({
   //   name:'Volume',
   //   shortName:'Vol',
@@ -48,7 +48,7 @@ const PriceByVolumeIndicator = ({ symbol }) => {
   //     let result = [];
   //     for (let i = 0; i < kLineDataList.length; i++) {
   //       result.push(kLineDataList[i].buy_volume);
-  //     }      
+  //     }
   //     return result;
   //   },
   //   draw: ({ctx, indicator, visibleRange, yAxis, barSpace, bounding}) => {
@@ -59,13 +59,13 @@ const PriceByVolumeIndicator = ({ symbol }) => {
   //     const to = Math.floor(visibleRange.to);
   //     console.log("indicator", indicator);
   //     console.log("barspace",barSpace, "bounding",bounding);
-      
+
   //     for (let i = from; i < to; i++) {
   //       const data = indicator.result[i];
   //       const x = i * barSpace.bar + bounding.left;
   //       const y = -yAxis.convertToPixel(data);
   //       // console.log('x',x,'y',y);
-        
+
   //       ctx.beginPath();
   //       ctx.moveTo(x, bounding.bottom);
   //       ctx.lineTo(x, y);
@@ -79,6 +79,7 @@ const PriceByVolumeIndicator = ({ symbol }) => {
     name: 'AvgCost',
     shortName: 'AC',
     figures: [{ key: 'ac', title: 'AvgCost: ', type: 'line' }],
+    series: 'price',
     calc: (kLineDataList) => {
       let result = [];
       getChartData({
@@ -101,12 +102,13 @@ const PriceByVolumeIndicator = ({ symbol }) => {
   registerIndicator({
     name: 'AvgCostFirstDay',
     shortName: 'AC_D1',
+    series: 'price',
     figures: [{ key: 'ac', title: 'AvgCost_D1: ', type: 'line' }],
     calc: (kLineDataList) => {
       let result = [];
       getChartData({
         token_symbol: symbol,
-        chart_label: 'AvgCostByStartDayBefore1',
+        chart_label: 'AvgCostByStartDayBefore1'
         // start_time: '2024-07-28 00:00:00'
       }).then((data) => {
         if (!data || data.length == 0) {
@@ -117,67 +119,65 @@ const PriceByVolumeIndicator = ({ symbol }) => {
         }
       });
 
-
       return result;
     }
   });
   registerIndicator({
     name: 'PriceByVolume',
     shortName: 'PBV',
+    series: 'price',
     calc: (dataList) => {
       return getChartData({
         token_symbol: symbol,
-         // chart_label: 'trade_usd_pbv',
-         chart_label:'trade_token_pbv',
+        // chart_label: 'trade_usd_pbv',
+        chart_label: 'trade_token_pbv',
         start_time: formatToDateTimeString(timeRange.startTime),
         end_time: formatToDateTimeString(timeRange.endTime)
       });
     },
     createTooltipDataSource: ({ indicator, xAxis, yAxis, crosshair }) => {
-      
-      if (!indicator.result || indicator.result.length === 0 ||crosshair.paneId!=='candle_pane') {
+      if (!indicator.result || indicator.result.length === 0 || crosshair.paneId !== 'candle_pane') {
         return {
           values: [
             // { title: "Price Range Lower", value: 'n/a' },
-            { title: "PBV Positive", value: 'n/a' },
-            { title: "PBV Negative", value: 'n/a' },
-            { title: "PBV Total", value: 'n/a' },
+            { title: 'PBV Positive', value: 'n/a' },
+            { title: 'PBV Negative', value: 'n/a' },
+            { title: 'PBV Total', value: 'n/a' }
           ]
         };
       }
-    
+
       const { x, y } = crosshair;
-    
-     
+
       // Calculate the price range index closest to the crosshair position
       const priceStep = (indicator.result[99].price_range_lower - indicator.result[0].price_range_lower) / 100;
       let index = Math.floor((yAxis.convertFromPixel(y) - indicator.result[0].price_range_lower) / priceStep);
-    
+
       // Ensure index is within bounds
       if (isNaN(index) || index < 0) index = 0;
       if (index >= indicator.result.length) index = indicator.result.length - 1;
-    
+
       const pbvData = indicator.result[index];
       if (!pbvData) {
         return {};
       }
-    
-      console.log("index", index, "pbvData", pbvData);
-    
+
+      console.log('index', index, 'pbvData', pbvData);
+
       return {
         values: [
           // { title: "Price Range Lower", value: pbvData.price_range_lower.toFixed(2) },
-          { title: "Positive", value: pbvData.positive_value.toFixed(2) },
-          { title: "Negative", value: pbvData.negative_value.toFixed(2) },
-          { title: "Total", value: (pbvData.positive_value + pbvData.negative_value).toFixed(2) },
-          {title:"PN Ratio",value:(pbvData.positive_value/pbvData.negative_value).toFixed(2)}
+          { title: 'Positive', value: pbvData.positive_value.toFixed(2) },
+          { title: 'Negative', value: pbvData.negative_value.toFixed(2) },
+          { title: 'Total', value: (pbvData.positive_value + pbvData.negative_value).toFixed(2) },
+          { title: 'PN Ratio', value: (pbvData.positive_value / pbvData.negative_value).toFixed(2) }
         ]
       };
     },
     draw: ({ ctx, kLineDataList, indicator, visibleRange, bounding, barSpace, xAxis, yAxis }) => {
       // Set drawing styles
       ctx.strokeStyle = '#4caf50';
-      ctx.lineWidth = 2;    
+      ctx.lineWidth = 2;
       ctx.setLineDash([]); // Ensure the line is solid
 
       // Calculate the price range
@@ -250,7 +250,7 @@ const PriceByVolumeIndicator = ({ symbol }) => {
       },
       candle: {
         // 蜡烛图类型 'candle_solid'|'candle_stroke'|'candle_up_stroke'|'candle_down_stroke'|'ohlc'|'area'
-        type: 'candle_solid', 
+        type: 'candle_solid',
         // 蜡烛柱
         bar: {
           upColor: '#2DC08E',
@@ -266,17 +266,19 @@ const PriceByVolumeIndicator = ({ symbol }) => {
       }
     });
     getTokenPrice({
-      token_symbol: symbol,
+      token_symbol: symbol
       // start_time: '2024-07-28 00:00:00',
       // end_time: '2024-09-22 23:59:59'
     }).then((data) => {
       chart.current?.applyNewData(data);
     });
+    /*  */
+    chart.current.setPriceVolumePrecision(8, 2);
 
     chart.current?.createIndicator('AvgCost', true, { id: 'candle_pane' });
     chart.current?.createIndicator('AvgCostFirstDay', true, { id: 'candle_pane' });
     // chart.current?.createIndicator('MA', true, { id: 'candle_pane' });
-    chart.current?.createIndicator('KDJ', true, { height: 80 });
+    // chart.current?.createIndicator('KDJ', true, { height: 80 });
     chart.current?.createIndicator('PriceByVolume', true, { id: 'candle_pane' });
     chart.current?.createIndicator('VOL', true);
 
@@ -287,8 +289,6 @@ const PriceByVolumeIndicator = ({ symbol }) => {
 
   useEffect(() => {
     if (!chart.current) {
-      console.log('chart.current is null');
-
       return;
     }
     getTokenPrice({
@@ -296,10 +296,9 @@ const PriceByVolumeIndicator = ({ symbol }) => {
       start_time: formatToDateTimeString(timeRange.startTime),
       end_time: formatToDateTimeString(timeRange.endTime)
     }).then((data) => {
-      chart.current.applyNewData(data)
+      chart.current.applyNewData(data);
     });
 
-    
     console.log('chart.current is not null');
     let pvbInd = chart.current.getIndicatorByPaneId('candle_pane', 'PriceByVolume');
 
@@ -308,8 +307,8 @@ const PriceByVolumeIndicator = ({ symbol }) => {
       calc: (dataList) => {
         return getChartData({
           token_symbol: symbol,
-          // chart_label: 'trade_usd_pbv',
-          chart_label:'trade_token_pbv',
+          chart_label: 'trade_usd_pbv',
+          // chart_label: 'trade_token_pbv',
           start_time: formatToDateTimeString(timeRange.startTime),
           end_time: formatToDateTimeString(timeRange.endTime)
         });
@@ -319,27 +318,31 @@ const PriceByVolumeIndicator = ({ symbol }) => {
       name: 'AvgCost',
       calc: (dataList) => {
         let result = [];
-      getChartData({
-        token_symbol: symbol,
-        chart_label: 'avg_cost_by_day_after',
-        start_time: formatToDateTimeString(timeRange.startTime),
-      }).then((data) => {
-        if (!data || data.length == 0) {
-          return [];
-        }
-        for (let i = 0; i < data.length; i++) {
-          result.push({ ac: data[i].value });
-        }
-      });
-      // console.log('result', result);
+        getChartData({
+          token_symbol: symbol,
+          chart_label: 'avg_cost_by_day_after',
+          start_time: formatToDateTimeString(timeRange.startTime)
+        }).then((data) => {
+          if (!data || data.length == 0) {
+            return [];
+          }
+          for (let i = 0; i < data.length; i++) {
+            result.push({ ac: data[i].value });
+          }
+        });
+        // console.log('result', result);
 
-      return result;
+        return result;
       }
     });
   }, [symbol, timeRange]);
 
   return (
     <>
+      <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ ml: 10 }}>
+        <TokenInf symbol={symbol} />
+      </Box>
+      <Divider />
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <div>
           <DateTimePicker
@@ -355,7 +358,7 @@ const PriceByVolumeIndicator = ({ symbol }) => {
             renderInput={(params) => <TextField {...params} />}
           />
           {/* <RatioChart chartName={chartId} chartData={chartData} priceSeries={priceSeries} priceData={priceData} /> */}
-          <div id="indicator-k-line" className="k-line-chart" style={{ height: '600px'}} />
+          <div id="indicator-k-line" className="k-line-chart" style={{ height: '600px' }} />
         </div>
       </LocalizationProvider>
     </>

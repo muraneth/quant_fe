@@ -139,14 +139,26 @@ const ChartBox = () => {
           token_symbol: symbol,
           chart_label: chartId,
           start_time: formatToDateTimeString(timeRange.startTime),
-          end_time: formatToDateTimeString(timeRange.endTime)
+          end_time: formatToDateTimeString(timeRange.endTime),
+          indicator_config: {
+            start_time: formatToDateTimeString(timeRange.startTime),
+            end_time: formatToDateTimeString(timeRange.endTime),
+            // holder_config: {
+            //   value_lower: 60000000000,
+            //   value_upper: 6000000000 * 10000
+            // }
+            holder_config: {
+              value_lower: 6000000,
+              value_upper: 6000000000
+            }
+          }
         }).then((response) => {
           setChartData(response ? response : []);
         });
       }
 
       getTokenPrice({
-        token_symbol: symbol,
+        token_symbol: symbol
         // start_time: formatToDateTimeString(timeRange.startTime),
         // end_time: formatToDateTimeString(timeRange.endTime)
       }).then((response) => {
@@ -176,15 +188,15 @@ const ChartBox = () => {
             borderColor0: '#ef232a',
             borderColor: '#14b143'
           }
-        },
-        {
-          name: 'Price',
-          type: 'line',
-          yAxisIndex: 0,
-          data: priceData.map((item) => item.avg_price),
-          smooth: true,
-          symbol: 'none'
         }
+        // {
+        //   name: 'Price',
+        //   type: 'line',
+        //   yAxisIndex: 0,
+        //   data: priceData.map((item) => item.avg_price),
+        //   smooth: true,
+        //   symbol: 'none'
+        // }
       ];
       setPriceSeries(series);
     } else {
@@ -216,13 +228,13 @@ const ChartBox = () => {
             <DateTimePicker
               label="Start Time"
               value={timeRange.startTime}
-              onChange={(newValue) => setStartTime(newValue)}
+              onChange={handleStartTimeChange}
               renderInput={(params) => <TextField {...params} />}
             />
             <DateTimePicker
               label="End Time"
               value={timeRange.endTime}
-              onChange={(newValue) => setEndTime(newValue)}
+              onChange={handleEndTimeChange}
               renderInput={(params) => <TextField {...params} />}
             />
             <RatioChart chartName={chartId} chartData={chartData} priceSeries={priceSeries} priceData={priceData} />
@@ -235,13 +247,13 @@ const ChartBox = () => {
             <DateTimePicker
               label="Start Time"
               value={timeRange.startTime}
-              onChange={(newValue) => setStartTime(newValue)}
+              onChange={handleStartTimeChange}
               renderInput={(params) => <TextField {...params} />}
             />
             <DateTimePicker
               label="End Time"
               value={timeRange.endTime}
-              onChange={(newValue) => setEndTime(newValue)}
+              onChange={handleEndTimeChange}
               renderInput={(params) => <TextField {...params} />}
             />
             <BaseLineChart chartName={chartId} chartData={chartData} priceSeries={priceSeries} priceData={priceData} />

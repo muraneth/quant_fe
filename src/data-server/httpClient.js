@@ -1,34 +1,27 @@
-
-import axios, {
-  AxiosRequestConfig,
-  AxiosResponse,
-  InternalAxiosRequestConfig,
-} from 'axios';
-
-
-
+import axios, { AxiosRequestConfig, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
 
 const httpClient = axios.create({
-  baseURL: `http://127.0.0.1:5005`,  // Include 'http://' here
+  baseURL: `http://127.0.0.1:5005` // Include 'http://' here
+  // baseURL: `https://www.matrixcipher.com/`
 });
 
 export const get = async (url, headers) => {
   try {
-    const response = await httpClient.get(url, { headers });  // Correct placement for headers
+    const response = await httpClient.get(url, { headers }); // Correct placement for headers
     return response.data;
   } catch (error) {
     console.error('Request error:', error);
   }
-}
+};
 
 export const post = async (url, headers, params) => {
   try {
-    const response = await httpClient.post(url, params, { headers });  // Correct placement for headers
+    const response = await httpClient.post(url, params, { headers }); // Correct placement for headers
     return response.data;
   } catch (error) {
     console.error('Request error:', error);
   }
-}
+};
 // export const request = async (
 //   url,
 //   option: AxiosRequestConfig = {

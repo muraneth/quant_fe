@@ -15,7 +15,7 @@ export const getChartData = async (postData) => {
   const uid = localStorage.getItem('uid');
   try {
     const response = await post(
-      `/data/api/data/chart`,
+      `/data/api/data/indicator`,
       {
         Authorization: `${token}`,
         Uid: `${uid}`
@@ -23,26 +23,7 @@ export const getChartData = async (postData) => {
       postData
     );
 
-    return response?.data;
-  } catch (error) {
-    console.error('Request error:', error);
-  }
-};
-
-export const getChartDataSync = (postData) => {
-  const token = localStorage.getItem('token');
-  const uid = localStorage.getItem('uid');
-  try {
-    const response = post(
-      `/data/api/data/chart`,
-      {
-        Authorization: `${token}`,
-        Uid: `${uid}`
-      },
-      postData
-    );
-
-    return response?.data;
+    return response?.data.data;
   } catch (error) {
     console.error('Request error:', error);
   }
