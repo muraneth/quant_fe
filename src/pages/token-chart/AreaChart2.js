@@ -34,7 +34,7 @@ const WalletChart2 = ({ symbol, chart }) => {
       try {
         const postData = {
           token_symbol: symbol,
-          chart_label: chart
+          handle_name: chart
         };
         getTokenPrice(postData).then((response) => {
           setPriceTimeSeriesData(response.data ? response.data : []);

@@ -115,19 +115,19 @@ const ChartBox = () => {
         Promise.all([
           getChartData({
             token_symbol: symbol,
-            chart_label: 'wallet_balance_by_day_rang_ratio',
+            handle_name: 'wallet_balance_by_day_rang_ratio',
             start_time: '2024-07-27 00:00:00',
             end_time: '2024-08-28 00:00:00'
           }),
           getChartData({
             token_symbol: symbol,
-            chart_label: 'wallet_balance_by_day_rang_ratio',
+            handle_name: 'wallet_balance_by_day_rang_ratio',
             start_time: '2024-08-28 00:00:00',
             end_time: '2024-09-28 00:00:00'
           }),
           getChartData({
             token_symbol: symbol,
-            chart_label: 'wallet_balance_by_day_rang_ratio',
+            handle_name: 'wallet_balance_by_day_rang_ratio',
             start_time: '2024-09-28 00:00:00',
             end_time: '2024-11-20800:00:00'
           })
@@ -137,7 +137,7 @@ const ChartBox = () => {
       } else {
         getChartData({
           token_symbol: symbol,
-          chart_label: chartId,
+          handle_name: chartId,
           start_time: formatToDateTimeString(timeRange.startTime),
           end_time: formatToDateTimeString(timeRange.endTime),
           indicator_config: {

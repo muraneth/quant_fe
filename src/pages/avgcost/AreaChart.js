@@ -32,7 +32,7 @@ const WalletChart = ({ symbol, chart }) => {
         const startDate = new Date();
         const postData = {
           token_symbol: symbol,
-          chart_label: chart
+          handle_name: chart
         };
         const token = localStorage.getItem('token');
         const uid = localStorage.getItem('uid');

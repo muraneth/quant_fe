@@ -61,7 +61,7 @@ const IndicatorOptions = ({ symbol, startTime, endTime, indicators, klineData, s
       if (indicator.need_fetch) {
         getChartData({
           token_symbol: symbol,
-          chart_label: indicator.id,
+          handle_name: indicator.id,
           start_time: startTime,
           end_time: endTime
         }).then((data) => {
@@ -96,7 +96,7 @@ const IndicatorOptions = ({ symbol, startTime, endTime, indicators, klineData, s
       if (indicator.need_fetch) {
         getChartData({
           token_symbol: symbol,
-          chart_label: indicator.id,
+          handle_name: indicator.id,
           start_time: startTime,
           end_time: endTime
         }).then((data) => {
@@ -172,7 +172,7 @@ const IndicatorOptions = ({ symbol, startTime, endTime, indicators, klineData, s
 
       getChartData({
         token_symbol: symbol,
-        chart_label: indicator.id,
+        handle_name: indicator.id,
         start_time: startTime,
         end_time: endTime
       }).then((data) => {

@@ -24,7 +24,7 @@ const MultiChart = ({ chart, symbols, zoom, onZoomChange }) => {
       try {
         const postData = {
           token_symbol: symbol,
-          chart_label: chart
+          handle_name: chart
         };
         const token = localStorage.getItem('token');
         const uid = localStorage.getItem('uid');

@@ -35,7 +35,7 @@ const PriceByVolumeChart = ({ symbol, path }) => {
       try {
         const postData = {
           token_symbol: symbol,
-          chart_label: 'priceVolume',
+          handle_name: 'priceVolume',
           start_time: formatToDateTimeString(startTime),
           end_time: formatToDateTimeString(endTime)
         };
@@ -50,7 +50,7 @@ const PriceByVolumeChart = ({ symbol, path }) => {
       try {
         const postData = {
           token_symbol: symbol,
-          chart_label: 'priceVolume',
+          handle_name: 'priceVolume',
           start_time: formatToDateTimeString(startTime),
           end_time: formatToDateTimeString(endTime)
         };

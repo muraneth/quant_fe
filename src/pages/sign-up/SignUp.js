@@ -163,7 +163,7 @@ export default function SignUp() {
     console.log(userObject);
 
     const response = await post(
-      '/api/user/googleLogin',
+      '/data/api/user/googleLogin',
       {
         Idtoken: Idtoken
       },
@@ -239,6 +239,7 @@ export default function SignUp() {
           >
             {/* <SitemarkIcon /> */}
             <Logo />
+            <div>google</div>
             <Box
               sx={{
                 display: 'flex',

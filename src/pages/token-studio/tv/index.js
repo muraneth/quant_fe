@@ -84,7 +84,7 @@ const PriceByVolumeIndicator = ({ symbol }) => {
       let result = [];
       getChartData({
         token_symbol: symbol,
-        chart_label: 'avg_cost_by_day_after',
+        handle_name: 'avg_cost_by_day_after',
         start_time: '2024-07-28 00:00:00'
       }).then((data) => {
         if (!data || data.length == 0) {
@@ -108,7 +108,7 @@ const PriceByVolumeIndicator = ({ symbol }) => {
       let result = [];
       getChartData({
         token_symbol: symbol,
-        chart_label: 'AvgCostByStartDayBefore1'
+        handle_name: 'AvgCostByStartDayBefore1'
         // start_time: '2024-07-28 00:00:00'
       }).then((data) => {
         if (!data || data.length == 0) {
@@ -129,8 +129,8 @@ const PriceByVolumeIndicator = ({ symbol }) => {
     calc: (dataList) => {
       return getChartData({
         token_symbol: symbol,
-        // chart_label: 'trade_usd_pbv',
-        chart_label: 'trade_token_pbv',
+        // handle_name: 'trade_usd_pbv',
+        handle_name: 'trade_token_pbv',
         start_time: formatToDateTimeString(timeRange.startTime),
         end_time: formatToDateTimeString(timeRange.endTime)
       });
@@ -307,8 +307,8 @@ const PriceByVolumeIndicator = ({ symbol }) => {
       calc: (dataList) => {
         return getChartData({
           token_symbol: symbol,
-          chart_label: 'trade_usd_pbv',
-          // chart_label: 'trade_token_pbv',
+          handle_name: 'trade_usd_pbv',
+          // handle_name: 'trade_token_pbv',
           start_time: formatToDateTimeString(timeRange.startTime),
           end_time: formatToDateTimeString(timeRange.endTime)
         });
@@ -320,7 +320,7 @@ const PriceByVolumeIndicator = ({ symbol }) => {
         let result = [];
         getChartData({
           token_symbol: symbol,
-          chart_label: 'avg_cost_by_day_after',
+          handle_name: 'avg_cost_by_day_after',
           start_time: formatToDateTimeString(timeRange.startTime)
         }).then((data) => {
           if (!data || data.length == 0) {

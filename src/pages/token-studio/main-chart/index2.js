@@ -147,7 +147,7 @@ const ChartBox = ({ symbol }) => {
     if (showAvgCost) {
       getChartData({
         token_symbol: symbol,
-        chart_label: 'AvgCost',
+        handle_name: 'AvgCost',
         start_time: formatToDateTimeString(startTime),
         end_time: formatToDateTimeString(endTime)
       }).then((response) => {
@@ -196,7 +196,7 @@ const ChartBox = ({ symbol }) => {
       let label = pbvType.split('_')[0] + 'PriceByVolume';
       getChartData({
         token_symbol: symbol,
-        chart_label: label,
+        handle_name: label,
         start_time: formatToDateTimeString(startTime),
         end_time: formatToDateTimeString(endTime)
       }).then((response) => {
@@ -413,7 +413,7 @@ const ChartBox = ({ symbol }) => {
     if (showRollingPrice) {
       getChartData({
         token_symbol: symbol,
-        chart_label: 'RollingPrice',
+        handle_name: 'RollingPrice',
         start_time: formatToDateTimeString(startTime),
         end_time: formatToDateTimeString(endTime)
       }).then((response) => {
