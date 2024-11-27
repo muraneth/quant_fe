@@ -140,17 +140,9 @@ const ChartBox = () => {
           handle_name: chartId,
           start_time: formatToDateTimeString(timeRange.startTime),
           end_time: formatToDateTimeString(timeRange.endTime),
-          indicator_config: {
+          params: {
             start_time: formatToDateTimeString(timeRange.startTime),
-            end_time: formatToDateTimeString(timeRange.endTime),
-            // holder_config: {
-            //   value_lower: 60000000000,
-            //   value_upper: 6000000000 * 10000
-            // }
-            holder_config: {
-              value_lower: 6000000,
-              value_upper: 6000000000
-            }
+            end_time: formatToDateTimeString(timeRange.endTime)
           }
         }).then((response) => {
           setChartData(response ? response : []);
