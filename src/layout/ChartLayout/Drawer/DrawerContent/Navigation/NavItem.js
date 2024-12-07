@@ -36,11 +36,11 @@ const NavItem = ({ item, level }) => {
   const Icon = item.icon;
   const itemIcon = item.icon ? <Icon style={{ fontSize: drawerOpen ? '1rem' : '1.25rem' }} /> : false;
 
-  const isSelected = openItem.findIndex((id) => id === item.id) > -1;
+  const isSelected = openItem.findIndex((id) => id === item.handler_name) > -1;
   // active menu item on page load
   useEffect(() => {
     if (pathname.includes(item.url)) {
-      dispatch(activeItem({ openItem: [item.id] }));
+      dispatch(activeItem({ openItem: [item.handler_name] }));
     }
     // eslint-disable-next-line
   }, [pathname]);
@@ -52,7 +52,7 @@ const NavItem = ({ item, level }) => {
     <ListItemButton
       {...listItemProps}
       disabled={item.disabled}
-      onClick={() => itemHandler(item.id)}
+      onClick={() => itemHandler(item.handler_name)}
       selected={isSelected}
       sx={{
         zIndex: 1201,
@@ -116,7 +116,7 @@ const NavItem = ({ item, level }) => {
         <ListItemText
           primary={
             <Typography variant="h7" sx={{ color: isSelected ? iconSelectedColor : textColor }}>
-              {item.title}
+              {item.name}
             </Typography>
           }
         />

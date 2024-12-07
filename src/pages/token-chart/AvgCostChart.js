@@ -39,6 +39,8 @@ const AvgCostChart = ({ chartName, chartData, priceSeries, priceData }) => {
       if (chartData.length < priceData.length) {
         chartData = padArrayAhead(chartData, priceData.length);
       }
+      console.log('chartData', chartData);
+
       const option = {
         // tooltip: {
         //   trigger: 'axis',
@@ -50,7 +52,7 @@ const AvgCostChart = ({ chartName, chartData, priceSeries, priceData }) => {
           trigger: 'axis',
           formatter: function (params) {
             let result = `<strong>Date:</strong> ${params[0].axisValue}<br/>`;
-            console.log('params', params);
+            // console.log('params', params);
 
             params.forEach((param) => {
               if (param.seriesType === 'candlestick') {

@@ -9,7 +9,7 @@ import { LineChart } from 'echarts/charts';
 import { GridComponent, TooltipComponent, TitleComponent, LegendComponent, DataZoomComponent } from 'echarts/components';
 import { CanvasRenderer } from 'echarts/renderers';
 import { getTokenPrice } from 'data-server/common';
-import {getChartData} from 'data-server/chart';
+import { getChartData } from 'data-server/chart';
 
 echarts.use([LineChart, GridComponent, TooltipComponent, TitleComponent, LegendComponent, DataZoomComponent, CanvasRenderer]);
 
@@ -28,12 +28,11 @@ const WalletChart2 = ({ symbol, chart }) => {
   const [chartData, setChartData] = useState([]);
   const [priceTimeSeriesData, setPriceTimeSeriesData] = useState([]);
 
-
   useEffect(() => {
     const fetchData = async () => {
       try {
         const postData = {
-          token_symbol: symbol,
+          symbol: symbol,
           handle_name: chart
         };
         getTokenPrice(postData).then((response) => {
@@ -71,8 +70,6 @@ const WalletChart2 = ({ symbol, chart }) => {
 
   useEffect(() => {
     if (chartInstance) {
-   
-
       const option = {
         tooltip: {
           trigger: 'axis',
@@ -102,16 +99,14 @@ const WalletChart2 = ({ symbol, chart }) => {
             name: 'Value & Price',
             axisLabel: {
               formatter: '{value}'
-            },
-
+            }
           },
           isNotSeperatePrice(chart) === false && {
             type: 'value',
             name: 'Price',
             axisLabel: {
               formatter: '{value}'
-            },
-
+            }
           }
         ].filter(Boolean),
         dataZoom: [
@@ -160,7 +155,7 @@ const WalletChart2 = ({ symbol, chart }) => {
 
       chartInstance.setOption(option);
     }
-  }, [chartData,priceTimeSeriesData, chartInstance, chart]);
+  }, [chartData, priceTimeSeriesData, chartInstance, chart]);
 
   return (
     <div>

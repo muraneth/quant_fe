@@ -5,7 +5,7 @@ export const getTokenPrice = async (postData) => {
   const uid = localStorage.getItem('uid');
   try {
     const response = await post(
-      '/data/api/data/price',
+      '/data/api/base/price',
       {
         Authorization: `${token}`,
         Uid: `${uid}`

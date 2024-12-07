@@ -3,7 +3,7 @@ import { get, post } from './httpClient';
 // 审批列表
 export const getChartList = async () => {
   try {
-    const response = await get(`/data/api/token/menu`);
+    const response = await get(`/data/api/base/indicatorList`);
     return response?.data;
   } catch (error) {
     console.error('Request error:', error);
@@ -15,7 +15,7 @@ export const getChartData = async (postData) => {
   const uid = localStorage.getItem('uid');
   try {
     const response = await post(
-      `/data/api/data/indicator`,
+      `/data/api/indicator`,
       {
         Authorization: `${token}`,
         Uid: `${uid}`
@@ -23,7 +23,7 @@ export const getChartData = async (postData) => {
       postData
     );
 
-    return response?.data.data;
+    return response?.data;
   } catch (error) {
     console.error('Request error:', error);
   }
