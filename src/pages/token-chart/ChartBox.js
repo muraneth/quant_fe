@@ -54,7 +54,7 @@ function isAvgCostChart(chart) {
   // const items = ['AvgCost', 'DexAvgCost', 'CexAvgCost', 'AvgCostExcept'];
 
   // return items.includes(chart);
-  return chart.includes('AvgCost') || chart.includes('avg_cost');
+  return chart.includes('AvgCost') || chart.includes('avg_cost') || chart.includes('avgcost');
 }
 function isBasicVolumeChart(chart) {
   const items = [
