@@ -9,7 +9,6 @@ import { selectToken } from 'store/reducers/token';
 import { getTokens } from 'data-server/tokenlist';
 import { over } from 'lodash';
 
-
 // ==============================|| HEADER - CONTENT ||============================== //
 
 const TokenContent = () => {
@@ -66,9 +65,8 @@ const TokenContent = () => {
         sx={{
           display: 'flex',
           alignItems: 'center',
-          maxWidth: '100%',
-          // overflowX: 'auto' 
-          
+          maxWidth: '100%'
+          // overflowX: 'auto'
         }}
       >
         <List sx={{ display: 'flex', flexDirection: 'row', gap: 1 }}>

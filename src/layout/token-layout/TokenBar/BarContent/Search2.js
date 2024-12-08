@@ -10,21 +10,21 @@ const Search = ({ onSearchSelect }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [results, setResults] = useState([]);
   useEffect(() => {
-    searchToken('')
+    searchToken('S')
       .then((response) => {
         setResults(response ? response : []); // assuming the API returns an array of items
       })
       .catch((error) => {
         console.error('Error fetching search results:', error);
       });
-  }, [searchTerm]);
+  }, []);
 
   // Handle search input change
   const handleInputChange = (event, value) => {
-    setSearchTerm(value);
+    // setSearchTerm(value);
     // Fetch data if search term is not empty
     if (value) {
-      searchToken(value)
+      searchToken('S')
         .then((response) => {
           setResults(response ? response : []); // assuming the API returns an array of items
         })

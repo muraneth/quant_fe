@@ -17,7 +17,7 @@ const Search = ({ onSearchSelect }) => {
       .catch((error) => {
         console.error('Error fetching search results:', error);
       });
-  }, [searchTerm]);
+  }, []);
 
   // Handle search input change
   const handleInputChange = (event, value) => {
