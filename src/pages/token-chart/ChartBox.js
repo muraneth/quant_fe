@@ -51,26 +51,13 @@ function isBaseLineChart(chart) {
   );
 }
 function isAvgCostChart(chart) {
-  // const items = ['AvgCost', 'DexAvgCost', 'CexAvgCost', 'AvgCostExcept'];
-
-  // return items.includes(chart);
-  return chart.includes('AvgCost') || chart.includes('avg_cost') || chart.includes('avgcost');
+  return chart.includes('avgcost.');
 }
 function isBasicVolumeChart(chart) {
-  const items = [
-    'TradeVolume',
-    'DailyTradeVolumeUSD',
-    'DailyTxVolume',
-    'USDPnNVolume',
-    'PnNVolume',
-    'RobotVolume',
-    'TradingVolumeWithoutBot'
-  ];
-  return items.includes(chart);
+  return chart.includes('volume.');
 }
 function isPriceByVolumeChart(chart) {
-  const items = ['PriceByVolumeTimeRange', 'WalletPriceByVolume'];
-  return items.includes(chart);
+  return chart.includes('pbv.');
 }
 
 const ChartBox = () => {

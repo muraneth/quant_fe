@@ -2,6 +2,7 @@ import React from 'react';
 import ReactECharts from 'echarts-for-react';
 
 import { useState, useEffect } from 'react';
+import { stack } from 'd3';
 
 const PriceByVolumeChart = ({ chartName, chartData, priceSeries, priceData }) => {
   const [options, setOptions] = useState({});
@@ -35,7 +36,7 @@ const PriceByVolumeChart = ({ chartName, chartData, priceSeries, priceData }) =>
       xAxis: [
         {
           type: 'category',
-          data: priceData.map((item) => item.day),
+          data: priceData.map((item) => item.time),
           name: 'Time',
           nameLocation: 'middle',
           // nameGap: 30,
@@ -98,7 +99,20 @@ const PriceByVolumeChart = ({ chartName, chartData, priceSeries, priceData }) =>
         {
           name: 'Volume',
           type: 'bar',
-          data: chartData.map((item) => item.total_tx_usd_volume),
+          stack: 'pbvVolume',
+          data: chartData.map((item) => item.negative_value),
+          barWidth: '40%',
+          yAxisIndex: 1,
+          xAxisIndex: 1,
+          itemStyle: {
+            color: ' rgba(255, 111, 97, 0.5)' // Light red with 50% transparency
+          }
+        },
+        {
+          name: 'Volume',
+          type: 'bar',
+          stack: 'pbvVolume',
+          data: chartData.map((item) => item.positive_value),
           barWidth: '40%',
           yAxisIndex: 1,
           xAxisIndex: 1,

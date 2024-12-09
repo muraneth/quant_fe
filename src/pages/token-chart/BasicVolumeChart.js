@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useState, useEffect } from 'react';
 import ReactECharts from 'echarts-for-react';
 
-const PriceVolumeChart = ({ chartName, chartData, priceSeries }) => {
+const VolumeChart = ({ chartName, chartData, priceSeries }) => {
   const [options, setOptions] = useState({});
 
   useEffect(() => {
@@ -42,7 +42,8 @@ const PriceVolumeChart = ({ chartName, chartData, priceSeries }) => {
         {
           name: 'Buy Volume',
           type: 'bar',
-          data: chartData?.map((item) => item.buy_volume),
+          stack: 'pbvVolume',
+          data: chartData?.map((item) => item.positive_value),
           yAxisIndex: 1,
           itemStyle: {
             color: '#73C0DE'
@@ -51,7 +52,8 @@ const PriceVolumeChart = ({ chartName, chartData, priceSeries }) => {
         {
           name: 'Sell Volume',
           type: 'bar',
-          data: chartData?.map((item) => item.sell_volume),
+          stack: 'pbvVolume',
+          data: chartData?.map((item) => item.negative_value),
           yAxisIndex: 1,
           itemStyle: {
             color: '#FF6F61'
@@ -76,4 +78,4 @@ const PriceVolumeChart = ({ chartName, chartData, priceSeries }) => {
   return <ReactECharts option={options} style={{ height: 400, width: '100%' }} />;
 };
 
-export default PriceVolumeChart;
+export default VolumeChart;
