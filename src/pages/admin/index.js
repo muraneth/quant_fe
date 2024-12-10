@@ -6,7 +6,7 @@ import { Box, Button, Grid, Stack, Typography, Divider } from '@mui/material';
 import Header from 'layout/MainLayout/Header/index';
 import axios from 'axios';
 
-const accounts = ['helen', 'myquant_alpha', 'jizhou', 'mydreamy', 'linda001', 'mudidi'];
+const accounts = ['myquant_alpha', 'jizhou', 'mydreamy', 'linda001', 'mudidi', 'myquant_sigma'];
 const AdminPage = () => {
   return (
     <div>
