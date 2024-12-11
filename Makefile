@@ -1,5 +1,6 @@
 ## 0.3.2 update Hero and admin
-version = 0.3.2
+## 0.3.3 fix hero
+version = 0.3.3
 container_name = quant_fe_pre_container
 image_name = quant_fe_pre:$(version)
 
